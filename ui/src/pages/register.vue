@@ -7,12 +7,14 @@
                 :label="locale.email" 
                 type="text" 
                 v-model="email" 
-                :rules="[rules.isEmail]" />
+                :rules="[rules.isEmail]" 
+                @keyup.enter="register" />
             <v-text-field 
                 :label="locale.password" 
                 type="password" 
                 v-model="password" 
-                :rules="[rules.notEmpty]" />
+                :rules="[rules.notEmpty]" 
+                @keyup.enter="register" />
         </v-form>
         <v-btn 
             @click="register"

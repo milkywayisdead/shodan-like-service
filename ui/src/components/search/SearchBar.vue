@@ -46,6 +46,7 @@ export default {
     mounted(){
         this.search = this.store.searchTerm
         this.searchType = this.store.searchType
+        this.go()
     }
 }
 </script>

@@ -1,14 +1,14 @@
 <template>
-    <v-row>
-        <v-col cols="3" v-for="card in cards">
-            <v-card :title="`Функционал ${card}`" :height="400"></v-card>
-        </v-col>
-    </v-row>
-    <v-row>
-        <v-col cols="12">
-            <v-card title="Новость" :height="100"></v-card>
-        </v-col>
-    </v-row>
+<v-row>
+    <v-col cols="3" v-for="card in cards">
+        <v-card :title="`Функционал ${card}`" :height="400"></v-card>
+    </v-col>
+</v-row>
+<v-row>
+    <v-col cols="12">
+        <v-card title="Новость" :height="100"></v-card>
+    </v-col>
+</v-row>
 </template>
 
 <script>

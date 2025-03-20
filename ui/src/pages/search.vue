@@ -1,5 +1,5 @@
 <template>
-<h1>ДОБАВИТЬ ПРОВЕРКУ НА АВТОРИЗАЦИЮ</h1>
+<h1>ДОБАВИТЬ ПРОВЕРКУ НА АВТОРИЗАЦИЮ И ЭФФЕКТ ЗАГРУЗКИ</h1>
 <search-bar ref="searchBar" @search="search" />
 <component :is="`${searchType}-search-results`" v-if="searchType" />
 </template>
@@ -34,9 +34,12 @@ export default {
             const func = this.searchApi[params.type]
             func({params: {search: term}})
                 .then(res => {
-                    if(res.status === 200){
+                    const status = res.status
+                    if(status === 200){
                         console.log(res.data)
                         this.store.setSearchType(params.type)
+                    } else if(status === 401){
+                        this.$router.replace('/login')
                     }
                 }).catch(err => {})
         }
