@@ -5,6 +5,7 @@
     <v-container>
         <lazy-search-bar />
         <router-view />
+        <loader-overlay :loading="store.loading" />
     </v-container>
 </v-main>
 <app-footer />
@@ -14,8 +15,9 @@
 import Sidebar from './default/Sidebar.vue';
 import AppBar from './default/AppBar.vue';
 import AppFooter from './default/AppFooter.vue';
-import SearchBar from '@/components/search/SearchBar.vue';
 import { useAuthStore } from '@/stores/auth';
+import { useAppStore } from '@/stores/app';
 
-const authStore = useAuthStore();
+const authStore = useAuthStore()
+const store = useAppStore()
 </script>

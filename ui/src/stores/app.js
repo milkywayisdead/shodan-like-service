@@ -7,6 +7,7 @@ export const useAppStore = defineStore('app', {
         locale: ru,
         searchTerm: '',
         searchType: 'hosts',
+        loading: false,
     }),
     actions: {
         setSearchTerm(term){
@@ -15,5 +16,11 @@ export const useAppStore = defineStore('app', {
         setSearchType(type){
             this.searchType = String(type)
         },
+        setLoading(){
+            this.loading = true
+        },
+        resetLoading(){
+            this.loading = false
+        }
     }
 })

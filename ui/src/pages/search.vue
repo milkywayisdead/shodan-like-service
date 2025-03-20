@@ -1,5 +1,4 @@
 <template>
-<h1>ДОБАВИТЬ ПРОВЕРКУ НА АВТОРИЗАЦИЮ И ЭФФЕКТ ЗАГРУЗКИ</h1>
 <search-bar ref="searchBar" @search="search" />
 <component :is="`${searchType}-search-results`" v-if="searchType" />
 </template>
@@ -32,16 +31,19 @@ export default {
             const term = params.term
             if(!term) return
             const func = this.searchApi[params.type]
+            this.store.setLoading()
             func({params: {search: term}})
                 .then(res => {
                     const status = res.status
                     if(status === 200){
                         console.log(res.data)
                         this.store.setSearchType(params.type)
-                    } else if(status === 401){
-                        this.$router.replace('/login')
                     }
-                }).catch(err => {})
+                }).catch(err => {}).finally(() => {
+                    setTimeout(() => {
+                        this.store.resetLoading()
+                    }, 500);
+                })
         }
     },
     mounted(){
