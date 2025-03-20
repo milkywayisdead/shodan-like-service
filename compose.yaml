@@ -1,0 +1,30 @@
+services:
+  lk:
+    container_name: lk
+    build:
+      context: .
+    ports:
+      - 8000:8000
+    volumes:
+      - /home/max/ohaiyou/service:/app
+    command: >
+      sh -c "python manage.py makemigrations &&
+          python manage.py migrate &&
+          python manage.py runserver 0.0.0.0:8000"
+    env_file:
+      - ./.env_dev
+    depends_on:
+      - db
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=django_dev
+      - POSTGRES_PASSWORD=django_dev
+      - POSTGRES_DB=django_dev
+  redis:
+    image: redis
+
+volumes:
+  postgres_data:
