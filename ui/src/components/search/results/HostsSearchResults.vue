@@ -28,14 +28,9 @@
                 <search-results-card :title="locale.search.results.portsList" />
             </v-col>
         </v-row>
-        <v-row>
+        <v-row v-for="port in portsList" :key="port.port">
             <v-col>
-                <search-results-card :title="locale.search.results.port" />
-            </v-col>
-        </v-row>
-        <v-row>
-            <v-col>
-                <search-results-card :title="locale.search.results.port" />
+                <port-info-card :info="port" />
             </v-col>
         </v-row>
     </v-col>
@@ -51,6 +46,11 @@ export default {
         info: {
             type: Object,
             default: {}
+        }
+    },
+    computed: {
+        portsList(){
+            return this.info.total_ports || []
         }
     }
 }

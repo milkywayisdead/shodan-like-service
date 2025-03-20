@@ -76,5 +76,15 @@ export const ru = {
         asn: 'ASN',
         os: 'ОС',
         net: 'Сеть'
+    },
+    port: {
+        'port': 'Порт',
+        'service': 'Сервис',
+        'software': 'Софт',
+        'application': 'Приложение',
+        'component': 'Компонент',
+        'title': 'Название',
+        'headers': 'Заголовки',
+        'body': 'Тело'
     }
 }

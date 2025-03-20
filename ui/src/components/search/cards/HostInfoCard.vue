@@ -1,9 +1,11 @@
 <template>
 <v-card 
-    :title="locale.search.results.main">
-    <p v-for="param in mainParams">
-        {{ locale.host[param.title] }}: {{ info[param.value] }}
-    </p>
+    :title="locale.search.results.main" >
+    <v-card-text>
+        <p v-for="param in mainParams" :key="param.value">
+            {{ locale.host[param.title] }}: {{ info[param.value] }}
+        </p>
+    </v-card-text>
 </v-card>
 </template>
 
@@ -25,7 +27,6 @@ export default {
     },
     data(){
         return {
-            test: '1',
             mainParams: [
                 {title: 'host', value: 'IP'},
                 {title: 'domain', value: 'domain'},
