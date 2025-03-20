@@ -1,6 +1,8 @@
 <template>
 <search-bar ref="searchBar" @search="search" />
-<component :is="`${searchType}-search-results`" v-if="searchType" />
+<component v-if="searchType"
+    :is="`${searchType}-search-results`" 
+    :info="results" />
 </template>
 
 <script>
@@ -21,6 +23,11 @@ import { searchMixin } from '@/mixins/search';
 
 export default {
     mixins: [storeMixin, searchMixin],
+    data(){
+        return {
+            results: {}
+        }
+    },
     computed: {
         searchType(){
             return this.store.searchType
@@ -36,7 +43,7 @@ export default {
                 .then(res => {
                     const status = res.status
                     if(status === 200){
-                        console.log(res.data)
+                        this.results = res.data[0]
                         this.store.setSearchType(params.type)
                     }
                 }).catch(err => {}).finally(() => {

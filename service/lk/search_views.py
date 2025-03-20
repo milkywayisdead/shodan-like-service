@@ -1,6 +1,8 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
+from .mocks import HOSTS
+
 
 def check_auth(view, *args, **kwargs):
     def wrapper(request, *args, **kwargs):
@@ -11,7 +13,7 @@ def check_auth(view, *args, **kwargs):
 
 
 def hosts(request):
-    return JsonResponse({'data': {'q': request.GET['search']}})
+    return JsonResponse(HOSTS, safe=False)
 
 
 def port(request):

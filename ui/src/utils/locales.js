@@ -67,5 +67,14 @@ export const ru = {
         settings: 'Настройки',
         security: 'Безопасность',
         other: 'Прочее',
+    },
+    host: {
+        host: 'Хост',
+        domain: 'Домен',
+        location: 'Местоположение',
+        organization: 'Организация',
+        asn: 'ASN',
+        os: 'ОС',
+        net: 'Сеть'
     }
 }

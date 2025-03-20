@@ -3,7 +3,7 @@
     <v-col cols="6">
         <v-row>
             <v-col>
-                <search-results-card :title="locale.search.results.main" />
+                <host-info-card :info="info" />
             </v-col>
         </v-row>
         <v-row>
@@ -47,5 +47,11 @@ import { storeMixin } from '@/mixins/store';
 
 export default {
     mixins: [storeMixin, ],
+    props: {
+        info: {
+            type: Object,
+            default: {}
+        }
+    }
 }
 </script>
