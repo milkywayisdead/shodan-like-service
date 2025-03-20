@@ -1,9 +1,13 @@
 <template>
-<div>feed</div>
+<h1>{{ locale.nav.feed }}</h1>
 </template>
 
 <script>
-export default {}
+import { storeMixin } from '@/mixins/store';
+
+export default {
+    mixins: [storeMixin],
+}
 </script>
 
 <route lang="yaml">

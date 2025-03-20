@@ -1,9 +1,13 @@
 <template>
-<div>help</div>
+<h1>{{ locale.nav.help }}</h1>
 </template>
 
 <script>
-export default {}
+import { storeMixin } from '@/mixins/store';
+
+export default {
+    mixins: [storeMixin],
+}
 </script>
 
 <route lang="yaml">
