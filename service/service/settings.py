@@ -117,6 +117,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SESSION_COOKIE_AGE = 10*60
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -143,4 +145,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
 REDIS_PORT = os.environ.get('REDIS_PORT', 6379)
 
-SESSION_COOKIE_AGE = 10*60
+MONGODB_URL = os.environ.get('MONGODB_URL', '')
+MONGODB_DB_NAME = os.environ.get('MONGODB_DB_NAME', 'db')
+MONGODB_COLLECTION_NAME = os.environ.get('MONGODB_COLLECTION_NAME', 'Hosts')

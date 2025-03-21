@@ -43,7 +43,7 @@ export default {
                 .then(res => {
                     const status = res.status
                     if(status === 200){
-                        this.results = res.data[0]
+                        this.results = res.data
                         this.store.setSearchType(params.type)
                     }
                 }).catch(err => {}).finally(() => {

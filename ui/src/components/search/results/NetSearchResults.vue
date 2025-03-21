@@ -3,5 +3,12 @@
 </template>
 
 <script>
-export default {}
+export default {
+    props: {
+        info: {
+            type: Object,
+            default: {}
+        }
+    },
+}
 </script>

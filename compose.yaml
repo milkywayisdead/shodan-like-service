@@ -15,6 +15,7 @@ services:
       - ./.env_dev
     depends_on:
       - db
+      - mongo
   db:
     image: postgres:15
     volumes:
@@ -25,6 +26,15 @@ services:
       - POSTGRES_DB=django_dev
   redis:
     image: redis
+  mongo:
+    image: mongo
+    restart: always
+    env_file:
+      - ./.env_dev
+    volumes:
+      - type: bind
+        source: /home/max/mongodb_temp
+        target: /data/db
 
 volumes:
   postgres_data:
