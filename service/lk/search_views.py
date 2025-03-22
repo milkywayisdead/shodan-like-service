@@ -55,12 +55,28 @@ def asn(request):
 
 @check_auth
 def app(request):
-    return JsonResponse({'data': {'q': request.GET['search']}})
+    application = request.GET['search']
+    _ = 'total_ports.application'
+    resp = {
+        'hosts': db.generic_hosts(_, application),
+        'hosts_total': db.generic_hosts_total(_, application),
+        'ports': db.generic_ports(_, application),
+        'tops': db.generic_tops(_, application),
+    }
+    return JsonResponse(resp)
 
 
 @check_auth
 def component(request):
-    return JsonResponse({'data': {'q': request.GET['search']}})
+    component = request.GET['search']
+    _ = 'total_ports.component'
+    resp = {
+        'hosts': db.generic_hosts(_, component),
+        'hosts_total': db.generic_hosts_total(_, component),
+        'ports': db.generic_ports(_, component),
+        'tops': db.generic_tops(_, component),
+    }
+    return JsonResponse(resp)
 
 
 @check_auth
@@ -93,9 +109,25 @@ def os(request):
 
 @check_auth
 def soft(request):
-    return JsonResponse({'data': {'q': request.GET['search']}})
+    soft = request.GET['search']
+    _ = 'total_ports.software'
+    resp = {
+        'hosts': db.generic_hosts(_, soft),
+        'hosts_total': db.generic_hosts_total(_, soft),
+        'ports': db.generic_ports(_, soft),
+        'tops': db.generic_tops(_, soft),
+    }
+    return JsonResponse(resp)
 
 
 @check_auth
 def service(request):
-    return JsonResponse({'data': {'q': request.GET['search']}})
+    service = request.GET['search']
+    _ = 'total_ports.service'
+    resp = {
+        'hosts': db.generic_hosts(_, service),
+        'hosts_total': db.generic_hosts_total(_, service),
+        'ports': db.generic_ports(_, service),
+        'tops': db.generic_tops(_, service),
+    }
+    return JsonResponse(resp)
