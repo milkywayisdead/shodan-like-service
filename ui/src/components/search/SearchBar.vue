@@ -34,8 +34,10 @@ export default {
     methods: {
         go(){
             if(!this.search) return
-            this.store.setSearchTerm(this.search)
-            this.$emit('search', {term: this.search, type: this.searchType})
+            const term = this.search.trim()
+            this.search = term
+            this.store.setSearchTerm(term)
+            this.$emit('search', {term: term, type: this.searchType})
         },
     },
     watch: {

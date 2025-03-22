@@ -50,6 +50,7 @@ export const ru = {
             topApps: 'Топ приложений',
             topComponents: 'Топ компонентов',
             topPorts: 'Топ портов',
+            topSoft: 'Топ ПО',
             portDetails: 'Подробности порта',
         },
     },

@@ -8,7 +8,10 @@
         </v-row>
         <v-row v-for="top in topCats">
             <v-col>
-                <search-results-card :title="locale.search.results[`top${top}`]" />
+                <component 
+                    :is="`Top${top.title}Card`" 
+                    :title="locale.search.results[`top${top.title}`]"
+                    :top-data="tops[top.key]" />
             </v-col>
         </v-row>
     </v-col>
@@ -31,6 +34,11 @@
 
 <script>
 import { storeMixin } from '@/mixins/store';
+import TopAppsCard from '../cards/TopAppsCard.vue';
+import TopPortsCard from '../cards/TopPortsCard.vue';
+import TopServicesCard from '../cards/TopServicesCard.vue';
+import TopComponentsCard from '../cards/TopComponentsCard.vue';
+import TopSoftCard from '../cards/TopSoftCard.vue';
 
 export default {
     mixins: [storeMixin],
@@ -40,11 +48,24 @@ export default {
     },
     data(){
         return {
-            topCats: ['Ports', 'Services', 'Apps', 'Components'],
+            topCats: [
+                {title: 'Ports', key: 'top_ports'}, 
+                {title: 'Services', key: 'top_services'},
+                {title: 'Soft', key: 'top_software'}, 
+                {title: 'Apps', key: 'top_applications'},
+                {title: 'Components', key: 'top_components'}
+            ],
             page: 1,
             totalVisible: 5,
             paginationLength: 50,
         }
     },
+    components: {
+        TopAppsCard,
+        TopPortsCard,
+        TopServicesCard,
+        TopSoftCard,
+        TopComponentsCard,
+    }
 }
 </script>
