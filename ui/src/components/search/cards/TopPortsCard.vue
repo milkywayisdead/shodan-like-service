@@ -2,6 +2,9 @@
 <v-card 
     :title="locale.search.results.topPorts" >
     <v-card-text>
+        <p v-for="data in topData" :key="data._id">
+            {{ data._id }}: {{ data.count }}
+        </p>
     </v-card-text>
 </v-card>
 </template>
