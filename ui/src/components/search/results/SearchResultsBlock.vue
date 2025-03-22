@@ -3,7 +3,9 @@
     <v-col cols="4">
         <v-row>
             <v-col>
-                <search-results-card :title="locale.search.results.totalResults" />
+                <search-results-card 
+                    :title="locale.search.results.totalResults" 
+                    :totals="totals" />
             </v-col>
         </v-row>
         <v-row v-for="top in topCats">
@@ -45,6 +47,7 @@ export default {
     props: {
         hosts: Array,
         tops: Object,
+        totals: Object,
     },
     data(){
         return {

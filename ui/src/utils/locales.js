@@ -38,6 +38,8 @@ export const ru = {
         placeholder: 'Поиск',
         host: 'Хост',
         results: {
+            hostsTotal: 'Всего хостов',
+            portsTotal: 'Всего портов',
             main: 'Основная информация',
             soft: 'Софт',
             apps: 'Приложения',
