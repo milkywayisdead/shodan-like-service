@@ -10,7 +10,13 @@ _collection = _db[settings.MONGODB_COLLECTION_NAME]
 
 
 def ip_to_int(ip_str):
-    return str(int(ipaddress.IPv4Address(ip_str)))
+    return int(ipaddress.IPv4Address(ip_str))
+
+
+def get_range(net_str):
+    nw = ipaddress.IPv4Network(net_str)
+    nw = tuple(nw)
+    return int(nw[0]), int(nw[-1])
 
 
 def mock_db():
@@ -23,12 +29,11 @@ def mock_db():
     for i in range(200):
         del h['_id']
         ip += 1
-        h['address'] = str(ip)
+        h['address'] = ip
         h['IP'] = str(ipaddress.IPv4Address(ip))
         _collection.insert_one(h)
     print('OK')
     
-
 
 def hosts(address):
     """
@@ -40,20 +45,20 @@ def hosts(address):
     return res
 
 
-def net(addr1, addr2):
+def net_hosts_total(net_str):
     """
     Для страницы 'Net'
     """
-    addr1, addr2 = ip_to_int(addr1), ip_to_int(addr2)
+    addr1, addr2 = get_range(net_str)
     params = {'address': { '$gte': addr1, '$lte': addr2}}
-    return _collection.countDocuments(params)
+    return _collection.count_documents(params)
 
 
-def ports_sum(addr1, addr2):
+def net_ports(net_str):
     """
     Сумма портов по сети
     """
-    addr1, addr2 = ip_to_int(addr1), ip_to_int(addr2)
+    addr1, addr2 = get_range(net_str)
     params = [
         {
             '$match': {
@@ -70,14 +75,14 @@ def ports_sum(addr1, addr2):
             '$count': "total_ports_count"
         }
     ]
-    return _collection.aggregate(params)
+    return _collection.aggregate(params).to_list()
 
 
-def tops(addr1, addr2, limit=5):
+def net_tops(net_str, limit=5):
     """
     Топ 5 портов, сервисов, софта, приложений и компонентов
     """
-    addr1, addr2 = ip_to_int(addr1), ip_to_int(addr2)
+    addr1, addr2 = addr1, addr2 = get_range(net_str)
     params = [
         {
             '$match': {
@@ -184,10 +189,13 @@ def tops(addr1, addr2, limit=5):
             }
         }
     ]
-    return _collection.aggregate(params)
+    return _collection.aggregate(params).to_list()
 
 
-def first_n(addr1, addr2, limit=10):
-    addr1, addr2 = ip_to_int(addr1), ip_to_int(addr2)
+def net_hosts(net_str, limit=10):
+    addr1, addr2 = get_range(net_str)
     params = {"address": {'$gte': addr1, '$lte': addr2}}
-    return hosts.find(params).limit(limit).pretty()
+    hosts_list = _collection.find(params).limit(limit).to_list()
+    for host in hosts_list:
+        del host['_id']
+    return hosts_list

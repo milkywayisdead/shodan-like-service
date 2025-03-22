@@ -16,7 +16,6 @@ def set_csrf_token(request):
     """
     We set the CSRF cookie on the frontend.
     """
-    print(User.objects.all())
     return JsonResponse({'message': 'CSRF cookie set'})
 
 

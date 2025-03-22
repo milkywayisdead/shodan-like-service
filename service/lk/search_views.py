@@ -16,8 +16,7 @@ def check_auth(view, *args, **kwargs):
 def hosts(request):
     ip = request.GET['search']
     res = db.hosts(ip)
-    print(res)
-    return JsonResponse(res, safe=False)
+    return JsonResponse(res)
 
 
 def port(request):
@@ -25,7 +24,14 @@ def port(request):
 
 
 def net(request):
-    return JsonResponse({'data': {'q': request.GET['search']}})
+    net_str = request.GET['search']
+    resp = {
+        'hosts': db.net_hosts(net_str),
+        'hosts_total': db.net_hosts_total(net_str),
+        'ports': db.net_ports(net_str),
+        'tops': db.net_tops(net_str),
+    }
+    return JsonResponse(resp)
 
 
 def asn(request):
