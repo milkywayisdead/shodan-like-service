@@ -1,5 +1,8 @@
 <template>
-<search-results-domain-block :info="info" />
+<search-results-domain-block 
+    :info="info.hosts || []" 
+    :tops="(info.tops || [])[0] || {}"
+    :totals="totals" />
 </template>
 
 <script>

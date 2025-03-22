@@ -67,7 +67,6 @@ def generic_ports(key, value):
     params = query.get_ports_filter(
         {key: value}
     )
-    print(params)
     return _collection.aggregate(params).to_list()
 
 

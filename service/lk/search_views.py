@@ -43,11 +43,12 @@ def net(request):
 
 def asn(request):
     asn = request.GET['search']
+    _ = 'ASN'
     resp = {
-        'hosts': db.generic_hosts('ASN', asn),
-        'hosts_total': db.generic_hosts_total('ASN', asn),
-        'ports': db.generic_ports('ASN', asn),
-        'tops': db.generic_tops('ASN', asn),
+        'hosts': db.generic_hosts(_, asn),
+        'hosts_total': db.generic_hosts_total(_, asn),
+        'ports': db.generic_ports(_, asn),
+        'tops': db.generic_tops(_, asn),
     }
     return JsonResponse(resp)
 
@@ -74,7 +75,15 @@ def org(request):
 
 @check_auth
 def domain(request):
-    return JsonResponse({'data': {'q': request.GET['search']}})
+    domain = request.GET['search']
+    _ = 'domain'
+    resp = {
+        'hosts': db.generic_hosts(_, domain),
+        'hosts_total': db.generic_hosts_total(_, domain),
+        'ports': db.generic_ports(_, domain),
+        'tops': db.generic_tops(_, domain),
+    }
+    return JsonResponse(resp)
 
 
 @check_auth

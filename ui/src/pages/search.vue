@@ -39,12 +39,12 @@ export default {
             if(!term) return
             const func = this.searchApi[params.type]
             this.store.setLoading()
+            this.store.setSearchType(params.type)
             func({params: {search: term}})
                 .then(res => {
                     const status = res.status
                     if(status === 200){
                         this.results = res.data
-                        this.store.setSearchType(params.type)
                     }
                 }).catch(err => {}).finally(() => {
                     setTimeout(() => {
