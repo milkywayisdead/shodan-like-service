@@ -46,7 +46,7 @@ def asn(request):
     resp = {
         'hosts': db.generic_hosts('ASN', asn),
         'hosts_total': db.generic_hosts_total('ASN', asn),
-        'ports': [],
+        'ports': db.generic_ports('ASN', asn),
         'tops': db.generic_tops('ASN', asn),
     }
     return JsonResponse(resp)

@@ -49,14 +49,25 @@ def generic_hosts(key, value, limit=10):
 
 def generic_hosts_total(key, value):
     params = query.get_match_filter(key, value)
-    return _collection.count_documents(params)
+    return _collection.count_documents({key: value})
 
 
 def generic_tops(key, value, limit=5):
     params = query.get_tops_filter(
-        query.get_match_filter(key, value),
+        {key: value},
         limit
     )
+    return _collection.aggregate(params).to_list()
+
+
+def generic_ports(key, value):
+    """
+    Сумма портов по сети
+    """
+    params = query.get_ports_filter(
+        {key: value}
+    )
+    print(params)
     return _collection.aggregate(params).to_list()
 
 
