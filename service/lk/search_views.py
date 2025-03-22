@@ -81,12 +81,28 @@ def component(request):
 
 @check_auth
 def loc(request):
-    return JsonResponse({'data': {'q': request.GET['search']}})
+    loc = request.GET['search']
+    _ = 'Location'
+    resp = {
+        'hosts': db.generic_hosts(_, loc),
+        'hosts_total': db.generic_hosts_total(_, loc),
+        'ports': db.generic_ports(_, loc),
+        'tops': db.generic_tops(_, loc),
+    }
+    return JsonResponse(resp)
 
 
 @check_auth
 def org(request):
-    return JsonResponse({'data': {'q': request.GET['search']}})
+    org = request.GET['search']
+    _ = 'Organization'
+    resp = {
+        'hosts': db.generic_hosts(_, org),
+        'hosts_total': db.generic_hosts_total(_, org),
+        'ports': db.generic_ports(_, org),
+        'tops': db.generic_tops(_, org),
+    }
+    return JsonResponse(resp)
 
 
 @check_auth
@@ -104,7 +120,15 @@ def domain(request):
 
 @check_auth
 def os(request):
-    return JsonResponse({'data': {'q': request.GET['search']}})
+    osys = request.GET['search']
+    _ = 'OS'
+    resp = {
+        'hosts': db.generic_hosts(_, osys),
+        'hosts_total': db.generic_hosts_total(_, osys),
+        'ports': db.generic_ports(_, osys),
+        'tops': db.generic_tops(_, osys),
+    }
+    return JsonResponse(resp)
 
 
 @check_auth
