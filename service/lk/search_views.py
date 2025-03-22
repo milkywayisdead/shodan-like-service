@@ -22,10 +22,10 @@ def hosts(request):
 def port(request):
     port_str = request.GET['search']
     resp = {
-        'hosts': db.generic_hosts('port', port_str),
-        'hosts_total': db.generic_hosts_total('port', port_str),
+        'hosts': db.port_hosts(port_str),
+        'hosts_total': db.port_hosts_total(port_str), 
         'ports': [],
-        'tops': db.generic_tops('port', port_str),
+        'tops': db.port_tops(port_str),
     }
     return JsonResponse(resp)
 

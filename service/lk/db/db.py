@@ -10,6 +10,9 @@ _db = _client[settings.MONGODB_DB_NAME]
 _collection = _db[settings.MONGODB_COLLECTION_NAME]
 
 
+_TOTAL_PORTS = 'total_ports'
+
+
 def mock_db():
     from .mocks import HOSTS
     h = HOSTS[0]
@@ -45,13 +48,13 @@ def generic_hosts(key, value, limit=10):
 
 
 def generic_hosts_total(key, value):
-    params = {key: value}
+    params = query.get_match_filter(key, value)
     return _collection.count_documents(params)
 
 
 def generic_tops(key, value, limit=5):
     params = query.get_tops_filter(
-        {key: value},
+        query.get_match_filter(key, value),
         limit
     )
     return _collection.aggregate(params).to_list()
@@ -92,3 +95,33 @@ def net_hosts(net_str, limit=10):
     for host in hosts_list:
         del host['_id']
     return hosts_list
+
+
+def port_hosts(port_str, limit=10):
+    """
+    Для страницы 'Port'
+    """
+    params = query.get_elemmatch_filter('port', port_str)
+    hosts_list = _collection.find({_TOTAL_PORTS: params}).limit(limit).to_list()
+    for host in hosts_list:
+        del host['_id']
+    return hosts_list
+
+
+def port_hosts_total(port_str):
+    """
+    Для страницы 'Port'
+    """
+    params = query.get_elemmatch_filter('port', port_str)
+    return _collection.count_documents({_TOTAL_PORTS: params})
+
+
+def port_tops(port_str, limit=5):
+    """
+    Топ 5 портов, сервисов, софта, приложений и компонентов для страницы портов
+    """
+    params = query.get_port_tops_filter(
+        port_str,
+        limit
+    )
+    return _collection.aggregate(params).to_list()
