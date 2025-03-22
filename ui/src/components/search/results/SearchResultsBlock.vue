@@ -6,23 +6,19 @@
                 <search-results-card :title="locale.search.results.totalResults" />
             </v-col>
         </v-row>
-        <v-row v-for="top in tops">
+        <v-row v-for="top in topCats">
             <v-col>
                 <search-results-card :title="locale.search.results[`top${top}`]" />
             </v-col>
         </v-row>
     </v-col>
-    <v-col cols="4">
-        <v-row v-for="dummy in dummies" :key="dummy">
-            <v-col>
-                <search-results-card :title="locale.search.host + ` ${dummy}`" />
+    <v-col cols="10">
+        <v-row v-for="host in hosts" :key="host.address">
+            <v-col cols="5">
+                <host-info-card :info="host" />
             </v-col>
-        </v-row>
-    </v-col>
-    <v-col cols="6">
-        <v-row v-for="dummy in dummies" :key="dummy">
-            <v-col>
-                <search-results-card :title="locale.search.results.portDetails + ` ${dummy}`" />
+            <v-col cols="7">
+                <ports-list-card :ports="host.total_ports" />
             </v-col>
         </v-row>
     </v-col>
@@ -34,23 +30,21 @@
 </template>
 
 <script>
-import { useAppStore } from '@/stores/app';
+import { storeMixin } from '@/mixins/store';
 
 export default {
+    mixins: [storeMixin],
+    props: {
+        hosts: Array,
+        tops: Object,
+    },
     data(){
         return {
-            locale: useAppStore().locale,
-            _dummies: [1,2,3,4,5,6,7,8,9,10],
-            tops: ['Ports', 'Services', 'Apps', 'Components'],
+            topCats: ['Ports', 'Services', 'Apps', 'Components'],
             page: 1,
             totalVisible: 5,
             paginationLength: 50,
         }
     },
-    computed: {
-        dummies(){
-            return this._dummies.map(i => (this.page - 1)*10 + i)
-        }
-    }
 }
 </script>
