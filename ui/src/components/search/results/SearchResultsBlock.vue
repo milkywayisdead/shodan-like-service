@@ -1,6 +1,6 @@
 <template>
 <v-row>
-    <v-col cols="2">
+    <v-col cols="4">
         <v-row>
             <v-col>
                 <search-results-card :title="locale.search.results.totalResults" />
@@ -12,7 +12,7 @@
             </v-col>
         </v-row>
     </v-col>
-    <v-col cols="10">
+    <v-col cols="8">
         <v-row v-for="host in hosts" :key="host.address">
             <v-col cols="5">
                 <host-info-card :info="host" />

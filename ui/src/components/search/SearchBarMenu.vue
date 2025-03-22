@@ -9,8 +9,9 @@
             v-for="(item, i) in searchTypes"
                 :key="i"
                 :value="i"
+                @click="searchTypeTitle = item.title, $emit('change', item.value)"
             >
-        <v-list-item-title @click="searchTypeTitle = item.title, $emit('change', item.value)">{{ item.title }}</v-list-item-title>
+        <v-list-item-title>{{ item.title }}</v-list-item-title>
         </v-list-item>
     </v-list>
 </v-menu>

@@ -1,6 +1,6 @@
 <template>
 <v-card 
-    :title="locale.search.results.portsList" >
+    :title="locale.search.results.openPorts" >
     <v-card-text>
         <v-chip class="mr-1"
             v-for="port in ports" 

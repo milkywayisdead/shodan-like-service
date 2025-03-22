@@ -43,6 +43,7 @@ export const ru = {
             apps: 'Приложения',
             components: 'Компоненты',
             portsList: 'Список портов',
+            openPorts: 'Открытые порты',
             port: 'Порт',
             totalResults: 'Результаты',
             topServices: 'Топ сервисов',
