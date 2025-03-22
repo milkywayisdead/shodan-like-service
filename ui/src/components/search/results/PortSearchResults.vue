@@ -1,6 +1,8 @@
 <template>
-<search-results-block />
-</template>
+    <search-results-block 
+        :hosts="info.hosts || []" 
+        :tops="info.tops[0] || {}" />
+    </template>
 
 <script>
 export default {

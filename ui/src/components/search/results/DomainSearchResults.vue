@@ -1,5 +1,5 @@
 <template>
-<search-results-domain-block />
+<search-results-domain-block :info="info" />
 </template>
 
 <script>

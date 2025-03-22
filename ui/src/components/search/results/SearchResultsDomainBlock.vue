@@ -31,6 +31,12 @@
 import { useAppStore } from '@/stores/app';
 
 export default {
+    props: {
+        info: {
+            type: Object,
+            default: {}
+        }
+    },
     data(){
         const locale = useAppStore().locale
         return {

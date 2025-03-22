@@ -1,5 +1,7 @@
 <template>
-<search-results-block />
+<search-results-block 
+    :hosts="info.hosts || []" 
+    :tops="info.tops[0] || {}" />
 </template>
 
 <script>
