@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
 from .mocks import HOSTS
-from . import db
+from .db import db
 
 
 def check_auth(view, *args, **kwargs):
@@ -20,7 +20,14 @@ def hosts(request):
 
 
 def port(request):
-    return JsonResponse({'data': {'q': request.GET['search']}})
+    port_str = request.GET['search']
+    resp = {
+        'hosts': db.generic_hosts('port', port_str),
+        'hosts_total': db.generic_hosts_total('port', port_str),
+        'ports': [],
+        'tops': db.generic_tops('port', port_str),
+    }
+    return JsonResponse(resp)
 
 
 def net(request):
@@ -35,7 +42,14 @@ def net(request):
 
 
 def asn(request):
-    return JsonResponse({'data': {'q': request.GET['search']}})
+    asn = request.GET['search']
+    resp = {
+        'hosts': db.generic_hosts('ASN', asn),
+        'hosts_total': db.generic_hosts_total('ASN', asn),
+        'ports': [],
+        'tops': db.generic_tops('ASN', asn),
+    }
+    return JsonResponse(resp)
 
 
 @check_auth
