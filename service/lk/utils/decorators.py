@@ -1,3 +1,6 @@
+from django.http import JsonResponse
+
+
 def check_auth(view, *args, **kwargs):
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
