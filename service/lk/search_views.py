@@ -14,7 +14,7 @@ from .utils import search_keys as sk
 def hosts(request):
     ip = request.GET['search']
     res = db.hosts(ip)
-    return JsonResponse(res)
+    return JsonResponse({'host': res})
 
 
 def port(request):

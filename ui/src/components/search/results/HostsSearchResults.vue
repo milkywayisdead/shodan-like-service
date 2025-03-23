@@ -1,9 +1,9 @@
 <template>
-<v-row>
+<v-row v-if="info.host">
     <v-col cols="6">
         <v-row>
             <v-col>
-                <host-info-card :info="info" />
+                <host-info-card :info="info.host" />
             </v-col>
         </v-row>
         <v-row>
@@ -50,7 +50,7 @@ export default {
     },
     computed: {
         portsList(){
-            return this.info.total_ports || []
+            return this.info?.host.total_ports || []
         }
     }
 }

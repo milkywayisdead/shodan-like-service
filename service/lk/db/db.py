@@ -37,7 +37,8 @@ def hosts(address):
     """
     address = ip_to_int(address)
     res = _collection.find_one({'address': address})
-    del res['_id']
+    if res:
+        del res['_id']
     return res
 
 
