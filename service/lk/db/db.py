@@ -42,7 +42,7 @@ def hosts(address):
     return res
 
 
-def generic_hosts(key, value, page=1, page_length=_PAGE_LENGTH):
+def generic_hosts(key, value, *args, page=1, page_length=_PAGE_LENGTH):
     """
     Поиск хостов для asn, loc, org, app, component, service, soft, os.
     """
@@ -114,7 +114,7 @@ def net_tops(net_str, limit=_TOPS_LIMIT):
     return _collection.aggregate(params).to_list()
 
 
-def net_hosts(net_str, page=1, page_length=_PAGE_LENGTH):
+def net_hosts(net_str, *args, page=1, page_length=_PAGE_LENGTH):
     """
     Поиск хостов для net.
     """
@@ -131,7 +131,7 @@ def net_hosts(net_str, page=1, page_length=_PAGE_LENGTH):
     return hosts_list
 
 
-def port_hosts(port_str, page=1, page_length=_PAGE_LENGTH):
+def port_hosts(port_str, *args, page=1, page_length=_PAGE_LENGTH):
     """
     Поиск хостов для port.
     """

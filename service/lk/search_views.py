@@ -39,18 +39,18 @@ def net(request):
     return JsonResponse(resp)
 
 
-def get_net_page(request):
-    net_str = request.GET['search']
-    page = int(request.GET.get('page', 1))
-    resp = db.net_hosts(net_str, page=page)
-    return JsonResponse({'hosts': resp})
+class NetPage(GenericPageView):
+    search_func = db.net_hosts
+
+    def get_args(self, request):
+        return (request.GET['search'], )
 
 
-def get_port_page(request):
-    port_str = request.GET['search']
-    page = int(request.GET.get('page', 1))
-    resp = db.port_hosts(port_str, page=page)
-    return JsonResponse({'hosts': resp})
+class PortPage(GenericPageView):
+    search_func = db.port_hosts
+
+    def get_args(self, request):
+        return (request.GET['search'], )
 
 
 class DomainSearch(GenericSearchWithAuth):

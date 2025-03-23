@@ -44,13 +44,16 @@ class GenericPageView(View):
     Не требует авторизации.
     """
     search_type = ''
+    search_func = db.generic_hosts
 
     def get(self, request, *args, **kwargs):
-        term = request.GET['search']
-        _ = self.search_type
+        args_ = self.get_args(request)
         page = self.get_page(request)
-        hosts = db.generic_hosts(_, term, page=page)
+        hosts = self.__class__.search_func(page=page, *args_)
         return JsonResponse({'hosts': hosts})
+
+    def get_args(self, request):
+        return self.search_type, request.GET['search']
 
     def get_page(self, request):
         page = int(request.GET.get('page', 1))

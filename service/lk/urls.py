@@ -23,8 +23,8 @@ urlpatterns = [
     path('search/app', sv.AppSearch.as_view(), name='search_app'),
     path('search/component', sv.ComponentSearch.as_view(), name='search_component'),
 
-    path('search/net/page', sv.get_net_page, name='net_page'),
-    path('search/port/page', sv.get_port_page, name='port_page'),
+    path('search/net/page', sv.NetPage.as_view(), name='net_page'),
+    path('search/port/page', sv.PortPage.as_view(), name='port_page'),
     path('search/asn/page', sv.ASNPage.as_view(), name='asn_page'),
     path('search/app/page', sv.AppPage.as_view(), name='app_page'),
     path('search/component/page', sv.ComponentPage.as_view(), name='component_page'),
