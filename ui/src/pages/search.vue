@@ -37,6 +37,7 @@ export default {
             totalVisible: 5,
             pageLength: 10,
             paginationLimit: 20,
+            _lockPage: false,
         }
     },
     computed: {
@@ -61,6 +62,9 @@ export default {
                     const status = res.status
                     if(status === 200){
                         this.results = res.data
+                        this.lockPage()
+                        this.resetPage()
+                        this.unlockPage()
                     }
                 }).catch(err => {}).finally(() => {
                     setTimeout(() => {
@@ -81,11 +85,23 @@ export default {
                         this.store.resetLoading()
                     }, 500);
                 })
+        },
+        resetPage(){
+            this.lockPage()
+            this.page = 1
+        },
+        lockPage(){
+            this._lockPage = true
+        },
+        unlockPage(){
+            this._lockPage = false
         }
     },
     watch: {
         page(value){
-            this.getPage(value)
+            if(!this._lockPage){
+                this.getPage(value)
+            }
         }
     },
     mounted(){
