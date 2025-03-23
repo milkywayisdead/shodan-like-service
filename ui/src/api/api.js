@@ -77,6 +77,9 @@ export const searchApi = {
         net(params){
             return api.get('/net/page', params)
         },
+        port(params){
+            return api.get('/port/page', params)
+        },
         asn(params){
             return api.get('/asn/page', params)
         },
@@ -91,6 +94,15 @@ export const searchApi = {
         },
         loc(params){
             return api.get('/loc/page', params)
+        },
+        soft(params){
+            return api.get('/soft/page', params)
+        },
+        service(params){
+            return api.get('/service/page', params)
+        },
+        os(params){
+            return api.get('/os/page', params)
         },
     }
 }

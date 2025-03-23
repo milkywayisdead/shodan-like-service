@@ -112,12 +112,14 @@ def net_hosts(net_str, page=1, limit=10):
     return hosts_list
 
 
-def port_hosts(port_str, limit=10):
+def port_hosts(port_str, page=1, limit=10):
     """
     Для страницы 'Port'
     """
+    if page < 1:
+        page = 1
     params = query.get_elemmatch_filter('port', port_str)
-    hosts_list = _collection.find({_TOTAL_PORTS: params}).limit(limit).to_list()
+    hosts_list = _collection.find({_TOTAL_PORTS: params}).skip((page - 1)*10).limit(limit).to_list()
     for host in hosts_list:
         del host['_id']
     return hosts_list
