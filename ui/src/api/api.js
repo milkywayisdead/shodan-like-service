@@ -73,4 +73,24 @@ export const searchApi = {
     service(params){
         return api.get('/service', params)
     },
+    pagination: {
+        net(params){
+            return api.get('/net/page', params)
+        },
+        asn(params){
+            return api.get('/asn/page', params)
+        },
+        app(params){
+            return api.get('/app/page', params)
+        },
+        component(params){
+            return api.get('/component/page', params)
+        },
+        org(params){
+            return api.get('/org/page', params)
+        },
+        loc(params){
+            return api.get('/loc/page', params)
+        },
+    }
 }

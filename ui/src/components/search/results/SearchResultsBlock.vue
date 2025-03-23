@@ -28,10 +28,6 @@
         </v-row>
     </v-col>
 </v-row>
-<v-pagination
-    v-model="page" 
-    :length="paginationLength" 
-    :total-visible="totalVisible" />
 </template>
 
 <script>
@@ -43,7 +39,7 @@ import TopComponentsCard from '../cards/TopComponentsCard.vue';
 import TopSoftCard from '../cards/TopSoftCard.vue';
 
 export default {
-    mixins: [storeMixin],
+    mixins: [storeMixin,],
     props: {
         hosts: Array,
         tops: Object,
@@ -60,7 +56,6 @@ export default {
             ],
             page: 1,
             totalVisible: 5,
-            paginationLength: 50,
         }
     },
     components: {

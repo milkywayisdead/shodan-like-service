@@ -1,5 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.utils.decorators import method_decorator
+from django.views import View
 
 from .mocks import HOSTS
 from .db import db
@@ -11,6 +13,78 @@ def check_auth(view, *args, **kwargs):
             return JsonResponse({'error': 401}, status=401)
         return view(request, *args, **kwargs)
     return wrapper
+
+
+class GenericSearchView(View):
+    search_type = ''
+
+    def get(self, request, *args, **kwargs):
+        term = request.GET['search']
+        _ = self.search_type
+        resp = {
+            'hosts': db.generic_hosts(_, term),
+            'hosts_total': db.generic_hosts_total(_, term),
+            'ports': db.generic_ports(_, term),
+            'tops': db.generic_tops(_, term),
+        }
+        return JsonResponse(resp)
+
+
+class GenericSearchWithAuth(GenericSearchView):
+    @method_decorator(check_auth)
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+
+class GenericPageView(View):
+    search_type = ''
+
+    def get(self, request, *args, **kwargs):
+        term = request.GET['search']
+        _ = self.search_type
+        page = int(request.GET.get('page', 1))
+        hosts = db.generic_hosts(_, term, page=page)
+        return JsonResponse({'hosts': hosts})
+
+
+class ASNSearch(GenericSearchView):
+    search_type = 'ASN'
+
+
+class ASNPage(GenericPageView):
+    search_type = 'ASN'
+
+
+class AppSearch(GenericSearchWithAuth):
+    search_type = 'total_ports.application'
+
+
+class AppPage(GenericPageView):
+    search_type = 'total_ports.application'
+
+
+class ComponentSearch(GenericSearchWithAuth):
+    search_type = 'total_ports.component'
+
+
+class ComponentPage(GenericPageView):
+    search_type = 'total_ports.component'
+
+
+class LocSearch(GenericSearchWithAuth):
+    search_type = 'Location'
+
+
+class LocPage(GenericPageView):
+    search_type = 'Location'
+
+
+class OrgSearch(GenericSearchWithAuth):
+    search_type = 'Organization'
+
+
+class OrgPage(GenericPageView):
+    search_type = 'Organization'
 
 
 def hosts(request):
@@ -41,16 +115,11 @@ def net(request):
     return JsonResponse(resp)
 
 
-def asn(request):
-    asn = request.GET['search']
-    _ = 'ASN'
-    resp = {
-        'hosts': db.generic_hosts(_, asn),
-        'hosts_total': db.generic_hosts_total(_, asn),
-        'ports': db.generic_ports(_, asn),
-        'tops': db.generic_tops(_, asn),
-    }
-    return JsonResponse(resp)
+def get_net_page(request):
+    net_str = request.GET['search']
+    page = int(request.GET.get('page', 1))
+    resp = db.net_hosts(net_str, page=page)
+    return JsonResponse({'hosts': resp})
 
 
 @check_auth
