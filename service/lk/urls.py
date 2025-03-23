@@ -11,9 +11,9 @@ urlpatterns = [
     path('api/register', views.register, name='register'),
 
     path('search/hosts', sv.hosts, name='search_hosts'),
-    path('search/port', sv.port, name='search_port'),
+    path('search/port', sv.PortSearch.as_view(), name='search_port'),
     path('search/asn', sv.ASNSearch.as_view(), name='search_asn'),
-    path('search/net', sv.net, name='search_net'),
+    path('search/net', sv.NetSearch.as_view(), name='search_net'),
     path('search/loc', sv.LocSearch.as_view(), name='search_loc'),
     path('search/org', sv.OrgSearch.as_view(), name='search_org'),
     path('search/domain', sv.DomainSearch.as_view(), name='search_domain'),

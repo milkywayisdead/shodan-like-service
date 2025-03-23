@@ -15,17 +15,24 @@ class GenericSearchView(View):
     Не требует авторизации.
     """
     search_type = ''
+    hosts_func = db.generic_hosts
+    hosts_total_func = db.generic_hosts_total
+    ports_func = db.generic_ports
+    tops_func = db.generic_tops
 
     def get(self, request, *args, **kwargs):
-        term = request.GET['search']
-        _ = self.search_type
+        cls_ = self.__class__
+        args_ = self.get_args(request)
         resp = {
-            'hosts': db.generic_hosts(_, term),
-            'hosts_total': db.generic_hosts_total(_, term),
-            'ports': db.generic_ports(_, term),
-            'tops': db.generic_tops(_, term),
+            'hosts': cls_.hosts_func(*args_),
+            'hosts_total': cls_.hosts_total_func(*args_),
+            'ports': cls_.ports_func(*args_),
+            'tops': cls_.tops_func(*args_),
         }
         return JsonResponse(resp)
+
+    def get_args(self, request):
+        return self.search_type, request.GET['search']
 
 
 class GenericSearchWithAuth(GenericSearchView):

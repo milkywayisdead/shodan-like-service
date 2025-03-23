@@ -17,26 +17,24 @@ def hosts(request):
     return JsonResponse({'host': res})
 
 
-def port(request):
-    port_str = request.GET['search']
-    resp = {
-        'hosts': db.port_hosts(port_str),
-        'hosts_total': db.port_hosts_total(port_str), 
-        'ports': [],
-        'tops': db.port_tops(port_str),
-    }
-    return JsonResponse(resp)
+class PortSearch(GenericSearchView):
+    hosts_func = db.port_hosts
+    hosts_total_func = db.port_hosts_total
+    ports_func = lambda x: []
+    tops_func = db.port_tops
+
+    def get_args(self, request):
+        return (request.GET['search'],)
 
 
-def net(request):
-    net_str = request.GET['search']
-    resp = {
-        'hosts': db.net_hosts(net_str),
-        'hosts_total': db.net_hosts_total(net_str),
-        'ports': db.net_ports(net_str),
-        'tops': db.net_tops(net_str),
-    }
-    return JsonResponse(resp)
+class NetSearch(GenericSearchView):
+    hosts_func = db.net_hosts
+    hosts_total_func = db.net_hosts_total
+    ports_func = db.net_ports
+    tops_func = db.net_tops
+
+    def get_args(self, request):
+        return (request.GET['search'],)
 
 
 class NetPage(GenericPageView):
