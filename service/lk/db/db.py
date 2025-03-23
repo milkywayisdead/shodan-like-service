@@ -14,7 +14,7 @@ _TOTAL_PORTS = 'total_ports'
 
 
 def mock_db():
-    from .mocks import HOSTS
+    from .utils.mocks import HOSTS
     h = HOSTS[0]
     del h['_id']
     _collection.insert_one(h)
@@ -31,7 +31,7 @@ def mock_db():
 
 def hosts(address):
     """
-    Для страницы 'Hosts'
+    Поиск хоста по адресу.
     """
     address = ip_to_int(address)
     res = _collection.find_one({'address': address})
@@ -40,6 +40,9 @@ def hosts(address):
 
 
 def generic_hosts(key, value, page=1, limit=10):
+    """
+    Поиск хостов для asn, loc, org, app, component, service, soft, os.
+    """
     if page < 1:
         page = 1
 
@@ -51,11 +54,17 @@ def generic_hosts(key, value, page=1, limit=10):
 
 
 def generic_hosts_total(key, value):
+    """
+    Подсчёт хостов для asn, loc, org, app, component, service, soft, os.
+    """
     params = query.get_match_filter(key, value)
     return _collection.count_documents({key: value})
 
 
 def generic_tops(key, value, limit=5):
+    """
+    Получение топ-{limit} для asn, loc, org, app, component, service, soft, os.
+    """
     params = query.get_tops_filter(
         {key: value},
         limit
@@ -65,7 +74,7 @@ def generic_tops(key, value, limit=5):
 
 def generic_ports(key, value):
     """
-    Сумма портов по сети
+    Подсчёт портов для asn, loc, org, app, component, service, soft, os.
     """
     params = query.get_ports_filter(
         {key: value}
@@ -75,7 +84,7 @@ def generic_ports(key, value):
 
 def net_hosts_total(net_str):
     """
-    Для страницы 'Net'
+    Подсчёт хостов для net.
     """
     params = query.get_range_filter('address', net_str)
     return _collection.count_documents(params)
@@ -83,7 +92,7 @@ def net_hosts_total(net_str):
 
 def net_ports(net_str):
     """
-    Сумма портов по сети
+    Подсчёт портов для net.
     """
     params = query.get_ports_filter(
         query.get_range_filter('address', net_str)
@@ -93,7 +102,7 @@ def net_ports(net_str):
 
 def net_tops(net_str, limit=5):
     """
-    Топ 5 портов, сервисов, софта, приложений и компонентов
+    Получение топ-{limit} для net.
     """
     params = query.get_tops_filter(
         query.get_range_filter('address', net_str),
@@ -103,6 +112,9 @@ def net_tops(net_str, limit=5):
 
 
 def net_hosts(net_str, page=1, limit=10):
+    """
+    Поиск хостов для net.
+    """
     if page < 1:
         page = 1
     params = query.get_range_filter('address', net_str)
@@ -114,7 +126,7 @@ def net_hosts(net_str, page=1, limit=10):
 
 def port_hosts(port_str, page=1, limit=10):
     """
-    Для страницы 'Port'
+    Поиск хостов для port.
     """
     if page < 1:
         page = 1
@@ -127,7 +139,7 @@ def port_hosts(port_str, page=1, limit=10):
 
 def port_hosts_total(port_str):
     """
-    Для страницы 'Port'
+    Подсчёт хостов для port.
     """
     params = query.get_elemmatch_filter('port', port_str)
     return _collection.count_documents({_TOTAL_PORTS: params})
@@ -135,7 +147,7 @@ def port_hosts_total(port_str):
 
 def port_tops(port_str, limit=5):
     """
-    Топ 5 портов, сервисов, софта, приложений и компонентов для страницы портов
+    Получение топ-{limit} для port.
     """
     params = query.get_port_tops_filter(
         port_str,
