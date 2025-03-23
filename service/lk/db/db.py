@@ -11,6 +11,8 @@ _collection = _db[settings.MONGODB_COLLECTION_NAME]
 
 
 _TOTAL_PORTS = 'total_ports'
+_PAGE_LENGTH = 10
+_TOPS_LIMIT = 5
 
 
 def mock_db():
@@ -39,7 +41,7 @@ def hosts(address):
     return res
 
 
-def generic_hosts(key, value, page=1, limit=10):
+def generic_hosts(key, value, page=1, page_length=_PAGE_LENGTH):
     """
     Поиск хостов для asn, loc, org, app, component, service, soft, os.
     """
@@ -47,7 +49,7 @@ def generic_hosts(key, value, page=1, limit=10):
         page = 1
 
     params = {key: value}
-    hosts_list = _collection.find(params).skip((page - 1)*10).limit(limit).to_list()
+    hosts_list = _collection.find(params).skip((page - 1)*page_length).limit(page_length).to_list()
     for host in hosts_list:
         del host['_id']
     return hosts_list
@@ -100,7 +102,7 @@ def net_ports(net_str):
     return _collection.aggregate(params).to_list()
 
 
-def net_tops(net_str, limit=5):
+def net_tops(net_str, limit=_TOPS_LIMIT):
     """
     Получение топ-{limit} для net.
     """
@@ -111,27 +113,34 @@ def net_tops(net_str, limit=5):
     return _collection.aggregate(params).to_list()
 
 
-def net_hosts(net_str, page=1, limit=10):
+def net_hosts(net_str, page=1, page_length=_PAGE_LENGTH):
     """
     Поиск хостов для net.
     """
     if page < 1:
         page = 1
+
     params = query.get_range_filter('address', net_str)
-    hosts_list = _collection.find(params).skip((page - 1)*10).limit(limit).to_list()
+    hosts_list = _collection.find(
+        params
+        ).skip((page - 1)*page_length).limit(page_length).to_list()
+
     for host in hosts_list:
         del host['_id']
     return hosts_list
 
 
-def port_hosts(port_str, page=1, limit=10):
+def port_hosts(port_str, page=1, page_length=_PAGE_LENGTH):
     """
     Поиск хостов для port.
     """
     if page < 1:
         page = 1
     params = query.get_elemmatch_filter('port', port_str)
-    hosts_list = _collection.find({_TOTAL_PORTS: params}).skip((page - 1)*10).limit(limit).to_list()
+    hosts_list = _collection.find(
+        {_TOTAL_PORTS: params}
+    ).skip((page - 1)*page_length).limit(page_length).to_list()
+
     for host in hosts_list:
         del host['_id']
     return hosts_list
@@ -145,7 +154,7 @@ def port_hosts_total(port_str):
     return _collection.count_documents({_TOTAL_PORTS: params})
 
 
-def port_tops(port_str, limit=5):
+def port_tops(port_str, limit=_TOPS_LIMIT):
     """
     Получение топ-{limit} для port.
     """

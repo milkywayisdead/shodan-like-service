@@ -6,6 +6,7 @@ from .utils.generic_views import (
     GenericSearchView,
     GenericSearchWithAuth,
     GenericPageView,
+    GenericPageWithAuth
 )
 from .utils import search_keys as sk
 
@@ -68,7 +69,7 @@ class AppSearch(GenericSearchWithAuth):
     search_type = sk.APP
 
 
-class AppPage(GenericPageView):
+class AppPage(GenericPageWithAuth):
     search_type = sk.APP
 
 
@@ -76,7 +77,7 @@ class ComponentSearch(GenericSearchWithAuth):
     search_type = sk.COMPONENT
 
 
-class ComponentPage(GenericPageView):
+class ComponentPage(GenericPageWithAuth):
     search_type = sk.COMPONENT
 
 
@@ -84,7 +85,7 @@ class LocSearch(GenericSearchWithAuth):
     search_type = sk.LOC
 
 
-class LocPage(GenericPageView):
+class LocPage(GenericPageWithAuth):
     search_type = sk.LOC
 
 
@@ -92,7 +93,7 @@ class OrgSearch(GenericSearchWithAuth):
     search_type = sk.ORG
 
 
-class OrgPage(GenericPageView):
+class OrgPage(GenericPageWithAuth):
     search_type = sk.ORG
 
 
@@ -100,7 +101,7 @@ class OsSearch(GenericSearchWithAuth):
     search_type = sk.OS
 
 
-class OsPage(GenericPageView):
+class OsPage(GenericPageWithAuth):
     search_type = sk.OS
 
 
@@ -108,7 +109,7 @@ class SoftSearch(GenericSearchWithAuth):
     search_type = sk.SOFT
 
 
-class SoftPage(GenericPageView):
+class SoftPage(GenericPageWithAuth):
     search_type = sk.SOFT
 
 
@@ -116,5 +117,5 @@ class ServiceSearch(GenericSearchWithAuth):
     search_type = sk.SERVICE
 
 
-class ServicePage(GenericPageView):
+class ServicePage(GenericPageWithAuth):
     search_type = sk.SERVICE
