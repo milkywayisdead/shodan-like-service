@@ -12,7 +12,7 @@
                     @change="searchType = $event"/>
             </template>
             <template v-slot:append="{ props }">
-                <v-btn @click="go" :disabled="!search">{{ locale.search.search }}</v-btn>
+                <v-btn @click="go" :disabled="!btnEnabled">{{ locale.search.search }}</v-btn>
             </template>
         </v-text-field>
     </v-col>
@@ -21,6 +21,7 @@
 
 <script>
 import { storeMixin } from '@/mixins/store';
+import searchRules from '@/utils/searchRules';
 
 export default {
     mixins: [storeMixin],
@@ -39,6 +40,15 @@ export default {
             this.store.setSearchType(this.searchType)
             this.$router.push(`/search`)
         },
+    },
+    computed: {
+        btnEnabled(){
+            const rule = searchRules[this.searchType]
+            if(rule){
+                return rule(this.search)
+            }
+            return false
+        }
     },
     watch: {
         searchType(value){
