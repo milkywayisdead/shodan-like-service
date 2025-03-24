@@ -9,6 +9,19 @@ def get_elemmatch_filter(key, value):
     return {'$elemMatch': {key: value}}
 
 
+def get_loc_filter(value):
+    return {
+        'Location': {
+            '$elemMatch': {
+                '$or': [
+                    {'city': value},
+                    {'country': value},
+                ]
+            }
+        }
+    }
+
+
 def get_range_filter(key, net_str):
     addr1, addr2 = get_range(net_str)
     result = {key: {'$gte': addr1, '$lte': addr2}}

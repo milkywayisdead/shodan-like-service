@@ -164,3 +164,41 @@ def port_tops(port_str, limit=_TOPS_LIMIT):
         limit
     )
     return _collection.aggregate(params).to_list()
+
+
+def loc_hosts(loc_str, *args, page=1, page_length=_PAGE_LENGTH):
+    """
+    Поиск хостов для loc.
+    """
+    params = query.get_loc_filter(loc_str)
+    hosts_list = _collection.find(params).skip((page - 1)*page_length).limit(page_length).to_list()
+    for host in hosts_list:
+        del host['_id']
+    return hosts_list
+
+
+def loc_hosts_total(loc_str):
+    """
+    Подсчёт хостов для loc.
+    """
+    params = query.get_loc_filter(loc_str)
+    return _collection.count_documents(params)
+
+
+def loc_ports_total(loc_str):
+    """
+    Подсчёт портов для loc.
+    """
+    params = query.get_ports_filter(query.get_loc_filter(loc_str))
+    return _collection.aggregate(params).to_list()
+
+
+def loc_tops(loc_str, limit=_TOPS_LIMIT):
+    """
+    Получение топ-{limit} для port.
+    """
+    params = query.get_tops_filter(
+        query.get_loc_filter(loc_str),
+        limit
+    )
+    return _collection.aggregate(params).to_list()

@@ -81,10 +81,21 @@ class ComponentPage(GenericPageWithAuth):
 
 class LocSearch(GenericSearchWithAuth):
     search_type = sk.LOC
+    hosts_func = db.loc_hosts
+    hosts_total_func = db.loc_hosts_total
+    ports_func = db.loc_ports_total
+    tops_func = db.loc_tops
+
+    def get_args(self, request):
+        return (request.GET['search'], )
 
 
 class LocPage(GenericPageWithAuth):
     search_type = sk.LOC
+    search_func = db.loc_hosts
+
+    def get_args(self, request):
+        return (request.GET['search'], )
 
 
 class OrgSearch(GenericSearchWithAuth):
