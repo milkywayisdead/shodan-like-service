@@ -3,7 +3,7 @@ from django.views import View
 from django.http import JsonResponse
 
 from .decorators import check_auth
-from lk.db import db
+from core.db import db
 
 
 PAGES_LIMIT = 20
