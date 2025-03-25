@@ -4,7 +4,7 @@ from django.http import JsonResponse
 
 from .decorators import check_auth, limit_check
 from core.db import db
-from .ratelimit import update_counter
+from .ratelimit import update_counter, get_user_state, get_ip_state
 from core.db.utils import get_ip
 
 
@@ -65,18 +65,18 @@ class GenericPageView(View):
     search_type = ''
     search_func = db.generic_hosts
 
-    @method_decorator(limit_check)
+    #@method_decorator(limit_check)
     def get(self, request, *args, **kwargs):
         args_ = self.get_args(request)
         page = self.get_page(request)
         hosts = self.__class__.search_func(page=page, *args_)
 
-        # обновление счетчика запросов
+        """ # обновление счетчика запросов
         if request.user.is_authenticated:
             key, target = request.user.id, 'user'
         else:
             key, target = get_ip(request), 'ip'
-        update_counter(key, target=target)
+        update_counter(key, target=target) """
 
         return JsonResponse({'hosts': hosts})
 
@@ -97,7 +97,7 @@ class GenericPageWithAuth(GenericPageView):
     Для запросов хостов для пагинации.
     Есть проверка на авторизацию.
     """
-    @method_decorator(limit_check)
+    #@method_decorator(limit_check)
     @method_decorator(check_auth)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)

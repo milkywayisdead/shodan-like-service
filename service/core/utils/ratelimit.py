@@ -1,11 +1,12 @@
 import time
 import redis
+import json
 
 from django.conf import settings
 
 
 _REDIS_URL = f'redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}'
-_R = redis.Redis(_REDIS_URL)
+_R = redis.Redis.from_url(_REDIS_URL)
 _USERS_HASH = settings.RATELIMIT_USERS_HASH_NAME
 _IPS_HASH = settings.RATELIMIT_IPS_HASH_NAME
 _USER_LIMIT = settings.RATELIMIT_USER_LIMIT
@@ -16,8 +17,6 @@ _IP_INTERVAL = settings.RATELIMIT_IP_INTERVAL
 _COUNTER_KEY = 'counter'
 _INTERVAL_START_KEY = 'interval_start'
 
-state = {'n': 1, 'ts': time.time()}
-
 
 def db_request_allowed(state, target='user'):
     interval, limit = _USER_INTERVAL, _USER_LIMIT
@@ -26,7 +25,6 @@ def db_request_allowed(state, target='user'):
 
     n, ts = state[_COUNTER_KEY], state[_INTERVAL_START_KEY]
     now = time.time()
-    ts_ok, n_ok = False, False
     if ts + interval < now:
         return True
     if n < limit:
@@ -40,7 +38,7 @@ def get_new_state():
 
 def _create_counter(hash, key):
     state = get_new_state()
-    _R.hset(hash, key, state)
+    _R.hset(hash, key, json.dumps(state))
     return state
 
 
@@ -52,11 +50,6 @@ def create_ip_counter(key):
     return _create_counter(_IPS_HASH, key)
 
 
-def increment_counter(hash, key, state):
-    state[_COUNTER_KEY] += 1
-    return _R.hset(hash, key, state)
-
-
 def update_counter(key, target='user'):
     hash, interval, get_state = _USERS_HASH, _USER_INTERVAL, get_user_state
     if target != 'user':
@@ -64,20 +57,23 @@ def update_counter(key, target='user'):
     
     now = time.time()
     state = get_state(key)
-    new_state = None
     # если истек интервал, то сбросить
     if state[_INTERVAL_START_KEY] + interval < now:
         new_state = get_new_state()
     # если нет - увеличить счётчик
     else:
         new_state = state
-        state[_COUNTER_KEY] += 1
-    return _R.hset(hash, key, state)
+    new_state[_COUNTER_KEY] += 1
+    return _R.hset(hash, key, json.dumps(new_state))
 
 
 def get_user_state(user_id):
-    return _R.hget(_USERS_HASH, user_id)
+    state = _R.hget(_USERS_HASH, user_id)
+    if state:
+        return json.loads(state)
 
 
 def get_ip_state(key):
-    return _R.hget(_IPS_HASH, key)
+    state = _R.hget(_IPS_HASH, key)
+    if state:
+        return json.loads(state)

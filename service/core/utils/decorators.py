@@ -4,7 +4,7 @@ from . import ratelimit as rl
 from core.db.utils import get_ip
 
 
-_DENIED = JsonResponse({'error': 'denied'})
+_DENIED = JsonResponse({'error': 'denied'}, status=429)
 
 
 def check_auth(view, *args, **kwargs):
@@ -34,12 +34,10 @@ def limit_check(view, *args, **kwargs):
         # проверка лимита запросов для ip
         else:
             ip_address = get_ip(request)
-            print(ip_address)
             state = rl.get_ip_state(ip_address)
             if not state:
                 state = rl.create_ip_counter(ip_address)
             ok = rl.db_request_allowed(state, target='ip')
-        print(state)
 
         if ok:
             return view(request, *args, **kwargs)
