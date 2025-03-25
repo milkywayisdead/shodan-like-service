@@ -2,8 +2,10 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.http import JsonResponse
 
-from .decorators import check_auth
+from .decorators import check_auth, limit_check
 from core.db import db
+from .ratelimit import update_counter
+from core.db.utils import get_ip
 
 
 PAGES_LIMIT = 20
@@ -20,6 +22,7 @@ class GenericSearchView(View):
     ports_func = db.generic_ports
     tops_func = db.generic_tops
 
+    @method_decorator(limit_check)
     def get(self, request, *args, **kwargs):
         cls_ = self.__class__
         args_ = self.get_args(request)
@@ -29,6 +32,14 @@ class GenericSearchView(View):
             'ports': cls_.ports_func(*args_),
             'tops': cls_.tops_func(*args_),
         }
+
+        # обновление счетчика запросов
+        if request.user.is_authenticated:
+            key, target = request.user.id, 'user'
+        else:
+            key, target = get_ip(request), 'ip'
+        update_counter(key, target=target)
+
         return JsonResponse(resp)
 
     def get_args(self, request):
@@ -40,6 +51,7 @@ class GenericSearchWithAuth(GenericSearchView):
     Для поиска loc, org, app, soft, service, component, os.
     Есть проверка на авторизацию.
     """
+    @method_decorator(limit_check)
     @method_decorator(check_auth)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
@@ -53,10 +65,19 @@ class GenericPageView(View):
     search_type = ''
     search_func = db.generic_hosts
 
+    @method_decorator(limit_check)
     def get(self, request, *args, **kwargs):
         args_ = self.get_args(request)
         page = self.get_page(request)
         hosts = self.__class__.search_func(page=page, *args_)
+
+        # обновление счетчика запросов
+        if request.user.is_authenticated:
+            key, target = request.user.id, 'user'
+        else:
+            key, target = get_ip(request), 'ip'
+        update_counter(key, target=target)
+
         return JsonResponse({'hosts': hosts})
 
     def get_args(self, request):
@@ -76,6 +97,7 @@ class GenericPageWithAuth(GenericPageView):
     Для запросов хостов для пагинации.
     Есть проверка на авторизацию.
     """
+    @method_decorator(limit_check)
     @method_decorator(check_auth)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
