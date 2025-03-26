@@ -78,5 +78,5 @@ export default {
 <route lang="yaml">
 meta:
     noAuthOnly: true
-    layout: register
+    layout: login
 </route>
