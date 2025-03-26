@@ -2,7 +2,37 @@ import ipaddress
 
 
 def is_ip(ip_str):
-    return True
+    ip_str = str(ip_str)
+    try:
+        ipaddress.IPv4Address(ip_str)
+    except ipaddress.AddressValueError:
+        pass
+    else:
+        return True
+    
+    try:
+        ipaddress.IPv6Address(ip_str)
+    except ipaddress.AddressValueError:
+        return False
+    else:
+        return True
+
+
+def is_net(net_str):
+    net_str = str(net_str)
+    try:
+        ipaddress.IPv4Network(net_str)
+    except ipaddress.AddressValueError:
+        pass
+    else:
+        return True
+    
+    try:
+        ipaddress.IPv6Network(net_str)
+    except ipaddress.AddressValueError:
+        return False
+    else:
+        return True
 
 
 def ip_to_int(ip_str):
