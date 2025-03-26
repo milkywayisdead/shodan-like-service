@@ -11,18 +11,13 @@ from core.db.utils import get_ip
 PAGES_LIMIT = 20
 
 
-class GenericSearchView(View):
-    """
-    Для поиска asn, hosts.
-    Не требует авторизации.
-    """
+class GenericBaseView(View):
     search_type = ''
     hosts_func = db.generic_hosts
     hosts_total_func = db.generic_hosts_total
     ports_func = db.generic_ports
     tops_func = db.generic_tops
 
-    @method_decorator(limit_check)
     def get(self, request, *args, **kwargs):
         cls_ = self.__class__
         args_ = self.get_args(request)
@@ -46,13 +41,23 @@ class GenericSearchView(View):
         return self.search_type, request.GET['search']
 
 
-class GenericSearchWithAuth(GenericSearchView):
+class GenericSearchView(GenericBaseView):
+    """
+    Для поиска asn, hosts.
+    Не требует авторизации.
+    """
+    @method_decorator(limit_check)
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+
+class GenericSearchWithAuth(GenericBaseView):
     """
     Для поиска loc, org, app, soft, service, component, os.
     Есть проверка на авторизацию.
     """
-    @method_decorator(limit_check)
     @method_decorator(check_auth)
+    @method_decorator(limit_check)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
@@ -65,7 +70,6 @@ class GenericPageView(View):
     search_type = ''
     search_func = db.generic_hosts
 
-    #@method_decorator(limit_check)
     def get(self, request, *args, **kwargs):
         args_ = self.get_args(request)
         page = self.get_page(request)
@@ -97,7 +101,6 @@ class GenericPageWithAuth(GenericPageView):
     Для запросов хостов для пагинации.
     Есть проверка на авторизацию.
     """
-    #@method_decorator(limit_check)
     @method_decorator(check_auth)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)

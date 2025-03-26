@@ -6,7 +6,7 @@ def get_match_filter(key, value):
 
 
 def get_elemmatch_filter(key, value):
-    return {'$elemMatch': {key: value}}
+    return {'$elemMatch': {key: {'$regex': value, '$options': 'i'}}}
 
 
 def get_loc_filter(value):
@@ -14,8 +14,8 @@ def get_loc_filter(value):
         'Location': {
             '$elemMatch': {
                 '$or': [
-                    {'city': value},
-                    {'country': value},
+                    {'city': {'$regex': value, '$options': 'i'}},
+                    {'country': {'$regex': value, '$options': 'i'}},
                 ]
             }
         }
@@ -146,7 +146,7 @@ def get_port_tops_filter(port_str, limit=5):
     return [
         {
             '$match': {
-                'total_ports': {'$elemMatch': {'port': port_str}}
+                'total_ports': {'$elemMatch': {'port': {'$regex': port_str, '$options': 'i'}}}
             },
         },
         { 
