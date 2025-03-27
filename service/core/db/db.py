@@ -1,4 +1,5 @@
 import pymongo
+import re
 
 from django.conf import settings
 
@@ -29,7 +30,11 @@ def mock_db():
         h['IP'] = str(ipaddress.IPv4Address(ip))
         _collection.insert_one(h)
     print('OK')
-    
+
+
+def _regex(value):
+    return re.compile(value, re.IGNORECASE)
+
 
 def hosts(address):
     """
@@ -49,7 +54,7 @@ def generic_hosts(key, value, *args, page=1, page_length=_PAGE_LENGTH):
     if page < 1:
         page = 1
 
-    params = {key: value}
+    params = {key: _regex(value)}
     hosts_list = _collection.find(params).skip((page - 1)*page_length).limit(page_length).to_list()
     for host in hosts_list:
         del host['_id']
@@ -60,8 +65,7 @@ def generic_hosts_total(key, value):
     """
     Подсчёт хостов для asn, loc, org, app, component, service, soft, os.
     """
-    params = query.get_match_filter(key, value)
-    return _collection.count_documents({key: value})
+    return _collection.count_documents({key: _regex(value)})
 
 
 def generic_tops(key, value, limit=5):
@@ -69,7 +73,7 @@ def generic_tops(key, value, limit=5):
     Получение топ-{limit} для asn, loc, org, app, component, service, soft, os.
     """
     params = query.get_tops_filter(
-        {key: value},
+        {key: _regex(value)},
         limit
     )
     return _collection.aggregate(params).to_list()
@@ -80,7 +84,7 @@ def generic_ports(key, value):
     Подсчёт портов для asn, loc, org, app, component, service, soft, os.
     """
     params = query.get_ports_filter(
-        {key: value}
+        {key: _regex(value)}
     )
     return _collection.aggregate(params).to_list()
 
