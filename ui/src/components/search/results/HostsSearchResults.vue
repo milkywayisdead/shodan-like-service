@@ -8,22 +8,19 @@
         </v-row>
         <v-row>
             <v-col v-if="softList.length">
-                <search-results-asc 
-                    :title="locale.search.results.soft" 
+                <search-results-soft 
                     :items="softList" />
             </v-col>
         </v-row>
         <v-row>
             <v-col v-if="appsList.length">
-                <search-results-asc 
-                    :title="locale.search.results.apps" 
+                <search-results-apps
                     :items="appsList" />
             </v-col>
         </v-row>
         <v-row>
             <v-col v-if="componentsList.length">
-                <search-results-asc 
-                    :title="locale.search.results.components" 
+                <search-results-components
                     :items="componentsList" />
             </v-col>
         </v-row>

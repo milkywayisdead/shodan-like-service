@@ -1,6 +1,6 @@
 <template>
 <v-card 
-    :title="title" 
+    :title="locale.search.results.soft" 
     :height="height">
     <v-card-text>
         <p v-for="item in items">{{ item.title }}</p>
@@ -13,7 +13,6 @@ import { storeMixin } from '@/mixins/store';
 
 export default {
     props: {
-        title: String,
         height: {
             type: Number,
             default: 100
