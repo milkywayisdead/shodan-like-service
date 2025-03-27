@@ -17,7 +17,8 @@ _TOPS_LIMIT = 5
 
 
 def mock_db():
-    from .utils.mocks import HOSTS
+    from ..utils.mocks import HOSTS
+    import ipaddress
     h = HOSTS[0]
     del h['_id']
     _collection.insert_one(h)

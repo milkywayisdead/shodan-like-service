@@ -1,6 +1,5 @@
 <template>
-<v-row>
-    <v-spacer />
+<v-row align="center" justify="center">
     <v-col cols="4" class="text-center">
         <v-form v-model="formIsValid">
             <v-text-field 
@@ -22,21 +21,20 @@
             {{ locale.login }}
         </v-btn>
     </v-col>
-    <v-spacer />
 </v-row>
 </template>
 
 <script>
 import { useAuthStore } from '../stores/auth'
-import { useAppStore } from '@/stores/app'
 import { loginAndRegisterRules } from '@/utils/rules'
+import { storeMixin } from '@/mixins/store'
 
 export default {
+    mixins: [storeMixin],
     setup() {
         const authStore = useAuthStore()
         return {
             authStore,
-            locale: useAppStore().locale,
             rules: loginAndRegisterRules,
         }
     },
@@ -51,10 +49,13 @@ export default {
         async login() {
             if(!this.formIsValid) return
 
+            this.store.loading = true
+
             await this.authStore.login(this.email, this.password, this.$router)
             if (!this.authStore.isAuthenticated) {
                 this.error = 'Login failed. Please check your credentials.'
             }
+            this.store.loading = false
         },
     }
 }

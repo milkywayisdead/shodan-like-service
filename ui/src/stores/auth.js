@@ -48,7 +48,10 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async logout(router = null) {
+    async logout(router = null, loader=null, cb=null) {
+      if(loader){
+        loader()
+      }
       try {
         const response = await fetch(urls.logout, {
           method: 'POST',
@@ -70,6 +73,10 @@ export const useAuthStore = defineStore('auth', {
       } catch (error) {
         console.error('Logout failed', error)
         throw error
+      } finally {
+        if(cb){
+          cb()
+        }
       }
     },
 

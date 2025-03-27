@@ -1,6 +1,5 @@
 <template>
-<v-row>
-    <v-spacer />
+<v-row align="center" justify="center">
     <v-col cols="4" class="text-center">
         <v-form v-model="formIsValid">
             <v-text-field 
@@ -22,29 +21,29 @@
             {{ locale.register }}
         </v-btn>
     </v-col>
-    <v-spacer />
 </v-row>
 </template>
 
 <script>
 import { getCSRFToken } from '../stores/auth'
-import { useAppStore } from '@/stores/app'
 import { urls } from '@/utils/urls'
 import { loginAndRegisterRules } from '@/utils/rules'
+import { storeMixin } from '@/mixins/store'
 
 export default {
+    mixins: [storeMixin],
     data(){
         return {
             email: '',
             password: '',
             success: '',
-            locale: useAppStore().locale,
             rules: loginAndRegisterRules,
             formIsValid: false,
         }
     },
     methods: {
         async register() {
+            this.store.loading = true
             try {
                 const response = await fetch(urls.register, {
                     method: 'POST',
@@ -63,12 +62,15 @@ export default {
                     this.success = 'Registration successful! Please log in.'
                     setTimeout(() => {
                         this.$router.push('/login')
+                        this.store.loading = false
                     }, 1000)
                 } else {
                     this.error = data.error || 'Registration failed'
                 }
             } catch (err) {
                 this.error = 'An error occurred during registration: ' + err
+            } finally {
+                this.store.loading = false
             }
         }
     }

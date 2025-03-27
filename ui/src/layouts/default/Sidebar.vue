@@ -37,7 +37,7 @@
                 :to="item.to">
             </v-list-item>
             <v-list-item v-if="auth.isAuthenticated">
-                <v-btn @click="auth.logout($router)">{{ locale.signOut }}</v-btn>
+                <v-btn @click="auth.logout($router, setLoading, resetLoading)">{{ locale.signOut }}</v-btn>
             </v-list-item>
         </v-list>
     </template>
@@ -46,15 +46,15 @@
 
 <script>
 import { useAuthStore } from '@/stores/auth';
-import { useAppStore } from '@/stores/app';
+import { storeMixin } from '@/mixins/store';
 
 export default {
+    mixins: [storeMixin],
     data(){
         return {
             rail: true,
             drawer: null,
             auth: useAuthStore(),
-            locale: useAppStore().locale,
         }
     },
     computed: {
@@ -83,6 +83,14 @@ export default {
             }
             items.push({title: nav.help, icon: 'mdi-help-box-outline', value: 'help', to: '/help'})
             return items
+        },
+        setLoading(){
+            this.store.loading = true
+        },
+        resetLoading(){
+            setTimeout(() => {
+                this.store.loading = false
+            }, 500)
         }
     }
 }
