@@ -13,7 +13,7 @@ _collection = _db[settings.MONGODB_COLLECTION_NAME]
 
 _TOTAL_PORTS = 'total_ports'
 _PAGE_LENGTH = 10
-_TOPS_LIMIT = 5
+_TOPS_LIMIT = 6
 
 
 def mock_db():

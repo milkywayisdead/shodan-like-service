@@ -76,6 +76,8 @@ export const ru = {
         host: 'Хост',
         domain: 'Домен',
         location: 'Местоположение',
+        city: 'Город',
+        country: 'Страна',
         organization: 'Организация',
         asn: 'ASN',
         os: 'ОС',
@@ -89,6 +91,6 @@ export const ru = {
         'component': 'Компонент',
         'title': 'Название',
         'headers': 'Заголовки',
-        'body': 'Тело'
+        'body': 'Тело',
     }
 }

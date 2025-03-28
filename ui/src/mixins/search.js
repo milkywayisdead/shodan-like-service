@@ -9,6 +9,20 @@ export const searchMixin = {
 }
 
 
+const TOPS_LIMIT = 1
+
+export const topsMixin = {
+    props: {
+        topData: Array,
+    },
+    computed: {
+        items(){
+            return (this.topData || []).slice(0, TOPS_LIMIT)
+        }
+    }
+}
+
+
 export const genericResultsMixin = {
     props: {
         info: {
