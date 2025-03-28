@@ -1,7 +1,9 @@
 <template>
-<v-card 
-    :title="locale.search.results.main"
-    @click="emitClick">
+<v-card>
+    <v-card-title>
+        {{ locale.search.results.main }}
+        <v-btn icon="mdi-arrow-right" @click="emitClick" size="x-small" />
+    </v-card-title>
     <v-card-text>
         <p v-for="param in mainParams" :key="param.value">
             {{ locale.host[param.title] }}: {{ info[param.value] }}
