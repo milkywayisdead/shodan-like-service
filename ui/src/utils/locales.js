@@ -22,6 +22,7 @@ export const ru = {
         contacts: 'Контакты'
     },
     search: {
+        more: 'Больше',
         search: 'Поиск',
         hosts: 'Hosts',
         net: 'Net',

@@ -5,6 +5,9 @@
         <p v-for="data in topData" :key="data._id">
             {{ data._id }}: {{ data.count }}
         </p>
+        <p>
+            <a @click="toMore">{{ locale.search.more }}...</a>
+        </p>
     </v-card-text>
 </v-card>
 </template>

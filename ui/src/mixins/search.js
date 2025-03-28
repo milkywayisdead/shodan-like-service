@@ -18,7 +18,15 @@ export const topsMixin = {
     computed: {
         items(){
             return (this.topData || []).slice(0, TOPS_LIMIT)
-        }
+        },
+        showMore(){
+            return (this.topData || []).length > TOPS_LIMIT
+        },
+    },
+    methods: {
+        toMore(){
+           
+        },
     }
 }
 
