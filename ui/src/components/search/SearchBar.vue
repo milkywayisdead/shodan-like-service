@@ -34,7 +34,7 @@ export default {
     emits: ['search'],
     methods: {
         go(){
-            if(!this.search) return
+            if(!this.search || !this.btnEnabled) return
             const term = this.search.trim()
             this.search = term
             this.store.setSearchTerm(term)

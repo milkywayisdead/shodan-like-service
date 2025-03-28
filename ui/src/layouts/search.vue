@@ -3,7 +3,11 @@
     <sidebar />
     <app-bar v-if="!authStore.isAuthenticated" />
     <v-container>
-        <router-view />
+        <router-view v-slot="{Component}">
+            <keep-alive>
+                <component :is="Component" />
+            </keep-alive>
+        </router-view>
         <loader-overlay :loading="store.loading" />
     </v-container>
 </v-main>

@@ -8,6 +8,7 @@ export const useAppStore = defineStore('app', {
         searchTerm: '',
         searchType: 'hosts',
         loading: false,
+        hostDetails: null
     }),
     actions: {
         setSearchTerm(term){
@@ -21,6 +22,12 @@ export const useAppStore = defineStore('app', {
         },
         resetLoading(){
             this.loading = false
+        },
+        setHostDetails(host){
+            this.hostDetails = host
+        },
+        resetHostDetails(){
+            this.hostDetails = null
         }
     }
 })

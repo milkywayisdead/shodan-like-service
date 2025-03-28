@@ -2,7 +2,8 @@
 <search-results-block 
     :hosts="info.hosts || []" 
     :tops="(info.tops || [])[0] || {}"
-    :totals="totals" />
+    :totals="totals" 
+    @host-clicked="emitHostClicked($event)" />
 </template>
 
 <script>

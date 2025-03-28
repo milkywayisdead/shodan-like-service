@@ -3,7 +3,7 @@
 <component v-if="searchType"
     :is="`${searchType}-search-results`" 
     :info="results"
-    @host-clicked="hostClickedHandler" />
+    @host-clicked="hostClickedHandler($event)" />
 <v-pagination v-if="auth.isAuthenticated && paginationLength"
     v-model="page" 
     :length="paginationLength" 
@@ -98,7 +98,8 @@ export default {
             this._lockPage = false
         },
         hostClickedHandler(host){
-            console.log(host)
+            this.store.setHostDetails(host)
+            this.$router.push('/details/host')
         }
     },
     watch: {

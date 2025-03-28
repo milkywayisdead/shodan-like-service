@@ -63,7 +63,7 @@ export default {
     },
     methods: {
         emitHostClicked(host){
-            this.$emit('host-clicked', host)
+            this.$emit('host-clicked', JSON.parse(JSON.stringify(host)))
         }
     },
     components: {
