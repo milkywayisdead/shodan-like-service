@@ -20,7 +20,9 @@
     <v-col cols="8">
         <v-row v-for="host in hosts" :key="host.address">
             <v-col cols="5">
-                <host-info-card :info="host" />
+                <host-info-card 
+                    :info="host" 
+                    @click="emitHostClicked(host)" />
             </v-col>
             <v-col cols="7">
                 <ports-list-card :ports="host.total_ports" />
@@ -40,6 +42,7 @@ import TopSoftCard from '../cards/TopSoftCard.vue';
 
 export default {
     mixins: [storeMixin,],
+    emits: ['host-clicked'],
     props: {
         hosts: Array,
         tops: Object,
@@ -56,6 +59,11 @@ export default {
             ],
             page: 1,
             totalVisible: 5,
+        }
+    },
+    methods: {
+        emitHostClicked(host){
+            this.$emit('host-clicked', host)
         }
     },
     components: {

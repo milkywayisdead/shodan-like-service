@@ -1,6 +1,7 @@
 <template>
 <v-card 
-    :title="locale.search.results.main" >
+    :title="locale.search.results.main"
+    @click="emitClick">
     <v-card-text>
         <p v-for="param in mainParams" :key="param.value">
             {{ locale.host[param.title] }}: {{ info[param.value] }}
@@ -14,6 +15,7 @@ import { storeMixin } from '@/mixins/store';
 
 export default {
     mixins: [storeMixin],
+    emits: ['click'],
     props: {
         title: String,
         height: {
@@ -38,5 +40,10 @@ export default {
             ]
         }
     },
+    methods: {
+        emitClick(){
+            this.$emit('click')
+        }
+    }
 }
 </script>

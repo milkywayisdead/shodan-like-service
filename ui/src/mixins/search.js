@@ -16,6 +16,12 @@ export const genericResultsMixin = {
             default: {}
         }
     },
+    emits: ['host-clicked'],
+    methods: {
+        emitHostClicked(host){
+            this.$emit('host-clicked', host)
+        }
+    },
     computed: {
         totals(){
             const ports = (this.info.ports || [])[0]

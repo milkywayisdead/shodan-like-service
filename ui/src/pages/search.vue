@@ -2,7 +2,8 @@
 <search-bar ref="searchBar" @search="search" />
 <component v-if="searchType"
     :is="`${searchType}-search-results`" 
-    :info="results" />
+    :info="results"
+    @host-clicked="hostClickedHandler" />
 <v-pagination v-if="auth.isAuthenticated && paginationLength"
     v-model="page" 
     :length="paginationLength" 
@@ -95,6 +96,9 @@ export default {
         },
         unlockPage(){
             this._lockPage = false
+        },
+        hostClickedHandler(host){
+            console.log(host)
         }
     },
     watch: {
