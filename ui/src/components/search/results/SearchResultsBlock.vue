@@ -21,7 +21,8 @@
         <v-row v-for="host in hosts" :key="host.address">
             <v-col cols="5">
                 <host-info-card 
-                    :info="host" 
+                    :info="host"
+                    :host-link="hostLink" 
                     @click="emitHostClicked(host)" />
             </v-col>
             <v-col cols="7">
@@ -47,6 +48,10 @@ export default {
         hosts: Array,
         tops: Object,
         totals: Object,
+        hostLink: {
+            type: Boolean,
+            default: true
+        },
     },
     data(){
         return {

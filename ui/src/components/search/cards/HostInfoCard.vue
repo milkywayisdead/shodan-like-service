@@ -2,7 +2,10 @@
 <v-card>
     <v-card-title>
         {{ locale.search.results.main }}
-        <v-btn icon="mdi-arrow-right" @click="emitClick" size="x-small" />
+        <v-btn v-if="hostLink" 
+            icon="mdi-arrow-right" 
+            @click="emitClick" 
+            size="x-small" />
     </v-card-title>
     <v-card-text>
         <p v-for="param in mainParams" :key="param.value">
@@ -28,6 +31,7 @@ export default {
             type: Object,
             default: {}
         },
+        hostLink: Boolean,
     },
     data(){
         return {

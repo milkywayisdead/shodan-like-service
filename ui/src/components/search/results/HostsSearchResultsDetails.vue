@@ -3,8 +3,7 @@
     <v-col cols="6">
         <v-row>
             <v-col>
-                <host-info-card 
-                    :info="info.host" />
+                <host-info-card :info="info.host" />
             </v-col>
         </v-row>
         <v-row>

@@ -1,6 +1,8 @@
 <template>
 <lazy-search-bar />
-<hosts-search-results :info="info" v-if="info"/>
+<hosts-search-results-details v-if="info"
+    :info="info"
+    host-link />
 </template>
 
 <script>
