@@ -5,9 +5,11 @@
         <p v-for="data in items" :key="data._id">
             {{ data._id }}: {{ data.count }}
         </p>
-        <p>
-            <a @click="toMore">{{ locale.search.more }}...</a>
-        </p>
+        <a v-if="showMore" class="nodecor"
+            @click.prevent="toMore"
+            href="">
+            {{ locale.search.more }}...
+        </a>
     </v-card-text>
 </v-card>
 </template>
