@@ -25,6 +25,9 @@ import searchRules from '@/utils/searchRules';
 
 export default {
     mixins: [storeMixin],
+    props: {
+        hostDetails: Boolean,
+    },
     data(){
         return {
             search: '',
@@ -56,7 +59,9 @@ export default {
         }
     },
     mounted(){
-        //this.search = this.store.searchTerm
+        if(this.hostDetails){
+            this.search = this.store.searchTerm
+        }
     }
 }
 </script>

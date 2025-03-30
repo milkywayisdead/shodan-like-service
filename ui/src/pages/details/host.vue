@@ -1,5 +1,5 @@
 <template>
-<lazy-search-bar />
+<lazy-search-bar ref="searchBar" host-details />
 <hosts-search-results-details v-if="info"
     :info="info"
     host-link />
@@ -19,7 +19,11 @@ export default {
     methods: {
         setHostDetails(){
             this.info = {host: this.store.hostDetails}
-        }
+        },
+    },
+    mounted(){
+        this.setHostDetails()
+        this.$refs.searchBar.searchType = this.store.searchType
     },
     activated(){
         this.setHostDetails()

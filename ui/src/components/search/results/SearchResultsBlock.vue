@@ -1,6 +1,6 @@
 <template>
 <v-row>
-    <v-col cols="4">
+    <v-col cols="2">
         <v-row>
             <v-col>
                 <search-results-card 
@@ -17,15 +17,15 @@
             </v-col>
         </v-row>
     </v-col>
-    <v-col cols="8">
+    <v-col cols="10">
         <v-row v-for="host in hosts" :key="host.address">
-            <v-col cols="5">
+            <v-col cols="6">
                 <host-info-card 
                     :info="host"
                     :host-link="hostLink" 
                     @click="emitHostClicked(host)" />
             </v-col>
-            <v-col cols="7">
+            <v-col cols="6">
                 <ports-list-card :ports="host.total_ports" />
             </v-col>
         </v-row>
