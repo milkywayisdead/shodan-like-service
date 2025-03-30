@@ -145,9 +145,11 @@ def get_tops_filter(match, limit=5):
 def get_port_tops_filter(port_str, limit=5):
     return [
         {
-            '$match': {
-                'total_ports': {'$elemMatch': {'port': {'$regex': port_str, '$options': 'i'}}}
-            },
+            '$match': { "total_ports.port": {'$regex': port_str, '$options': 'i'}},
+
+            #'$match': {
+            #    'total_ports': {'$elemMatch': {'port': {'$regex': port_str, '$options': 'i'}}}
+            #},
         },
         { 
             '$unwind': "$total_ports" 

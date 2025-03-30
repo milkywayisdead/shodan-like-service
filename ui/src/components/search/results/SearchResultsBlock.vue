@@ -5,7 +5,8 @@
             <v-col>
                 <search-results-card 
                     :title="locale.search.results.totalResults" 
-                    :totals="totals" />
+                    :totals="totals" 
+                    :show-ports="!portResults" />
             </v-col>
         </v-row>
         <v-row v-for="top in topCats">
@@ -52,6 +53,7 @@ export default {
             type: Boolean,
             default: true
         },
+        portResults: Boolean,
     },
     data(){
         return {

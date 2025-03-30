@@ -3,7 +3,8 @@
     :hosts="info.hosts || []" 
     :tops="(info.tops || [])[0] || {}"
     :totals="totals" 
-    @host-clicked="emitHostClicked($event)" />
+    @host-clicked="emitHostClicked($event)" 
+    port-results />
 </template>
 
 <script>
