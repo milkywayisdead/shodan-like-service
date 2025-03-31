@@ -36,11 +36,9 @@ export default {
     },
     methods: {
         go(){
-            if(!this.search || !this.btnEnabled) return
             const term = this.search.trim()
+            if(!term || !this.searchType || !this.btnEnabled) return
             this.search = term
-            //this.store.setSearchTerm(term)
-            //this.store.setSearchType(this.searchType)
             this.$router.push(`/search?t=${this.searchType}&q=${term}`)
         },
     },
@@ -58,10 +56,5 @@ export default {
             this.$refs.menu.setSearchTypeTitle(value)
         }
     },
-    mounted(){
-        if(this.hostDetails){
-            this.search = this.store.searchTerm
-        }
-    }
 }
 </script>

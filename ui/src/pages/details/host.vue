@@ -23,7 +23,6 @@ export default {
     },
     mounted(){
         this.setHostDetails()
-        this.$refs.searchBar.searchType = this.store.searchType
     },
     activated(){
         this.setHostDetails()

@@ -54,7 +54,6 @@ export default {
             if(!term || !type) return
             const func = this.searchApi[type]
             this.store.setLoading()
-            //this.store.setSearchType(params.type)
             this.$router.push(`/search?t=${type}&q=${term}`)
             func({params: {search: term}})
                 .then(res => {
@@ -73,9 +72,10 @@ export default {
                 })
         },
         getPage(page){
-            const term = this.store.searchTerm
             page = page > 20 ? 20 : page
-            const func = this.searchApi.pagination[this.store.searchType]
+            const query = this.$router.query
+            const term = query.q
+            const func = this.searchApi.pagination[query.t]
             this.store.setLoading()
             func({params: {search: term, page: page}})
                 .then(res => {
@@ -117,7 +117,6 @@ export default {
     mounted(){
         const query = this.$route.query || {}
         const type = query.t || ''
-        //this.store.searchType = type
         const term = query.q || ''
         this.$refs.searchBar.setTypeAndTerm(type, term)
         this.search(type, term)
