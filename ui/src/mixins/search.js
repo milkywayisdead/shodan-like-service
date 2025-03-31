@@ -40,10 +40,11 @@ export const detailsMixin = {
             const q = query.q
             const facet = query.facet
             this.store.setLoading()
-            searchApi.getDetails(t, q, facet)
+            searchApi.details(t, q, facet)
                 .then(res => {
                     if(res.status === 200){
-                        this.setDetails(res.data.details)
+                        const k = Object.keys((res.data.details[0]))
+                        this.setDetails(res.data.details[0][k[0]])
                     }
                 }).catch(err => {}).finally(() => {
                     setTimeout(this.store.resetLoading, 500)

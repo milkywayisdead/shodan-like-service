@@ -105,8 +105,8 @@ export const searchApi = {
             return api.get('/os/page', params)
         },
     },
-    details(type, term, facet){
-        const params = {params: {type, term, facet}}
+    details(t, q, facet){
+        const params = {params: {t, q, facet}}
         return api.get('/details', params)
     }
 }

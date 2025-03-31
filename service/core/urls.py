@@ -34,5 +34,5 @@ urlpatterns = [
     path('search/soft/page', sv.SoftPage.as_view(), name='soft_page'),
     path('search/service/page', sv.ServicePage.as_view(), name='service_page'),
 
-    path('details/', sv.details, name='details'),
+    path('search/details/', sv.details, name='details'),
 ]

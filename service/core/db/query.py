@@ -265,7 +265,7 @@ def get_facet_details_filter(t, q, facet):
     elif t == 'loc':
         match = get_loc_filter(q)
     else:
-        match = {t: regex(q)}
+        match = {SK_DICT[t]: regex(q)}
 
     return [
         {'$match': match},
