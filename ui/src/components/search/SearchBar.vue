@@ -34,12 +34,18 @@ export default {
     emits: ['search'],
     methods: {
         go(){
-            if(!this.search || !this.btnEnabled) return
+            if(!this.search || !this.searchType || !this.btnEnabled) return
             const term = this.search.trim()
             this.search = term
-            this.store.setSearchTerm(term)
-            this.$emit('search', {term: term, type: this.searchType})
+            this.$router.push(`/search?t=${this.searchType}&q=${term}`)
+            //this.store.setSearchTerm(term)
+            //this.$emit('search', {term: term, type: this.searchType})
         },
+        setTypeAndTerm(type, term){
+            this.search = term
+            this.searchType = type
+            this.$refs.menu.setSearchTypeTitle(type)
+        }
     },
     computed: {
         btnEnabled(){
@@ -52,13 +58,13 @@ export default {
     },
     watch: {
         searchType(value){
-            this.$refs.menu.setSearchTypeTitle(value)
+            //this.$refs.menu.setSearchTypeTitle(value)
         }
     },
     mounted(){
-        this.search = this.store.searchTerm
-        this.searchType = this.store.searchType
-        this.go()
+        //this.search = this.store.searchTerm
+        //this.searchType = this.store.searchType
+        //this.go()
     }
 }
 </script>

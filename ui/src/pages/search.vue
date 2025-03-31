@@ -39,12 +39,10 @@ export default {
             pageLength: 10,
             paginationLimit: 20,
             _lockPage: false,
+            searchType: 'hosts',
         }
     },
     computed: {
-        searchType(){
-            return this.store.searchType
-        },
         paginationLength(){
             const hostsNum = this.results.hosts_total || 0
             const pagesNum = Math.ceil(hostsNum / this.pageLength)
@@ -52,14 +50,15 @@ export default {
         }
     },
     methods: {
-        search(params){
-            const term = params.term
-            if(!term) return
-            const func = this.searchApi[params.type]
+        search(type, term){
+            if(!term || !type) return
+            const func = this.searchApi[type]
             this.store.setLoading()
-            this.store.setSearchType(params.type)
+            //this.store.setSearchType(params.type)
+            this.$router.push(`/search?t=${type}&q=${term}`)
             func({params: {search: term}})
                 .then(res => {
+                    this.searchType = type
                     const status = res.status
                     if(status === 200){
                         this.results = res.data
@@ -107,10 +106,21 @@ export default {
             if(!this._lockPage){
                 this.getPage(value)
             }
+        },
+        $route(to, from){
+            const type = to.query.t || ''
+            const term = to.query.q || ''
+            this.$refs.searchBar.setTypeAndTerm(type, term)
+            this.search(type, term)
         }
     },
     mounted(){
-        this.$refs.searchBar.searchType = this.store.searchType
+        const query = this.$route.query || {}
+        const type = query.t || ''
+        //this.store.searchType = type
+        const term = query.q || ''
+        this.$refs.searchBar.setTypeAndTerm(type, term)
+        this.search(type, term)
     },
     components: {
         HostsSearchResults,

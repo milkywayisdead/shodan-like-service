@@ -39,9 +39,9 @@ export default {
             if(!this.search || !this.btnEnabled) return
             const term = this.search.trim()
             this.search = term
-            this.store.setSearchTerm(term)
-            this.store.setSearchType(this.searchType)
-            this.$router.push(`/search`)
+            //this.store.setSearchTerm(term)
+            //this.store.setSearchType(this.searchType)
+            this.$router.push(`/search?t=${this.searchType}&q=${term}`)
         },
     },
     computed: {
