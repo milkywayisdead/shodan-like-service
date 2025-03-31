@@ -1,4 +1,5 @@
 import { searchApi } from "@/api/api";
+import { storeMixin } from "./store";
 
 export const searchMixin = {
     data(){
@@ -12,6 +13,7 @@ export const searchMixin = {
 const TOPS_LIMIT = import.meta.env.VITE_TOPS_LIMIT || 1
 
 export const topsMixin = {
+    mixins: [storeMixin],
     props: {
         topData: Array,
     },
@@ -29,8 +31,9 @@ export const topsMixin = {
         },
     },
     methods: {
-        toMore(facet){
+        toMore(){
             const query = this.$route.query
+            this.store.setDetails(this.topData)
             this.$router.push(`/details?t=${query.t}&q=${query.q}&facet=${this.type}`)
         },
     }
