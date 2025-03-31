@@ -7,7 +7,7 @@
 
 <script>
 import HostsDetails from '@/components/search/details/HostsDetails.vue';
-import { storeMixin } from '@/mixins/store';
+import PortDetails from '@/components/search/details/PortDetails.vue';
 
 export default {
     data(){
@@ -22,7 +22,7 @@ export default {
     },
     mounted(){
         const query = this.getQuery()
-        this.type = query.t
+        this.type = query.facet || query.t
         this.$refs.searchBar.setTypeAndTerm(query.t, query.q)
         this.$nextTick(() => {
             this.$refs.details.setDetails()
@@ -30,6 +30,7 @@ export default {
     },
     components: {
         HostsDetails,
+        PortDetails,
     }
 }
 </script>

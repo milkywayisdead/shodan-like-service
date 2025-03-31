@@ -17,7 +17,7 @@ export default {
     },
     methods: {
         setDetails(){
-            this.info = {host: this.store.hostDetails}
+            this.info = {host: this.store.details}
         },
     },
 }

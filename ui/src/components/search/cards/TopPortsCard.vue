@@ -22,6 +22,11 @@ export default {
     mixins: [storeMixin, topsMixin],
     props: {
         topData: Array,
+    },
+    data(){
+        return {
+            type: 'port'
+        }
     }
 }
 </script>

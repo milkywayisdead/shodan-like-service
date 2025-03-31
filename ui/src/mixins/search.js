@@ -15,6 +15,11 @@ export const topsMixin = {
     props: {
         topData: Array,
     },
+    data(){
+        return {
+            type: 'port',
+        }
+    },
     computed: {
         items(){
             return (this.topData || []).slice(0, TOPS_LIMIT)
@@ -24,8 +29,9 @@ export const topsMixin = {
         },
     },
     methods: {
-        toMore(){
-           
+        toMore(facet){
+            const query = this.$route.query
+            this.$router.push(`/details?t=${query.t}&q=${query.q}&facet=${this.type}`)
         },
     }
 }
