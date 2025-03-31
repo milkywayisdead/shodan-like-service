@@ -1,5 +1,4 @@
 <template>
-<lazy-search-bar ref="searchBar" host-details />
 <hosts-search-results-details v-if="info"
     :info="info"
     host-link />
@@ -17,23 +16,9 @@ export default {
         }
     },
     methods: {
-        setHostDetails(){
+        setDetails(){
             this.info = {host: this.store.hostDetails}
         },
     },
-    mounted(){
-        this.setHostDetails()
-    },
-    activated(){
-        this.setHostDetails()
-    },
-    deactivated(){
-        this.store.resetHostDetails()
-    }
 }
 </script>
-
-<route lang="yaml">
-meta:
-    layout: search
-</route>

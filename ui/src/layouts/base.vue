@@ -3,7 +3,7 @@
     <sidebar />
     <app-bar v-if="!authStore.isAuthenticated" />
     <v-container>
-        <lazy-search-bar />
+        <search-bar />
         <router-view />
         <loader-overlay :loading="store.loading" />
     </v-container>

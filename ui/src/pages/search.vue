@@ -98,7 +98,7 @@ export default {
         },
         hostClickedHandler(host){
             this.store.setHostDetails(host)
-            this.$router.push('/details/host')
+            this.$router.push(`/details/?t=hosts&q=${host.IP}`)
         }
     },
     watch: {

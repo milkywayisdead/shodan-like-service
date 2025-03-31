@@ -9,11 +9,6 @@ export const searchMixin = {
 }
 
 
-export const routeWatcher = {
-    
-}
-
-
 const TOPS_LIMIT = import.meta.env.VITE_TOPS_LIMIT || 1
 
 export const topsMixin = {
