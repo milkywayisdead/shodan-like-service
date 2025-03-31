@@ -25,9 +25,6 @@ import searchRules from '@/utils/searchRules';
 
 export default {
     mixins: [storeMixin],
-    props: {
-        hostDetails: Boolean,
-    },
     data(){
         return {
             search: '',

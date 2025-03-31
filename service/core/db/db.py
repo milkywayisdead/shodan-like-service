@@ -33,8 +33,7 @@ def mock_db():
     print('OK')
 
 
-def _regex(value):
-    return re.compile(value, re.IGNORECASE)
+_regex = query.regex
 
 
 def hosts(address):
@@ -207,3 +206,12 @@ def loc_tops(loc_str, limit=_TOPS_LIMIT):
         limit
     )
     return _collection.aggregate(params).to_list()
+
+
+def get_details(t, q, facet):
+    details = []
+    if t != 'domain':
+        details = _collection.aggregate(
+            query.get_facet_details_filter(t, q, facet)
+        ).to_list()
+    return details

@@ -96,8 +96,7 @@ export default {
         unlockPage(){
             this._lockPage = false
         },
-        hostClickedHandler(host){
-            this.store.setDetails(host)
+        hostClickedHandler(){
             this.$router.push(`/search?t=hosts&q=${host.IP}`)
         }
     },

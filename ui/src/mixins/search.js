@@ -21,15 +21,37 @@ export const detailsMixin = {
         }
     },
     methods: {
-        setDetails(){
-            const data = this.store.details
+        setDetails(data){
             const labels = data.map(item => item._id)
-            const datasets = [{data: data.map(item => item.count), backgroundColor: '#36a2eb'}]
+            const datasets = [
+                {
+                    data: data.map(item => item.count),
+                    backgroundColor: '#36a2eb',
+                }
+            ]
             this._chartData = {
                 labels: labels,
                 datasets: datasets,
             }
         },
+        getDetails(){
+            const query = this.$route.query
+            const t = query.t
+            const q = query.q
+            const facet = query.facet
+            this.store.setLoading()
+            searchApi.getDetails(t, q, facet)
+                .then(res => {
+                    if(res.status === 200){
+                        this.setDetails(res.data.details)
+                    }
+                }).catch(err => {}).finally(() => {
+                    setTimeout(this.store.resetLoading, 500)
+                })
+        }
+    },
+    mounted(){
+        this.getDetails()
     },
     computed: {
         chartData(){
@@ -62,7 +84,6 @@ export const topsMixin = {
     methods: {
         toMore(){
             const query = this.$route.query
-            this.store.setDetails(this.topData)
             this.$router.push(`/details?t=${query.t}&q=${query.q}&facet=${this.type}`)
         },
     }

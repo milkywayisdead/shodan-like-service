@@ -11,6 +11,18 @@ from .utils.generic_views import (
 from .utils import search_keys as sk
 
 
+def details(request):
+    get = request.GET.get
+    try:
+        q = get('q')
+        t = get('t')
+        facet = get('facet')
+    except:
+        return JsonResponse({'details': []}, status=400)
+
+    details = db.get_details(t, q, facet)
+    return JsonResponse({'details': details})
+
 def hosts(request):
     ip = request.GET['search']
     res = db.hosts(ip)

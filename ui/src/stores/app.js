@@ -6,7 +6,6 @@ export const useAppStore = defineStore('app', {
     state: () => ({
         locale: ru,
         loading: false,
-        details: null
     }),
     actions: {
         setLoading(){
@@ -15,11 +14,5 @@ export const useAppStore = defineStore('app', {
         resetLoading(){
             this.loading = false
         },
-        setDetails(details){
-            this.details = details
-        },
-        resetDetails(){
-            this.details = null
-        }
     }
 })

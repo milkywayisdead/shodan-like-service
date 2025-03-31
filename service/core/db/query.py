@@ -1,4 +1,11 @@
+import re
+
 from .utils import get_range, ip_to_int
+from core.utils.search_keys import SK_DICT
+
+
+def regex(value):
+    return re.compile(value, re.IGNORECASE)
 
 
 def get_match_filter(key, value):
@@ -245,6 +252,43 @@ def get_port_tops_filter(port_str, limit=5):
                         '$limit': limit
                     }
                 ]
+            }
+        }
+    ]
+
+
+def get_facet_details_filter(t, q, facet):
+    if t == 'port':
+        match = {"total_ports.port": {'$regex': q, '$options': 'i'}}
+    elif t == 'net':
+        match = get_range_filter('address', q)
+    elif t == 'loc':
+        match = get_loc_filter(q)
+    else:
+        match = {t: regex(q)}
+
+    return [
+        {'$match': match},
+        { 
+            '$unwind': "$total_ports" 
+        },
+        {
+            '$facet': {
+                'top_ports': [
+                    {
+                        '$group': { 
+                            '_id': f'$total_ports.{facet}', 
+                            'count': {
+                                '$sum': 1
+                            }
+                        }
+                    },
+                    {
+                        '$sort': {
+                            'count': -1
+                        }
+                    },
+                ],
             }
         }
     ]

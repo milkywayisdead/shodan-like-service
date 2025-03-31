@@ -104,5 +104,9 @@ export const searchApi = {
         os(params){
             return api.get('/os/page', params)
         },
+    },
+    details(type, term, facet){
+        const params = {params: {type, term, facet}}
+        return api.get('/details', params)
     }
 }
