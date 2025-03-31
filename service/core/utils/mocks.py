@@ -1,7 +1,7 @@
 HOSTS = [
     {
         '_id': '67a63d4dff2252cb4dd62d04',
-        'address': '1307891573',
+        'address': 1307891573,
         'IP': '77.244.215.117',
         'ASN': 'AS50340',
         'Location': [{ 'country': 'Russia', 'city': 'Moscow' }],

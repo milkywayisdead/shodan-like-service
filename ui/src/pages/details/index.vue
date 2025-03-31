@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import HostsDetails from '@/components/search/details/HostsDetails.vue';
 import PortDetails from '@/components/search/details/PortDetails.vue';
 import AppDetails from '@/components/search/details/AppDetails.vue';
 import SoftDetails from '@/components/search/details/SoftDetails.vue';
@@ -26,14 +25,13 @@ export default {
     },
     mounted(){
         const query = this.getQuery()
-        this.type = query.facet || query.t
+        this.type = query.facet
         this.$refs.searchBar.setTypeAndTerm(query.t, query.q)
         this.$nextTick(() => {
             this.$refs.details.setDetails()
         })
     },
     components: {
-        HostsDetails,
         PortDetails,
         ComponentDetails,
         SoftDetails,
