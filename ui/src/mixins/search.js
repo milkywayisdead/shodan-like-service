@@ -10,6 +10,35 @@ export const searchMixin = {
 }
 
 
+export const detailsMixin = {
+    mixins: [storeMixin],
+    data(){
+        return {
+            _chartData: {
+                labels: [],
+                datasets: []
+            },
+        }
+    },
+    methods: {
+        setDetails(){
+            const data = this.store.details
+            const labels = data.map(item => item._id)
+            const datasets = [{data: data.map(item => item.count), backgroundColor: '#36a2eb'}]
+            this._chartData = {
+                labels: labels,
+                datasets: datasets,
+            }
+        },
+    },
+    computed: {
+        chartData(){
+            return this._chartData
+        }
+    }
+}
+
+
 const TOPS_LIMIT = import.meta.env.VITE_TOPS_LIMIT || 1
 
 export const topsMixin = {

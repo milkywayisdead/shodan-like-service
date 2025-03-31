@@ -8,6 +8,10 @@
 <script>
 import HostsDetails from '@/components/search/details/HostsDetails.vue';
 import PortDetails from '@/components/search/details/PortDetails.vue';
+import AppDetails from '@/components/search/details/AppDetails.vue';
+import SoftDetails from '@/components/search/details/SoftDetails.vue';
+import ServiceDetails from '@/components/search/details/ServiceDetails.vue';
+import ComponentDetails from '@/components/search/details/ComponentDetails.vue';
 
 export default {
     data(){
@@ -31,6 +35,10 @@ export default {
     components: {
         HostsDetails,
         PortDetails,
+        ComponentDetails,
+        SoftDetails,
+        ServiceDetails,
+        AppDetails,
     }
 }
 </script>

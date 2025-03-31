@@ -38,6 +38,7 @@ export const ru = {
         component: 'Component',
         placeholder: 'Поиск',
         host: 'Хост',
+        details: 'Подробности',
         results: {
             hostsTotal: 'Всего хостов',
             portsTotal: 'Всего портов',
