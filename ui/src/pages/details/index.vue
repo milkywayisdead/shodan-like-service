@@ -7,8 +7,8 @@
 
 <script>
 import PortDetails from '@/components/search/details/PortDetails.vue';
-import ApplicationDetails from '@/components/search/details/ApplicationDetails.vue';
-import SoftwareDetails from '@/components/search/details/SoftwareDetails.vue';
+import AppDetails from '@/components/search/details/AppDetails.vue';
+import SoftDetails from '@/components/search/details/SoftDetails.vue';
 import ServiceDetails from '@/components/search/details/ServiceDetails.vue';
 import ComponentDetails from '@/components/search/details/ComponentDetails.vue';
 
@@ -31,9 +31,9 @@ export default {
     components: {
         PortDetails,
         ComponentDetails,
-        SoftwareDetails,
+        SoftDetails,
         ServiceDetails,
-        ApplicationDetails,
+        AppDetails,
     }
 }
 </script>

@@ -267,6 +267,8 @@ def get_facet_details_filter(t, q, facet):
     else:
         match = {SK_DICT[t]: regex(q)}
 
+    facet = SK_DICT[facet]
+
     return [
         {'$match': match},
         { 
@@ -277,7 +279,7 @@ def get_facet_details_filter(t, q, facet):
                 'top_ports': [
                     {
                         '$group': { 
-                            '_id': f'$total_ports.{facet}', 
+                            '_id': f'${facet}', 
                             'count': {
                                 '$sum': 1
                             }

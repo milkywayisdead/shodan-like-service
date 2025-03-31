@@ -211,7 +211,6 @@ def loc_tops(loc_str, limit=_TOPS_LIMIT):
 def get_details(t, q, facet):
     details = []
     if t != 'domain':
-        print(query.get_facet_details_filter(t, q, facet))
         details = _collection.aggregate(
             query.get_facet_details_filter(t, q, facet)
         ).to_list()
