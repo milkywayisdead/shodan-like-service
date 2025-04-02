@@ -73,7 +73,7 @@ export default {
         },
         getPage(page){
             page = page > 20 ? 20 : page
-            const query = this.$router.query
+            const query = this.$route.query
             const term = query.q
             const func = this.searchApi.pagination[query.t]
             this.store.setLoading()
