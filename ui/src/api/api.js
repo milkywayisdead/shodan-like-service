@@ -2,8 +2,10 @@ import axios from "axios";
 import { getCSRFToken } from "@/stores/auth";
 import router from "@/router";
 import { useAuthStore } from "@/stores/auth";
+import { useAppStore } from "@/stores/app";
 
 const auth = useAuthStore()
+const store = useAppStore()
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_SEARCH_URL,

@@ -7,6 +7,7 @@
         <router-view />
         <loader-overlay :loading="store.loading" />
     </v-container>
+    <snackbar-notif />
 </v-main>
 <app-footer />
 </template>

@@ -65,7 +65,11 @@ export default {
                         this.resetPage()
                         this.unlockPage()
                     }
-                }).catch(err => {}).finally(() => {
+                }).catch(err => {
+                    if(err.status === 429){
+                        this.store.addErrorNotif(this.locale.messages.requestsLimitReached)
+                    }
+                }).finally(() => {
                     setTimeout(() => {
                         this.store.resetLoading()
                     }, 500);
@@ -96,7 +100,7 @@ export default {
         unlockPage(){
             this._lockPage = false
         },
-        hostClickedHandler(){
+        hostClickedHandler(host){
             this.$router.push(`/search?t=hosts&q=${host.IP}`)
         }
     },

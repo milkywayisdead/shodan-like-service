@@ -94,5 +94,8 @@ export const ru = {
         'title': 'Название',
         'headers': 'Заголовки',
         'body': 'Тело',
+    },
+    messages: {
+        requestsLimitReached: 'Исчерпан лимит запросов'
     }
 }
