@@ -1,5 +1,5 @@
 <template>
-<search-bar ref="searchBar" @search="search" />
+<search-bar ref="searchBar" @search="searchTheSame" />
 <component v-if="searchType"
     :is="`${searchType}-search-results`" 
     :info="results"
@@ -50,11 +50,13 @@ export default {
         }
     },
     methods: {
+        searchTheSame(params){
+            this.search(params.t, params.q)
+        },
         search(type, term){
             if(!term || !type) return
             const func = this.searchApi[type]
             this.store.setLoading()
-            this.$router.push(`/search?t=${type}&q=${term}`)
             func({params: {search: term}})
                 .then(res => {
                     this.searchType = type
