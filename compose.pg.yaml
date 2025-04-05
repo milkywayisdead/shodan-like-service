@@ -7,6 +7,13 @@ services:
       - POSTGRES_USER=django_dev1
       - POSTGRES_PASSWORD=django_dev1
       - POSTGRES_DB=django_dev1
+    networks:
+      - nw
 
 volumes:
   postgres_data:
+
+networks:
+  nw:
+    name: ohaiyou
+    external: true

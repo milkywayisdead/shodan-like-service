@@ -6,3 +6,10 @@ services:
       - type: bind
         source: /home/max/mongodb_temp1
         target: /data/db
+    networks:
+      - nw
+
+networks:
+  nw:
+    name: ohaiyou
+    external: true

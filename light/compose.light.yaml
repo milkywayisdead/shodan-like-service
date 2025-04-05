@@ -1,0 +1,35 @@
+services:
+  web:
+    image: app_web
+    expose:
+      - 8000
+    command: >
+      sh -c "python manage.py makemigrations &&
+          python manage.py migrate &&
+          gunicorn service.wsgi:application --bind 0.0.0.0:8000"
+    env_file:
+      - ./.env_dev
+    networks:
+      - ohaiyou
+  nginx:
+    image: app_nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - web
+    networks:
+      - ohaiyou
+  redis:
+    image: redis
+    networks:
+      - ohaiyou
+  ui:
+    image: app_ui
+    ports:
+      - 1338:80
+    depends_on:
+      - web
+
+networks:
+  ohaiyou:
+    name: ohaiyou
