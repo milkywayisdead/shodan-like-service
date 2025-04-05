@@ -1,0 +1,30 @@
+services:
+  webapp:
+    container_name: webapp
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    expose:
+      - 8000
+    command: >
+      sh -c "python manage.py makemigrations &&
+          python manage.py migrate &&
+          gunicorn service.wsgi:application --bind 0.0.0.0:8000"
+    env_file:
+      - ./.env_dev
+  nginx:
+    build: ./nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - webapp
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    ports:
+      - 1338:80
+    depends_on:
+      - webapp
+  redis:
+    image: redis

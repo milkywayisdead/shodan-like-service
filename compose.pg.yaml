@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=django_dev1
+      - POSTGRES_PASSWORD=django_dev1
+      - POSTGRES_DB=django_dev1
+
+volumes:
+  postgres_data:

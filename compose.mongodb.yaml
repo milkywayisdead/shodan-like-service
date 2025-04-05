@@ -1,0 +1,8 @@
+services:
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - type: bind
+        source: /home/max/mongodb_temp1
+        target: /data/db

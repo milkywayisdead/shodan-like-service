@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get('DEBUG', 1))
+DEBUG = os.environ.get('DEBUG', '1') == '1'
 
 ALLOWED_HOSTS = []
 
@@ -56,8 +56,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'service.urls'
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]  # We add your frontend URL here.
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']  # We add your frontend URL here.
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:1338"]  # We add your frontend URL here.
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', "http://localhost:1338"]  # We add your frontend URL here.
 
 TEMPLATES = [
     {
@@ -117,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-SESSION_COOKIE_AGE = 10*60
+SESSION_COOKIE_AGE = int(os.environ.get('SESSION_COOKIE_MINUTES', 10))*60
 
 
 # Internationalization
