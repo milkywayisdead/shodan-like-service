@@ -56,8 +56,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'service.urls'
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:1338"]  # We add your frontend URL here.
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', "http://localhost:1338"]  # We add your frontend URL here.
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', '').split(',')   #["http://localhost:3000", "http://localhost:1338"]  # We add your frontend URL here.
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')   #['http://localhost:3000', "http://localhost:1338"]  # We add your frontend URL here.
 
 TEMPLATES = [
     {
