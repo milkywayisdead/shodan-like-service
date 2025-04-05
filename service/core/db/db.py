@@ -27,7 +27,7 @@ def mock_db():
     for i in range(200):
         del h['_id']
         ip += 1
-        h['address'] = ip
+        h['address'] = str(ip)
         h['IP'] = str(ipaddress.IPv4Address(ip))
         _collection.insert_one(h)
     print('OK')

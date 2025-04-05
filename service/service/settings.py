@@ -144,6 +144,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
 REDIS_PORT = os.environ.get('REDIS_PORT', 6379)
+
 RATELIMIT_USERS_HASH_NAME = os.environ.get('RATELIMIT_USERS_HASH_NAME', 'users')
 RATELIMIT_IPS_HASH_NAME = os.environ.get('RATELIMIT_IPS_HASH_NAME', 'ips')
 RATELIMIT_USER_LIMIT = int(os.environ.get('RATELIMIT_USER_LIMIT', 10))

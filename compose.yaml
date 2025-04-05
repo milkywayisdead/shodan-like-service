@@ -1,12 +1,12 @@
 services:
-  lk:
-    container_name: lk
+  webapp:
+    container_name: webapp
     build:
       context: .
     ports:
       - 8000:8000
     volumes:
-      - /home/max/ohaiyou/service:/app
+      - /home/max/service/service:/app
     command: >
       sh -c "python manage.py makemigrations &&
           python manage.py migrate &&
@@ -33,7 +33,7 @@ services:
       - ./.env_dev
     volumes:
       - type: bind
-        source: /home/max/mongodb_temp
+        source: /home/max/mongodb_temp1
         target: /data/db
 
 volumes:
