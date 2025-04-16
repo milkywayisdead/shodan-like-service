@@ -1,6 +1,6 @@
 services:
   web:
-    image: app_web
+    image: app_web_v2
     expose:
       - 8000
     command: >
@@ -12,11 +12,8 @@ services:
     networks:
       - ohaiyou
   gw:
-    build:
-      context: ../nginx
-    #ports:
-    #  - 1337:80
-    expose:
+    image: app_nginx_v2
+    expose: 
       - 80
     depends_on:
       - web
@@ -27,13 +24,9 @@ services:
     networks:
       - ohaiyou
   ui:
-    build:
-      context: ../
-      dockerfile: Dockerfile.ui
+    image: app_ui_v2
     ports:
       - 8002:80
-    depends_on:
-      - web
     networks:
       - ohaiyou
 
