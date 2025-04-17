@@ -56,13 +56,31 @@ export default {
             return this.info?.host.total_ports || []
         },
         appsList(){
-            return Array.from(new Set(this.portsList.map(item => ({title: item.application}))))
+            const arr = []
+            for(let item of this.portsList){
+                if(item.application){
+                    arr.push({title: item.application})
+                }
+            }
+            return Array.from(new Set(arr))
         },
         componentsList(){
-            return Array.from(new Set(this.portsList.map(item => ({title: item.component}))))
+            const arr = []
+            for(let item of this.portsList){
+                if(item.component){
+                    arr.push({title: item.component})
+                }
+            }
+            return Array.from(new Set(arr))
         },
         softList(){
-            return Array.from(new Set(this.portsList.map(item => ({title: item.software}))))
+            const arr = []
+            for(let item of this.portsList){
+                if(item.software){
+                    arr.push({title: item.software})
+                }
+            }
+            return Array.from(new Set(arr))
         }
     }
 }

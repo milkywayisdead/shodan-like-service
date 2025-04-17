@@ -44,7 +44,7 @@ export default {
                 {title: 'organization', value: 'Organization'},
                 {title: 'asn', value: 'ASN'},
                 {title: 'os', value: 'OS'},
-                {title: 'net', value: 'Net'},
+                {title: 'net', value: 'net'},
             ]
         }
     },
