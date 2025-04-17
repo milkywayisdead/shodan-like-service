@@ -2,8 +2,7 @@
 <v-card 
     :title="locale.search.results.openPorts">
     <v-card-text>
-        <p v-if="!ports.length">{{ locale.search.noResults }}</p>
-        <v-chip class="mr-1" v-if="ports.length"
+        <v-chip class="mr-1"
             v-for="port in ports" 
             :key="port.port"
             label>
