@@ -81,7 +81,7 @@ def generic_tops(key, value, limit=5):
     Получение топ-{limit} для asn, loc, org, app, component, service, soft, os.
     """
     if key.lower() == 'asn':
-        match = {'ASN': value, 'total_ports': {'$ne': []}}
+        match = {'ASN': value}
     else:
         match = {key: _regex(value)}
 
@@ -94,7 +94,7 @@ def generic_ports(key, value):
     Подсчёт портов для asn, loc, org, app, component, service, soft, os.
     """
     if key.lower() == 'asn':
-        match = {'ASN': value, 'total_ports': {'$ne': []}}
+        match = {'ASN': value}
     else:
         match = {key: _regex(value)}
     params = query.get_ports_filter(match)

@@ -11,8 +11,8 @@
         <p v-for="param in mainParams" :key="param.value">
             {{ locale.host[param.title] }}: {{ info[param.value] }}
         </p>
-        <p>{{ locale.host.country }}: {{ location.country || '' }}</p>
-        <p>{{ locale.host.city }}: {{ location.city || '' }}</p>
+        <p v-if="location.country">{{ locale.host.country }}: {{ location.country }}</p>
+        <p v-if="location.city">{{ locale.host.city }}: {{ location.city }}</p>
     </v-card-text>
 </v-card>
 </template>
@@ -37,7 +37,7 @@ export default {
     },
     data(){
         return {
-            mainParams: [
+            _mainParams: [
                 {title: 'host', value: 'IP'},
                 {title: 'domain', value: 'domain'},
                 //{title: 'location', value: 'Location'},
@@ -55,6 +55,11 @@ export default {
                 return {city: '', country: ''}
             }
             return loc[0]
+        },
+        mainParams(){
+            return this._mainParams.filter(
+                item => this.info[item.value] !== ''
+            )
         }
     },
     methods: {

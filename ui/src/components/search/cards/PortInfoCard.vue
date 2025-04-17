@@ -27,7 +27,7 @@ export default {
     },
     data(){
         return {
-            mainParams: [
+            _mainParams: [
                 //{title: 'port', value: 'port'},
                 {title: 'service', value: 'service'},
                 {title: 'software', value: 'software'},
@@ -39,5 +39,12 @@ export default {
             ]
         }
     },
+    computed: {
+        mainParams(){
+            return this._mainParams.filter(
+                item => this.info[item.value] !== ''
+            )
+        }
+    }
 }
 </script>
