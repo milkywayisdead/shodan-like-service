@@ -62,7 +62,7 @@ export const detailsMixin = {
 }
 
 
-const TOPS_LIMIT = import.meta.env.VITE_TOPS_LIMIT || 1
+const TOPS_LIMIT = import.meta.env.VITE_TOPS_LIMIT || 5
 
 export const topsMixin = {
     mixins: [storeMixin],

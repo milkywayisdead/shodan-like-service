@@ -159,3 +159,5 @@ RATELIMIT_IP_INTERVAL = int(os.environ.get('RATELIMIT_IP_INTERVAL', 300))
 MONGODB_URL = os.environ.get('MONGODB_URL', '')
 MONGODB_DB_NAME = os.environ.get('MONGODB_DB_NAME', 'db')
 MONGODB_COLLECTION_NAME = os.environ.get('MONGODB_COLLECTION_NAME', 'Hosts')
+
+SEARCH_INGORECASE = os.environ.get('SEARCH_INGORECASE', '0') == '1'

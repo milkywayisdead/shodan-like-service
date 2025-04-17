@@ -1,10 +1,12 @@
 import re
 
-from .utils import get_range, ip_to_int
+from .utils import get_range
 from core.utils.search_keys import SK_DICT
 
+from django.conf import settings
 
-IGNORECASE = False
+
+IGNORECASE = settings.SEARCH_INGORECASE
 
 
 def regex(value, ignorecase=IGNORECASE):
@@ -266,6 +268,8 @@ def get_facet_details_filter(t, q, facet):
         match = get_range_filter('address', q)
     elif t == 'loc':
         match = get_loc_filter(q)
+    elif t == 'asn':
+        match = {'ASN': q, 'total_ports': {'$ne': []}}
     else:
         match = {SK_DICT[t]: regex(q)}
 

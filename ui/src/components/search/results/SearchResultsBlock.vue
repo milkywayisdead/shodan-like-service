@@ -57,7 +57,7 @@ export default {
     },
     data(){
         return {
-            topCats: [
+            _topCats: [
                 {title: 'Ports', key: 'top_ports'}, 
                 {title: 'Services', key: 'top_services'},
                 {title: 'Soft', key: 'top_software'}, 
@@ -71,6 +71,14 @@ export default {
     methods: {
         emitHostClicked(host){
             this.$emit('host-clicked', JSON.parse(JSON.stringify(host)))
+        }
+    },
+    computed: {
+        topCats(){
+            if(this.portResults){
+                return this._topCats.filter(cat => cat.key !== 'top_ports')
+            }
+            return this._topCats
         }
     },
     components: {

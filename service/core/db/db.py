@@ -41,7 +41,7 @@ def hosts(address):
     Поиск хоста по адресу.
     """
     address = ip_to_int(address)
-    res = _collection.find_one({'address': address})
+    res = _collection.find_one({'address': address, 'total_ports': {'$ne': []}})
     if res:
         del res['_id']
     return res
@@ -54,7 +54,11 @@ def generic_hosts(key, value, *args, page=1, page_length=_PAGE_LENGTH):
     if page < 1:
         page = 1
 
-    params = {key: _regex(value)}
+    if key.lower() == 'asn':
+        params = {'ASN': value, 'total_ports': {'$ne': []}}
+    else:
+        params = {key: _regex(value)}
+        
     hosts_list = _collection.find(params).skip((page - 1)*page_length).limit(page_length).to_list()
     for host in hosts_list:
         del host['_id']
@@ -65,17 +69,23 @@ def generic_hosts_total(key, value):
     """
     Подсчёт хостов для asn, loc, org, app, component, service, soft, os.
     """
-    return _collection.count_documents({key: _regex(value)})
+    if key.lower() == 'asn':
+        params = {'ASN': value, 'total_ports': {'$ne': []}}
+    else:
+        params = {key: _regex(value)}
+    return _collection.count_documents(params)
 
 
 def generic_tops(key, value, limit=5):
     """
     Получение топ-{limit} для asn, loc, org, app, component, service, soft, os.
     """
-    params = query.get_tops_filter(
-        {key: _regex(value)},
-        limit
-    )
+    if key.lower() == 'asn':
+        match = {'ASN': value, 'total_ports': {'$ne': []}}
+    else:
+        match = {key: _regex(value)}
+
+    params = query.get_tops_filter(match, limit)
     return _collection.aggregate(params).to_list()
 
 
@@ -83,9 +93,11 @@ def generic_ports(key, value):
     """
     Подсчёт портов для asn, loc, org, app, component, service, soft, os.
     """
-    params = query.get_ports_filter(
-        {key: _regex(value)}
-    )
+    if key.lower() == 'asn':
+        match = {'ASN': value, 'total_ports': {'$ne': []}}
+    else:
+        match = {key: _regex(value)}
+    params = query.get_ports_filter(match)
     return _collection.aggregate(params).to_list()
 
 
@@ -94,6 +106,7 @@ def net_hosts_total(net_str):
     Подсчёт хостов для net.
     """
     params = query.get_range_filter('address', net_str)
+    params['total_ports'] = {'$ne': []}
     return _collection.count_documents(params)
 
 
@@ -126,6 +139,7 @@ def net_hosts(net_str, *args, page=1, page_length=_PAGE_LENGTH):
         page = 1
 
     params = query.get_range_filter('address', net_str)
+    params['total_ports'] = {'$ne': []}
     hosts_list = _collection.find(
         params
         ).skip((page - 1)*page_length).limit(page_length).to_list()
