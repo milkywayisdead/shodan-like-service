@@ -1,5 +1,7 @@
 <template>
-<v-overlay v-model="active" contained class="align-center justify-center">
+<v-overlay v-model="active"
+    persistent
+    contained class="align-center justify-center">
     <v-progress-circular
         color="primary"
         size="64"
