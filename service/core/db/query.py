@@ -4,8 +4,14 @@ from .utils import get_range, ip_to_int
 from core.utils.search_keys import SK_DICT
 
 
-def regex(value):
-    return re.compile(value, re.IGNORECASE)
+IGNORECASE = False
+
+
+def regex(value, ignorecase=IGNORECASE):
+    args = [f'^{value}', ]
+    if ignorecase:
+        args.append(re.IGNORECASE)
+    return re.compile(*args)
 
 
 def get_match_filter(key, value):
@@ -13,7 +19,7 @@ def get_match_filter(key, value):
 
 
 def get_elemmatch_filter(key, value):
-    return {'$elemMatch': {key: {'$regex': value, '$options': 'i'}}}
+    return {'$elemMatch': {key: regex(value)}}
 
 
 def get_loc_filter(value):
@@ -21,8 +27,8 @@ def get_loc_filter(value):
         'Location': {
             '$elemMatch': {
                 '$or': [
-                    {'city': {'$regex': value, '$options': 'i'}},
-                    {'country': {'$regex': value, '$options': 'i'}},
+                    {'city': regex(value)},
+                    {'country': regex(value)},
                 ]
             }
         }
@@ -152,11 +158,7 @@ def get_tops_filter(match, limit=5):
 def get_port_tops_filter(port_str, limit=5):
     return [
         {
-            '$match': { "total_ports.port": {'$regex': port_str, '$options': 'i'}},
-
-            #'$match': {
-            #    'total_ports': {'$elemMatch': {'port': {'$regex': port_str, '$options': 'i'}}}
-            #},
+            '$match': { "total_ports.port": regex(port_str)},
         },
         { 
             '$unwind': "$total_ports" 
@@ -259,7 +261,7 @@ def get_port_tops_filter(port_str, limit=5):
 
 def get_facet_details_filter(t, q, facet):
     if t == 'port':
-        match = {"total_ports.port": {'$regex': q, '$options': 'i'}}
+        match = {"total_ports.port": regex(q)}
     elif t == 'net':
         match = get_range_filter('address', q)
     elif t == 'loc':
