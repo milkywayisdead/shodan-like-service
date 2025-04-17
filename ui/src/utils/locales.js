@@ -6,6 +6,7 @@ export const ru = {
     password: 'Пароль',
     login: 'Вход',
     account: 'Личный кабинет',
+    more: 'Больше',
     actions: {
         save: 'Сохранить',
         update: 'Обновить',

@@ -1,7 +1,7 @@
 <template>
 <Bar
     id="details-bar"
-    style="background-color:#212121;max-height:400px"
+    style="background-color:#212121;"
     :options="chartOptions"
     :data="chartData" />
 </template>
@@ -35,6 +35,7 @@ export default {
         return {
             chartOptions: {
                 responsive: true,
+                indexAxis: 'y',
             },
             showChart: false,
         }

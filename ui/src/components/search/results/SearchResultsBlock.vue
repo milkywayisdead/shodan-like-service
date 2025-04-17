@@ -27,7 +27,10 @@
                     @click="emitHostClicked(host)" />
             </v-col>
             <v-col cols="6">
-                <ports-list-card :ports="host.total_ports" />
+                <ports-list-card
+                    @click="emitHostClicked(host)"
+                    :ports="host.total_ports" 
+                    clickable />
             </v-col>
         </v-row>
     </v-col>
