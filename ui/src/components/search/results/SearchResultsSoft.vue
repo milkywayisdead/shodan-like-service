@@ -1,7 +1,6 @@
 <template>
 <v-card 
-    :title="locale.search.results.soft" 
-    :height="height">
+    :title="locale.search.results.soft">
     <v-card-text>
         <p v-for="item in items">{{ item.title }}</p>
     </v-card-text>
