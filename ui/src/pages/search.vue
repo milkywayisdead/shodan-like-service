@@ -1,9 +1,10 @@
 <template>
 <search-bar ref="searchBar" @search="searchTheSame" />
-<component v-if="searchType"
+<component v-if="searchType && !noResults"
     :is="`${searchType}-search-results`" 
     :info="results"
     @host-clicked="hostClickedHandler($event)" />
+<no-results v-if="noResults" />
 <v-pagination v-if="auth.isAuthenticated && paginationLength"
     v-model="page" 
     :length="paginationLength" 
@@ -47,6 +48,12 @@ export default {
             const hostsNum = this.results.hosts_total || 0
             const pagesNum = Math.ceil(hostsNum / this.pageLength)
             return pagesNum > this.paginationLimit ? this.paginationLimit : pagesNum
+        },
+        noResults(){
+            if(this.searchType === 'hosts'){
+                return this.results.host === null
+            }
+            return this.results.hosts_total === 0
         }
     },
     methods: {
