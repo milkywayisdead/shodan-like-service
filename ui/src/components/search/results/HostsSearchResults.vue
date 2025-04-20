@@ -32,7 +32,7 @@
                 <ports-list-card :ports="portsList" />
             </v-col>
         </v-row>
-        <v-row v-for="port in portsList" :key="port.port">
+        <v-row v-for="port in filteredPortsList" :key="port.port">
             <v-col>
                 <port-info-card :info="port" />
             </v-col>
@@ -43,6 +43,9 @@
 
 <script>
 import { storeMixin } from '@/mixins/store';
+
+const portParams = ['service', 'software', 'application', 'component', 'title', 'headers', 'body']
+
 
 export default {
     mixins: [storeMixin, ],
@@ -55,6 +58,18 @@ export default {
     computed: {
         portsList(){
             return this.info?.host.total_ports || []
+        },
+        filteredPortsList(){
+            return this.portsList.filter(port => {
+                let include = false
+                for(let param of portParams){
+                    if(port[param]){
+                        include = true
+                        break
+                    }
+                }
+                return include
+            })
         },
         appsList(){
             const arr = []

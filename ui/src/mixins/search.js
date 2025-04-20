@@ -75,8 +75,13 @@ export const topsMixin = {
         }
     },
     computed: {
+        filteredItems(){
+            return (this.topData || []).filter(item => {
+                return item._id !== ''
+            })
+        },
         items(){
-            return (this.topData || []).slice(0, TOPS_LIMIT)
+            return this.filteredItems.slice(0, TOPS_LIMIT)
         },
         showMore(){
             return (this.topData || []).length > TOPS_LIMIT

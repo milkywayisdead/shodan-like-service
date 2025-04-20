@@ -78,10 +78,16 @@ export default {
     },
     computed: {
         topCats(){
+            let cats = this._topCats
             if(this.portResults){
-                return this._topCats.filter(cat => cat.key !== 'top_ports')
+                cats = cats.filter(cat => cat.key !== 'top_ports')
             }
-            return this._topCats
+            cats = cats.filter(cat => {
+                return this.tops[cat.key].filter(item => {
+                    return item._id !== ''
+                })
+            })
+            return cats
         }
     },
     components: {
