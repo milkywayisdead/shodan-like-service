@@ -85,7 +85,7 @@ export default {
             cats = cats.filter(cat => {
                 return this.tops[cat.key].filter(item => {
                     return item._id !== ''
-                })
+                }).length > 0
             })
             return cats
         }
