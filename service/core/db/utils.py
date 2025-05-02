@@ -1,5 +1,5 @@
 import ipaddress
-from core.utils.search_keys import SK_TP_DICT
+from core.utils.search_keys import SK_TP_DICT, SK_DICT
 
 
 TOTAL_PORTS_FACETS = [
@@ -20,6 +20,7 @@ HOST_FACETS = [
 
 
 def net_extend_params(original_params, extra_type, extra_query):
+    print(original_params, extra_type, extra_query)
     if extra_type in TOTAL_PORTS_FACETS:
         try:
             original_params['total_ports'] = {'$elemMatch': {SK_TP_DICT[extra_type]: extra_query}}
@@ -27,7 +28,11 @@ def net_extend_params(original_params, extra_type, extra_query):
             #original_params[0]['$match'][f'total_ports'] = {'$elemMatch': {SK_TP_DICT[extra_type]: extra_query}}
             original_params[0]['$match'][f'total_ports.{SK_TP_DICT[extra_type]}'] = extra_query
     elif extra_type in HOST_FACETS:
-        original_params[extra_type] = extra_query
+        key = SK_DICT[extra_type]
+        try:
+            original_params[key] = extra_query
+        except TypeError:
+            original_params[0]['$match'][key] = extra_query
     return original_params
 
 

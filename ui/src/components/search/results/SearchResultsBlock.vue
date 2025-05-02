@@ -25,7 +25,8 @@
                 <host-info-card 
                     :info="host"
                     :host-link="hostLink" 
-                    @click="emitHostClicked(host)" />
+                    @click="emitHostClicked(host)" 
+                    @facet-clicked="emitExtendSearch" />
             </v-col>
             <v-col cols="6">
                 <ports-list-card

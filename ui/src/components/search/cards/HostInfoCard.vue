@@ -47,6 +47,10 @@ export default {
             default: {}
         },
         hostLink: Boolean,
+        resultType: {
+            type: String,
+            default: 'host',
+        }
     },
     data(){
         return {
