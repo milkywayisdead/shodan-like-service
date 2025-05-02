@@ -21,11 +21,12 @@ class GenericBaseView(View):
     def get(self, request, *args, **kwargs):
         cls_ = self.__class__
         args_ = self.get_args(request)
+        kwargs_ = self.get_kwargs(request)
         resp = {
-            'hosts': cls_.hosts_func(*args_),
-            'hosts_total': cls_.hosts_total_func(*args_),
-            'ports': cls_.ports_func(*args_),
-            'tops': cls_.tops_func(*args_),
+            'hosts': cls_.hosts_func(*args_, **kwargs_),
+            'hosts_total': cls_.hosts_total_func(*args_, **kwargs_),
+            'ports': cls_.ports_func(*args_, **kwargs_),
+            'tops': cls_.tops_func(*args_, **kwargs_),
         }
 
         # обновление счетчика запросов
@@ -39,6 +40,9 @@ class GenericBaseView(View):
 
     def get_args(self, request):
         return self.search_type, request.GET['search']
+
+    def get_kwargs(self, request):
+        return {}
 
 
 class GenericSearchView(GenericBaseView):

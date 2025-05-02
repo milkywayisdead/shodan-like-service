@@ -14,7 +14,8 @@
                 <component 
                     :is="`Top${top.title}Card`" 
                     :title="locale.search.results[`top${top.title}`]"
-                    :top-data="tops[top.key]" />
+                    :top-data="tops[top.key]" 
+                    @extend-search="emitExtendSearch" />
             </v-col>
         </v-row>
     </v-col>
@@ -44,9 +45,10 @@ import TopPortsCard from '../cards/TopPortsCard.vue';
 import TopServicesCard from '../cards/TopServicesCard.vue';
 import TopComponentsCard from '../cards/TopComponentsCard.vue';
 import TopSoftCard from '../cards/TopSoftCard.vue';
+import { searchJumpMixin } from '@/mixins/search';
 
 export default {
-    mixins: [storeMixin,],
+    mixins: [storeMixin, searchJumpMixin],
     emits: ['host-clicked'],
     props: {
         hosts: Array,

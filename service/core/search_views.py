@@ -48,6 +48,12 @@ class NetSearch(GenericSearchView):
     def get_args(self, request):
         return (request.GET['search'],)
 
+    def get_kwargs(self, request):
+        return {
+            'extra_type': request.GET.get('et', None),
+            'extra_query': request.GET.get('eq', None)
+        }
+
 
 class NetPage(GenericPageView):
     search_func = db.net_hosts

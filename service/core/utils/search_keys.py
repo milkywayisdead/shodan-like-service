@@ -22,3 +22,11 @@ SK_DICT = {
     'os': OS,
     'port': PORT,
 }
+
+SK_TP_DICT = {
+    'app': 'application',
+    'soft': 'software',
+    'service': 'service',
+    'port': 'port',
+    'component': 'component'
+}

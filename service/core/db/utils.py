@@ -1,4 +1,34 @@
 import ipaddress
+from core.utils.search_keys import SK_TP_DICT
+
+
+TOTAL_PORTS_FACETS = [
+    'port',
+    'component',
+    'soft',
+    'app',
+    'service',
+]
+
+HOST_FACETS = [
+    'city',
+    'country',
+    'os',
+    'org',
+    'asn'
+]
+
+
+def net_extend_params(original_params, extra_type, extra_query):
+    if extra_type in TOTAL_PORTS_FACETS:
+        try:
+            original_params['total_ports'] = {'$elemMatch': {SK_TP_DICT[extra_type]: extra_query}}
+        except TypeError:
+            #original_params[0]['$match'][f'total_ports'] = {'$elemMatch': {SK_TP_DICT[extra_type]: extra_query}}
+            original_params[0]['$match'][f'total_ports.{SK_TP_DICT[extra_type]}'] = extra_query
+    elif extra_type in HOST_FACETS:
+        original_params[extra_type] = extra_query
+    return original_params
 
 
 def is_ip(ip_str):

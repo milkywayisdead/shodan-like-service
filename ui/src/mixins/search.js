@@ -101,12 +101,18 @@ export const genericResultsMixin = {
         info: {
             type: Object,
             default: {}
-        }
+        },
+        query: String,
     },
     emits: ['host-clicked'],
     methods: {
         emitHostClicked(host){
             this.$emit('host-clicked', host)
+        },
+        appendSearchParams(type, searchParams){
+            searchParams.originalType = type
+            searchParams.originalQuery = this.query
+            return searchParams
         }
     },
     computed: {
@@ -133,10 +139,19 @@ export const searchFacetMixin = {
 
 
 export const searchJumpMixin = {
-    emits: ['search-by'],
+    emits: ['search-by', 'extend-search'],
     methods: {
         emitSearchBy(newSearch){
             this.$emit('search-by', newSearch)
+        },
+        emitExtendSearch(newSearch){
+            this.$emit('extend-search', newSearch)
+        },
+        extendedSearch(value){
+            return {
+                param: this.type,
+                value: value,
+            }
         }
-    }
+    },
 }

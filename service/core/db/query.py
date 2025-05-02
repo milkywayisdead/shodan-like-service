@@ -10,10 +10,11 @@ IGNORECASE = settings.SEARCH_INGORECASE
 
 
 def regex(value, ignorecase=IGNORECASE):
-    args = [f'^{value}', ]
-    if ignorecase:
-        args.append(re.IGNORECASE)
-    return re.compile(*args)
+    # args = [f'^{value}', ]
+    # if ignorecase:
+    #     args.append(re.IGNORECASE)
+    # return re.compile(*args)
+    return {'$regex': f'^{value}'}
 
 
 def get_match_filter(key, value):

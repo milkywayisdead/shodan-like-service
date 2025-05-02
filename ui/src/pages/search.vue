@@ -4,7 +4,9 @@
     :is="`${searchType}-search-results`" 
     :info="results"
     @host-clicked="hostClickedHandler($event)" 
-    @search-by="handleSearchBy" />
+    @search-by="handleSearchBy" 
+    @extend-search="extendSearch" 
+    :query="query" />
 <no-results v-if="noResults" />
 <v-pagination v-if="auth.isAuthenticated && paginationLength"
     v-model="page" 
@@ -42,6 +44,7 @@ export default {
             paginationLimit: 20,
             _lockPage: false,
             searchType: 'hosts',
+            query: '',
         }
     },
     computed: {
@@ -61,11 +64,18 @@ export default {
         searchTheSame(params){
             this.search(params.t, params.q)
         },
-        search(type, term){
+        search(type, term, extraType, extraQuery){
             if(!term || !type) return
             const func = this.searchApi[type]
             this.store.setLoading()
-            func({params: {search: term}})
+            this.query = term
+
+            let params = {search: term}
+            if(!!extraType && !!extraQuery){
+                params = {search: term, et: extraType, eq: extraQuery}
+            }
+
+            func({params: params})
                 .then(res => {
                     this.searchType = type
                     const status = res.status
@@ -115,6 +125,9 @@ export default {
         },
         handleSearchBy(event){
             this.$router.push(`/search?t=${event.param}&q=${event.value}`)
+        },
+        extendSearch(params){
+            this.$router.push(`/search?t=${params.originalType}&q=${params.originalQuery}&et=${params.param}&eq=${params.value}`)
         }
     },
     watch: {
@@ -126,16 +139,20 @@ export default {
         $route(to, from){
             const type = to.query.t || ''
             const term = to.query.q || ''
+            const extraType = to.query.et || ''
+            const extraQuery = to.query.eq || ''
             this.$refs.searchBar.setTypeAndTerm(type, term)
-            this.search(type, term)
+            this.search(type, term, extraType, extraQuery)
         }
     },
     mounted(){
         const query = this.$route.query || {}
         const type = query.t || ''
         const term = query.q || ''
+        const extraType = query.et || ''
+        const extraQuery = query.eq || ''
         this.$refs.searchBar.setTypeAndTerm(type, term)
-        this.search(type, term)
+        this.search(type, term, extraType, extraQuery)
     },
     components: {
         HostsSearchResults,
