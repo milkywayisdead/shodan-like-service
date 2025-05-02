@@ -4,25 +4,29 @@
         <v-row>
             <v-col>
                 <host-info-card 
-                    :info="info.host" />
+                    :info="info.host" 
+                    @facet-clicked="emitSearchBy" />
             </v-col>
         </v-row>
         <v-row>
             <v-col v-if="softList.length">
                 <search-results-soft 
-                    :items="softList" />
+                    :items="softList" 
+                    @facet-clicked="emitSearchBy" />
             </v-col>
         </v-row>
         <v-row>
             <v-col v-if="appsList.length">
                 <search-results-apps
-                    :items="appsList" />
+                    :items="appsList" 
+                    @facet-clicked="emitSearchBy" />
             </v-col>
         </v-row>
         <v-row>
             <v-col v-if="componentsList.length">
                 <search-results-components
-                    :items="componentsList" />
+                    :items="componentsList" 
+                    @facet-clicked="emitSearchBy" />
             </v-col>
         </v-row>
     </v-col>
@@ -43,12 +47,13 @@
 
 <script>
 import { storeMixin } from '@/mixins/store';
+import { searchJumpMixin } from '@/mixins/search';
 
 const portParams = ['service', 'software', 'application', 'component', 'title', 'headers', 'body']
 
 
 export default {
-    mixins: [storeMixin, ],
+    mixins: [storeMixin, searchJumpMixin],
     props: {
         info: {
             type: Object,

@@ -119,3 +119,24 @@ export const genericResultsMixin = {
         }
     }
 }
+
+
+export const searchFacetMixin = {
+    emits: ['facet-clicked'],
+    methods: {
+        emitParamClickedOrIgnore(param, value, ignore=false){
+            if(ignore) return
+            this.$emit('facet-clicked', {param, value})
+        }
+    }
+}
+
+
+export const searchJumpMixin = {
+    emits: ['search-by'],
+    methods: {
+        emitSearchBy(newSearch){
+            this.$emit('search-by', newSearch)
+        }
+    }
+}

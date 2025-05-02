@@ -3,7 +3,8 @@
 <component v-if="searchType && !noResults"
     :is="`${searchType}-search-results`" 
     :info="results"
-    @host-clicked="hostClickedHandler($event)" />
+    @host-clicked="hostClickedHandler($event)" 
+    @search-by="handleSearchBy" />
 <no-results v-if="noResults" />
 <v-pagination v-if="auth.isAuthenticated && paginationLength"
     v-model="page" 
@@ -111,6 +112,9 @@ export default {
         },
         hostClickedHandler(host){
             this.$router.push(`/search?t=hosts&q=${host.IP}`)
+        },
+        handleSearchBy(event){
+            this.$router.push(`/search?t=${event.param}&q=${event.value}`)
         }
     },
     watch: {

@@ -2,13 +2,18 @@
 <v-card 
     :title="locale.search.results.components">
     <v-card-text>
-        <p v-for="item in items">{{ item.title }}</p>
+        <p  v-for="item in items"
+            class="clickable-element"
+            @click="emitParamClickedOrIgnore('component', item.title)">
+            {{ item.title }}
+        </p>
     </v-card-text>
 </v-card>
 </template>
 
 <script>
 import { storeMixin } from '@/mixins/store';
+import { searchFacetMixin } from '@/mixins/search';
 
 export default {
     props: {
@@ -18,6 +23,6 @@ export default {
         },
         items: Array,
     },
-    mixins: [storeMixin,],
+    mixins: [storeMixin, searchFacetMixin],
 }
 </script>

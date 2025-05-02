@@ -8,21 +8,34 @@
             size="x-small" />
     </v-card-title>
     <v-card-text>
-        <p v-for="param in mainParams" :key="param.value">
+        <p v-for="param in mainParams" 
+            :key="param.value"
+            :class="{'clickable-element': !!param.clickable}"
+            @click="emitParamClickedOrIgnore(param.searchType, info[param.value], !param.clickable)">
             {{ locale.host[param.title] }}: {{ info[param.value] }}
         </p>
-        <p v-if="location.country">{{ locale.host.country }}: {{ location.country }}</p>
-        <p v-if="location.city">{{ locale.host.city }}: {{ location.city }}</p>
+        <p v-if="location.country" 
+            class="clickable-element"
+            @click="emitParamClickedOrIgnore('country', location.country)">
+            {{ locale.host.country }}: {{ location.country }}
+        </p>
+        <p v-if="location.city" 
+            class="clickable-element"
+            @click="emitParamClickedOrIgnore('city', location.city)">
+            {{ locale.host.city }}: {{ location.city }}
+        </p>
     </v-card-text>
 </v-card>
 </template>
 
 <script>
 import { storeMixin } from '@/mixins/store';
+import { searchFacetMixin } from '@/mixins/search';
+
 
 export default {
-    mixins: [storeMixin],
-    emits: ['click'],
+    mixins: [storeMixin, searchFacetMixin],
+    emits: ['click', ],
     props: {
         title: String,
         height: {
@@ -41,9 +54,9 @@ export default {
                 {title: 'host', value: 'IP'},
                 {title: 'domain', value: 'domain'},
                 //{title: 'location', value: 'Location'},
-                {title: 'organization', value: 'Organization'},
-                {title: 'asn', value: 'ASN'},
-                {title: 'os', value: 'OS'},
+                {title: 'organization', value: 'Organization', clickable: true, searchType: 'org'},
+                {title: 'asn', value: 'ASN', clickable: true, searchType: 'asn'},
+                {title: 'os', value: 'OS', clickable: true, searchType: 'os'},
                 {title: 'net', value: 'net'},
             ]
         }
@@ -65,7 +78,7 @@ export default {
     methods: {
         emitClick(){
             this.$emit('click')
-        }
+        },
     }
 }
 </script>

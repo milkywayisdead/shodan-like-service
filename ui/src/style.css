@@ -1,3 +1,7 @@
 a.nodecor {
     text-decoration: none;
 }
+
+.clickable-element {
+    cursor: pointer;
+}
