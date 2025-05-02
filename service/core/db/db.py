@@ -3,7 +3,13 @@ import re
 
 from django.conf import settings
 
-from .utils import get_range, ip_to_int, net_extend_params
+from .utils import (
+    get_range, 
+    ip_to_int, 
+    net_extend_params,
+    port_extend_params,
+    extend_generic
+)
 from . import query
 from .logger import QLogger
 
@@ -52,7 +58,9 @@ def hosts(address):
     return res
 
 
-def generic_hosts(key, value, *args, page=1, page_length=_PAGE_LENGTH):
+def generic_hosts(key, value, *args, 
+    extra_type=None, extra_query=None, 
+    page=1, page_length=_PAGE_LENGTH):
     """
     Поиск хостов для asn, loc, org, app, component, service, soft, os.
     """
@@ -63,6 +71,8 @@ def generic_hosts(key, value, *args, page=1, page_length=_PAGE_LENGTH):
         params = {'ASN': value, 'total_ports': {'$ne': []}}
     else:
         params = {key: _regex(value)}
+    if extra_type and extra_query:
+        params = extend_generic(params, extra_type, extra_query)
         
     hosts_list = _collection.find(params).skip((page - 1)*page_length).limit(page_length).to_list()
     qlogger.add(key, 'hosts', params, _collection.find(params).skip((page - 1)*page_length).limit(page_length))
@@ -71,7 +81,7 @@ def generic_hosts(key, value, *args, page=1, page_length=_PAGE_LENGTH):
     return hosts_list
 
 
-def generic_hosts_total(key, value):
+def generic_hosts_total(key, value, extra_type=None, extra_query=None):
     """
     Подсчёт хостов для asn, loc, org, app, component, service, soft, os.
     """
@@ -79,11 +89,13 @@ def generic_hosts_total(key, value):
         params = {'ASN': value, 'total_ports': {'$ne': []}}
     else:
         params = {key: _regex(value)}
+    if extra_type and extra_query:
+        params = extend_generic(params, extra_type, extra_query)
     qlogger.add(key, 'hosts_total', params, collection=_collection, meth='count_documents')
     return _collection.count_documents(params)
 
 
-def generic_tops(key, value, limit=5):
+def generic_tops(key, value, extra_type=None, extra_query=None, limit=5):
     """
     Получение топ-{limit} для asn, loc, org, app, component, service, soft, os.
     """
@@ -93,11 +105,13 @@ def generic_tops(key, value, limit=5):
         match = {key: _regex(value)}
 
     params = query.get_tops_filter(match, limit)
+    if extra_type and extra_query:
+        params = extend_generic(params, extra_type, extra_query)
     qlogger.add(key, 'tops', params, collection=_collection, meth='aggregate')
     return _collection.aggregate(params).to_list()
 
 
-def generic_ports(key, value):
+def generic_ports(key, value, extra_type=None, extra_query=None):
     """
     Подсчёт портов для asn, loc, org, app, component, service, soft, os.
     """
@@ -106,6 +120,8 @@ def generic_ports(key, value):
     else:
         match = {key: _regex(value)}
     params = query.get_ports_filter(match)
+    if extra_type and extra_query:
+        params = extend_generic(params, extra_type, extra_query)
     qlogger.add(key, 'ports', params, collection=_collection, meth='aggregate')
     return _collection.aggregate(params).to_list()
 
@@ -176,34 +192,36 @@ def net_hosts(net_str, *args, extra_type=None, extra_query=None, page=1, page_le
     return hosts_list
 
 
-def port_hosts(port_str, *args, page=1, page_length=_PAGE_LENGTH):
+def port_hosts(port_str, *args, extra_type=None, extra_query=None, page=1, page_length=_PAGE_LENGTH):
     """
     Поиск хостов для port.
     """
     if page < 1:
         page = 1
-    params = query.get_elemmatch_filter('port', port_str)
+    params = {_TOTAL_PORTS: query.get_elemmatch_filter('port', port_str)}
+    if extra_type and extra_query:
+        params = net_extend_params(params, extra_type, extra_query)
+
     hosts_list = _collection.find(
-        {_TOTAL_PORTS: params}
+        params
     ).skip((page - 1)*page_length).limit(page_length).to_list()
-    qlogger.add('port', 'hosts', params, _collection.find(
-        {_TOTAL_PORTS: params}
-    ).skip((page - 1)*page_length).limit(page_length))
+
     for host in hosts_list:
         del host['_id']
     return hosts_list
 
 
-def port_hosts_total(port_str):
+def port_hosts_total(port_str, extra_type=None, extra_query=None):
     """
     Подсчёт хостов для port.
     """
-    params = query.get_elemmatch_filter('port', port_str)
-    qlogger.add('port', 'hosts_total', {_TOTAL_PORTS: params}, collection=_collection, meth='count_documents')
-    return _collection.count_documents({_TOTAL_PORTS: params})
+    params = {_TOTAL_PORTS: query.get_elemmatch_filter('port', port_str)}
+    if extra_type and extra_query:
+        params = net_extend_params(params, extra_type, extra_query)
+    return _collection.count_documents(params)
 
 
-def port_tops(port_str, limit=_TOPS_LIMIT):
+def port_tops(port_str, extra_type=None, extra_query=None, limit=_TOPS_LIMIT):
     """
     Получение топ-{limit} для port.
     """
@@ -211,6 +229,8 @@ def port_tops(port_str, limit=_TOPS_LIMIT):
         port_str,
         limit
     )
+    if extra_type and extra_query:
+        params = net_extend_params(params, extra_type, extra_query)
     qlogger.add('port', 'tops', params, collection=_collection, meth='aggregate')
     return _collection.aggregate(params).to_list()
 

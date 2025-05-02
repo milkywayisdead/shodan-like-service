@@ -3,14 +3,16 @@
     :hosts="info.hosts || []" 
     :tops="(info.tops || [])[0] || {}"
     :totals="totals" 
-    @host-clicked="emitHostClicked($event)" 
+    @host-clicked="emitHostClicked($event)"
+    @extend-search="emitExtendSearch(appendSearchParams('port', $event))" 
     port-results />
 </template>
 
 <script>
 import { genericResultsMixin } from '@/mixins/search';
+import { searchJumpMixin } from '@/mixins/search';
 
 export default {
-    mixins: [genericResultsMixin],
+    mixins: [genericResultsMixin, searchJumpMixin],
 }
 </script>
