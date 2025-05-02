@@ -49,7 +49,7 @@
 import { storeMixin } from '@/mixins/store';
 import { searchJumpMixin } from '@/mixins/search';
 
-const portParams = ['service', 'software', 'application', 'component', 'title', 'headers', 'body']
+const portParams = ['title', 'headers', 'body']
 
 
 export default {
