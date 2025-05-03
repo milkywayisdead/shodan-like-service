@@ -18,6 +18,7 @@ export const detailsMixin = {
                 labels: [],
                 datasets: []
             },
+            facet: null,
         }
     },
     methods: {
@@ -49,6 +50,12 @@ export const detailsMixin = {
                 }).catch(err => {}).finally(() => {
                     setTimeout(this.store.resetLoading, 500)
                 })
+        },
+        extendedSearch(term){
+            const q = this.$route.query
+            if(q.t === 'net' && this.facet){
+                this.$router.push(`/search?t=${q.t}&q=${q.q}&et=${this.facet}&eq=${term}`)
+            }
         }
     },
     mounted(){
@@ -57,7 +64,13 @@ export const detailsMixin = {
     computed: {
         chartData(){
             return this._chartData
-        }
+        },
+        labels(){
+            return this.chartData.labels
+        },
+        chartHeight(){
+            return this.labels.length*50 + 50
+        },
     }
 }
 
