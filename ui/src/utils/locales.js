@@ -98,6 +98,7 @@ export const ru = {
         'body': 'Тело',
     },
     messages: {
-        requestsLimitReached: 'Исчерпан лимит запросов'
+        requestsLimitReached: 'Исчерпан лимит запросов',
+        authError: 'Ошибка аутентификации',
     }
 }

@@ -4,7 +4,7 @@
     :is="`${searchType}-search-results`" 
     :info="results"
     @host-clicked="hostClickedHandler($event)" 
-    @search-by="handleSearchBy" 
+    @search-by="handleSearchBy"
     @extend-search="extendSearch" 
     :query="query" />
 <no-results v-if="noResults" />
@@ -127,6 +127,9 @@ export default {
             this.$router.push(`/search?t=${event.param}&q=${event.value}`)
         },
         extendSearch(params){
+            const allowedOriginals = ['port', 'net', 'asn']
+            if(!allowedOriginals.includes(params.originalType)) return
+
             this.$router.push(`/search?t=${params.originalType}&q=${params.originalQuery}&et=${params.param}&eq=${params.value}`)
         }
     },

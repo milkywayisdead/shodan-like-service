@@ -12,6 +12,7 @@ from .utils import (
 )
 from . import query
 from .logger import QLogger
+from core.utils.search_keys import REGEX_SEARCH
 
 
 qlogger = QLogger()
@@ -149,7 +150,6 @@ def net_ports(net_str, extra_type=None, extra_query=None):
     if extra_type and extra_query:
         params = net_extend_params(params, extra_type, extra_query)
     qlogger.add('net', 'ports', params, collection=_collection, meth='aggregate')
-    print(params)
     return _collection.aggregate(params).to_list()
 
 
@@ -164,7 +164,6 @@ def net_tops(net_str, extra_type=None, extra_query=None, limit=_TOPS_LIMIT):
     if extra_type and extra_query:
         params = net_extend_params(params, extra_type, extra_query)
     qlogger.add('net', 'tops', params, collection=_collection, meth='aggregate')
-    print(params)
     return _collection.aggregate(params).to_list()
 
 
@@ -198,7 +197,8 @@ def port_hosts(port_str, *args, extra_type=None, extra_query=None, page=1, page_
     """
     if page < 1:
         page = 1
-    params = {_TOTAL_PORTS: query.get_elemmatch_filter('port', port_str)}
+
+    params = {_TOTAL_PORTS: {'$elemMatch': {'port': port_str}}}
     if extra_type and extra_query:
         params = net_extend_params(params, extra_type, extra_query)
 
@@ -215,7 +215,7 @@ def port_hosts_total(port_str, extra_type=None, extra_query=None):
     """
     Подсчёт хостов для port.
     """
-    params = {_TOTAL_PORTS: query.get_elemmatch_filter('port', port_str)}
+    params = {_TOTAL_PORTS: {'$elemMatch': {'port': port_str}}}
     if extra_type and extra_query:
         params = net_extend_params(params, extra_type, extra_query)
     return _collection.count_documents(params)

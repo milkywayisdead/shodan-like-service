@@ -17,14 +17,6 @@ def regex(value, ignorecase=IGNORECASE):
     return {'$regex': f'^{value}'}
 
 
-def get_match_filter(key, value):
-    return {'$match': {key: value}}
-
-
-def get_elemmatch_filter(key, value):
-    return {'$elemMatch': {key: regex(value)}}
-
-
 def get_loc_filter(value):
     return {
         'Location': {
@@ -161,7 +153,7 @@ def get_tops_filter(match, limit=5):
 def get_port_tops_filter(port_str, limit=5):
     return [
         {
-            '$match': { "total_ports.port": regex(port_str)},
+            '$match': { "total_ports.port": port_str},
         },
         { 
             '$unwind': "$total_ports" 

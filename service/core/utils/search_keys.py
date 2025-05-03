@@ -30,3 +30,13 @@ SK_TP_DICT = {
     'port': 'port',
     'component': 'component'
 }
+
+
+REGEX_SEARCH = [
+    'Organization',
+    'OS',
+    'total_ports.service',
+    'total_ports.software',
+    'total_ports.application',
+    'total_ports.component',
+]

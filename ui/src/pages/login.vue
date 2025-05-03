@@ -53,7 +53,7 @@ export default {
 
             await this.authStore.login(this.email, this.password, this.$router)
             if (!this.authStore.isAuthenticated) {
-                this.error = 'Login failed. Please check your credentials.'
+                this.store.addErrorNotif(this.locale.messages.authError)
             }
             this.store.loading = false
         },
