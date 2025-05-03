@@ -12,7 +12,6 @@ from .utils import (
 )
 from . import query
 from .logger import QLogger
-from core.utils.search_keys import REGEX_SEARCH
 
 
 qlogger = QLogger()
@@ -75,8 +74,11 @@ def generic_hosts(key, value, *args,
     if extra_type and extra_query:
         params = extend_generic(params, extra_type, extra_query)
 
-    hosts_list = query.collection_find(
-        _collection, params, skip=(page - 1)*page_length, limit=page_length
+    hosts_list = query.find(
+        _collection, 
+        params, 
+        skip=(page - 1)*page_length, 
+        limit=page_length
     )
 
     qlogger.add(key, 'hosts', params, _collection.find(params).skip((page - 1)*page_length).limit(page_length))
@@ -97,7 +99,7 @@ def generic_hosts_total(key, value, extra_type=None, extra_query=None):
         params = extend_generic(params, extra_type, extra_query)
 
     qlogger.add(key, 'hosts_total', params, collection=_collection, meth='count_documents')
-    return query.collection_count(params)
+    return query.count(_collection, params)
 
 
 def generic_tops(key, value, extra_type=None, extra_query=None, limit=5):
@@ -112,8 +114,9 @@ def generic_tops(key, value, extra_type=None, extra_query=None, limit=5):
     params = query.get_tops_filter(match, limit)
     if extra_type and extra_query:
         params = extend_generic(params, extra_type, extra_query)
+
     qlogger.add(key, 'tops', params, collection=_collection, meth='aggregate')
-    return _collection.aggregate(params).to_list()
+    return query.aggregate(_collection, params)
 
 
 def generic_ports(key, value, extra_type=None, extra_query=None):
@@ -128,7 +131,8 @@ def generic_ports(key, value, extra_type=None, extra_query=None):
     if extra_type and extra_query:
         params = extend_generic(params, extra_type, extra_query)
     qlogger.add(key, 'ports', params, collection=_collection, meth='aggregate')
-    return _collection.aggregate(params).to_list()
+
+    return query.aggregate(_collection, params)
 
 
 def net_hosts_total(net_str, extra_type=None, extra_query=None):
@@ -140,8 +144,9 @@ def net_hosts_total(net_str, extra_type=None, extra_query=None):
         params = net_extend_params(params, extra_type, extra_query)
     else:
         params['total_ports'] = {'$ne': []}
+
     qlogger.add('net', 'hosts_total', params, collection=_collection, meth='count_documents')
-    return _collection.count_documents(params)
+    return query.count(_collection, params)
 
 
 def net_ports(net_str, extra_type=None, extra_query=None):
@@ -153,8 +158,9 @@ def net_ports(net_str, extra_type=None, extra_query=None):
     )
     if extra_type and extra_query:
         params = net_extend_params(params, extra_type, extra_query)
+
     qlogger.add('net', 'ports', params, collection=_collection, meth='aggregate')
-    return _collection.aggregate(params).to_list()
+    return query.aggregate(_collection, params)
 
 
 def net_tops(net_str, extra_type=None, extra_query=None, limit=_TOPS_LIMIT):
@@ -167,8 +173,9 @@ def net_tops(net_str, extra_type=None, extra_query=None, limit=_TOPS_LIMIT):
     )
     if extra_type and extra_query:
         params = net_extend_params(params, extra_type, extra_query)
+
     qlogger.add('net', 'tops', params, collection=_collection, meth='aggregate')
-    return _collection.aggregate(params).to_list()
+    return query.aggregate(_collection, params)
 
 
 def net_hosts(net_str, *args, extra_type=None, extra_query=None, page=1, page_length=_PAGE_LENGTH):
@@ -184,12 +191,17 @@ def net_hosts(net_str, *args, extra_type=None, extra_query=None, page=1, page_le
     else:
         params['total_ports'] = {'$ne': []}
 
-    hosts_list = _collection.find(
-        params
-        ).skip((page - 1)*page_length).limit(page_length).to_list()
+    hosts_list = query.find(
+        _collection,
+        params,
+        skip=(page - 1)*page_length,
+        limit=page_length
+    )
+
     qlogger.add('net', 'hosts', params, _collection.find(
         params
         ).skip((page - 1)*page_length).limit(page_length))
+
     for host in hosts_list:
         del host['_id']
     return hosts_list
@@ -206,9 +218,12 @@ def port_hosts(port_str, *args, extra_type=None, extra_query=None, page=1, page_
     if extra_type and extra_query:
         params = net_extend_params(params, extra_type, extra_query)
 
-    hosts_list = _collection.find(
-        params
-    ).skip((page - 1)*page_length).limit(page_length).to_list()
+    hosts_list = query.find(
+        _collection,
+        params,
+        skip=(page - 1)*page_length,
+        limit=page_length
+    )
 
     for host in hosts_list:
         del host['_id']
@@ -222,7 +237,7 @@ def port_hosts_total(port_str, extra_type=None, extra_query=None):
     params = {_TOTAL_PORTS: {'$elemMatch': {'port': port_str}}}
     if extra_type and extra_query:
         params = net_extend_params(params, extra_type, extra_query)
-    return _collection.count_documents(params)
+    return query.count(_collection, params)
 
 
 def port_tops(port_str, extra_type=None, extra_query=None, limit=_TOPS_LIMIT):
@@ -236,7 +251,7 @@ def port_tops(port_str, extra_type=None, extra_query=None, limit=_TOPS_LIMIT):
     if extra_type and extra_query:
         params = net_extend_params(params, extra_type, extra_query)
     qlogger.add('port', 'tops', params, collection=_collection, meth='aggregate')
-    return _collection.aggregate(params).to_list()
+    return query.aggregate(_collection, params)
 
 
 def country_hosts(
@@ -250,7 +265,12 @@ def country_hosts(
     if extra_type and extra_query:
         params = extend_generic(params, extra_type, extra_query)
 
-    hosts_list = _collection.find(params).skip((page - 1)*page_length).limit(page_length).to_list()
+    hosts_list = query.find(
+        _collection,
+        params,
+        skip=(page - 1)*page_length,
+        limit=page_length
+    )
     for host in hosts_list:
         del host['_id']
 
@@ -267,7 +287,7 @@ def country_hosts_total(loc_str, extra_type=None, extra_query=None,):
         params = extend_generic(params, extra_type, extra_query)
 
     qlogger.add('country', 'hosts_total', params, collection=_collection, meth='count_documents')
-    return _collection.count_documents(params)
+    return query.count(_collection, params)
 
 
 def country_ports_total(loc_str, extra_type=None, extra_query=None,):
@@ -279,7 +299,7 @@ def country_ports_total(loc_str, extra_type=None, extra_query=None,):
         params = extend_generic(params, extra_type, extra_query)
 
     qlogger.add('country', 'ports_total', params)
-    return _collection.aggregate(params).to_list()
+    return query.aggregate(_collection, params)
 
 
 def country_tops(loc_str, extra_type=None, extra_query=None, limit=_TOPS_LIMIT):
@@ -294,7 +314,7 @@ def country_tops(loc_str, extra_type=None, extra_query=None, limit=_TOPS_LIMIT):
         params = extend_generic(params, extra_type, extra_query)
 
     qlogger.add('country', 'tops', params, collection=_collection, meth='aggregate')
-    return _collection.aggregate(params).to_list()
+    return query.aggregate(_collection, params)
 
 
 def city_hosts(
@@ -308,7 +328,12 @@ def city_hosts(
     if extra_type and extra_query:
         params = extend_generic(params, extra_type, extra_query)
 
-    hosts_list = _collection.find(params).skip((page - 1)*page_length).limit(page_length).to_list()
+    hosts_list = query.find(
+        _collection,
+        params,
+        skip=(page - 1)*page_length,
+        limit=page_length
+    )
     for host in hosts_list:
         del host['_id']
 
@@ -325,7 +350,7 @@ def city_hosts_total(loc_str, extra_type=None, extra_query=None,):
         params = extend_generic(params, extra_type, extra_query)
 
     qlogger.add('city', 'hosts_total', params, collection=_collection, meth='count_documents')
-    return _collection.count_documents(params)
+    return query.count(_collection, params)
 
 
 def city_ports_total(loc_str, extra_type=None, extra_query=None,):
@@ -337,7 +362,7 @@ def city_ports_total(loc_str, extra_type=None, extra_query=None,):
         params = extend_generic(params, extra_type, extra_query)
 
     qlogger.add('city', 'ports_total', params)
-    return _collection.aggregate(params).to_list()
+    return query.aggregate(_collection, params)
 
 
 def city_tops(loc_str, extra_type=None, extra_query=None, limit=_TOPS_LIMIT):
@@ -352,13 +377,14 @@ def city_tops(loc_str, extra_type=None, extra_query=None, limit=_TOPS_LIMIT):
         params = extend_generic(params, extra_type, extra_query)
 
     qlogger.add('city', 'tops', params, collection=_collection, meth='aggregate')
-    return _collection.aggregate(params).to_list()
+    return query.aggregate(_collection, params)
 
 
 def get_details(t, q, facet):
     details = []
     if t != 'domain':
-        details = _collection.aggregate(
+        details = query.aggregate(
+            _collection,
             query.get_facet_details_filter(t, q, facet)
-        ).to_list()
+        )
     return details

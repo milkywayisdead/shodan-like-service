@@ -9,16 +9,16 @@ from django.conf import settings
 IGNORECASE = settings.SEARCH_INGORECASE
 
 
-def collection_aggregate(collection, params):
-    return collection.aggregate(params).to_list()
+def aggregate(collection, params):
+    return collection.aggregate(params, maxTimeMS=120*1000).to_list()
 
 
-def collection_count(collection, params):
-    return collection.count_documents(params)
+def count(collection, params):
+    return collection.count_documents(params, maxTimeMS=120*1000)
 
 
-def collection_find(collection, params, skip=0, limit=10): 
-    return collection.find(params).skip(skip).limit(limit).to_list()
+def find(collection, params, skip=0, limit=10): 
+    return collection.find(params, max_time_ms=120*1000).skip(skip).limit(limit).to_list()
 
 
 def regex(value):

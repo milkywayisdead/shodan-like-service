@@ -32,10 +32,14 @@ def hosts(request):
     return JsonResponse({'host': res})
 
 
+def _dummy_ports(*args, **kwargs):
+    return []
+
+
 class PortSearch(GenericSearchView):
     hosts_func = db.port_hosts
     hosts_total_func = db.port_hosts_total
-    ports_func = lambda x: []
+    ports_func = _dummy_ports
     tops_func = db.port_tops
 
     def get_args(self, request):
