@@ -42,7 +42,10 @@ class GenericBaseView(View):
         return self.search_type, request.GET['search']
 
     def get_kwargs(self, request):
-        return {}
+        return {
+            'extra_type': request.GET.get('et', None),
+            'extra_query': request.GET.get('eq', None)
+        }
 
 
 class GenericSearchView(GenericBaseView):

@@ -74,8 +74,11 @@ def generic_hosts(key, value, *args,
         params = {key: _regex(value)}
     if extra_type and extra_query:
         params = extend_generic(params, extra_type, extra_query)
-        
-    hosts_list = _collection.find(params).skip((page - 1)*page_length).limit(page_length).to_list()
+
+    hosts_list = query.collection_find(
+        _collection, params, skip=(page - 1)*page_length, limit=page_length
+    )
+
     qlogger.add(key, 'hosts', params, _collection.find(params).skip((page - 1)*page_length).limit(page_length))
     for host in hosts_list:
         del host['_id']
@@ -92,8 +95,9 @@ def generic_hosts_total(key, value, extra_type=None, extra_query=None):
         params = {key: _regex(value)}
     if extra_type and extra_query:
         params = extend_generic(params, extra_type, extra_query)
+
     qlogger.add(key, 'hosts_total', params, collection=_collection, meth='count_documents')
-    return _collection.count_documents(params)
+    return query.collection_count(params)
 
 
 def generic_tops(key, value, extra_type=None, extra_query=None, limit=5):
@@ -235,45 +239,119 @@ def port_tops(port_str, extra_type=None, extra_query=None, limit=_TOPS_LIMIT):
     return _collection.aggregate(params).to_list()
 
 
-def loc_hosts(loc_str, *args, page=1, page_length=_PAGE_LENGTH):
+def country_hosts(
+    loc_str, *args,
+    extra_type=None, extra_query=None,
+    page=1, page_length=_PAGE_LENGTH):
     """
-    Поиск хостов для loc.
+    Поиск хостов для country.
     """
-    params = query.get_loc_filter(loc_str)
+    params = query.get_country_filter(loc_str)
+    if extra_type and extra_query:
+        params = extend_generic(params, extra_type, extra_query)
+
     hosts_list = _collection.find(params).skip((page - 1)*page_length).limit(page_length).to_list()
     for host in hosts_list:
         del host['_id']
-    qlogger.add('loc', 'hosts', params, _collection.find(params).skip((page - 1)*page_length).limit(page_length))
+
+    qlogger.add('country', 'hosts', params, _collection.find(params).skip((page - 1)*page_length).limit(page_length))
     return hosts_list
 
 
-def loc_hosts_total(loc_str):
+def country_hosts_total(loc_str, extra_type=None, extra_query=None,):
     """
-    Подсчёт хостов для loc.
+    Подсчёт хостов для country.
     """
-    params = query.get_loc_filter(loc_str)
-    qlogger.add('loc', 'hosts_total', params, collection=_collection, meth='count_documents')
+    params = query.get_country_filter(loc_str)
+    if extra_type and extra_query:
+        params = extend_generic(params, extra_type, extra_query)
+
+    qlogger.add('country', 'hosts_total', params, collection=_collection, meth='count_documents')
     return _collection.count_documents(params)
 
 
-def loc_ports_total(loc_str):
+def country_ports_total(loc_str, extra_type=None, extra_query=None,):
     """
-    Подсчёт портов для loc.
+    Подсчёт портов для country.
     """
-    params = query.get_ports_filter(query.get_loc_filter(loc_str))
-    qlogger.add('loc', 'ports_total', params)
+    params = query.get_ports_filter(query.get_country_filter(loc_str))
+    if extra_type and extra_query:
+        params = extend_generic(params, extra_type, extra_query)
+
+    qlogger.add('country', 'ports_total', params)
     return _collection.aggregate(params).to_list()
 
 
-def loc_tops(loc_str, limit=_TOPS_LIMIT):
+def country_tops(loc_str, extra_type=None, extra_query=None, limit=_TOPS_LIMIT):
     """
-    Получение топ-{limit} для port.
+    Получение топ-{limit} для country.
     """
     params = query.get_tops_filter(
-        query.get_loc_filter(loc_str),
+        query.get_country_filter(loc_str),
         limit
     )
-    qlogger.add('loc', 'tops', params, collection=_collection, meth='aggregate')
+    if extra_type and extra_query:
+        params = extend_generic(params, extra_type, extra_query)
+
+    qlogger.add('country', 'tops', params, collection=_collection, meth='aggregate')
+    return _collection.aggregate(params).to_list()
+
+
+def city_hosts(
+    loc_str, *args, 
+    extra_type=None, extra_query=None,
+    page=1, page_length=_PAGE_LENGTH):
+    """
+    Поиск хостов для city.
+    """
+    params = query.get_city_filter(loc_str)
+    if extra_type and extra_query:
+        params = extend_generic(params, extra_type, extra_query)
+
+    hosts_list = _collection.find(params).skip((page - 1)*page_length).limit(page_length).to_list()
+    for host in hosts_list:
+        del host['_id']
+
+    qlogger.add('city', 'hosts', params, _collection.find(params).skip((page - 1)*page_length).limit(page_length))
+    return hosts_list
+
+
+def city_hosts_total(loc_str, extra_type=None, extra_query=None,):
+    """
+    Подсчёт хостов для city.
+    """
+    params = query.get_city_filter(loc_str)
+    if extra_type and extra_query:
+        params = extend_generic(params, extra_type, extra_query)
+
+    qlogger.add('city', 'hosts_total', params, collection=_collection, meth='count_documents')
+    return _collection.count_documents(params)
+
+
+def city_ports_total(loc_str, extra_type=None, extra_query=None,):
+    """
+    Подсчёт портов для city.
+    """
+    params = query.get_ports_filter(query.get_city_filter(loc_str))
+    if extra_type and extra_query:
+        params = extend_generic(params, extra_type, extra_query)
+
+    qlogger.add('city', 'ports_total', params)
+    return _collection.aggregate(params).to_list()
+
+
+def city_tops(loc_str, extra_type=None, extra_query=None, limit=_TOPS_LIMIT):
+    """
+    Получение топ-{limit} для city.
+    """
+    params = query.get_tops_filter(
+        query.get_city_filter(loc_str),
+        limit
+    )
+    if extra_type and extra_query:
+        params = extend_generic(params, extra_type, extra_query)
+
+    qlogger.add('city', 'tops', params, collection=_collection, meth='aggregate')
     return _collection.aggregate(params).to_list()
 
 

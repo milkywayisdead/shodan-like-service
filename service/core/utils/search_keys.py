@@ -8,6 +8,8 @@ LOC = 'Location'
 OS = 'OS'
 DOMAIN = 'domain'
 PORT = 'total_ports.port'
+COUNTRY = 'Location.0.country'
+CITY = 'Location.0.city'
 
 SK_DICT = {
     'asn': ASN,
@@ -21,6 +23,8 @@ SK_DICT = {
     'loc': LOC,
     'os': OS,
     'port': PORT,
+    'country': COUNTRY,
+    'city': CITY,
 }
 
 SK_TP_DICT = {

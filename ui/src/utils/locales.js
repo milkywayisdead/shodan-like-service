@@ -30,7 +30,8 @@ export const ru = {
         port: 'Port',
         asn: 'ASN',
         org: 'Org',
-        loc: 'Loc',
+        city: 'City',
+        country: 'Country',
         domain: 'Domain',
         os: 'OS',
         service: 'Service',
@@ -100,5 +101,7 @@ export const ru = {
     messages: {
         requestsLimitReached: 'Исчерпан лимит запросов',
         authError: 'Ошибка аутентификации',
+        searchError: 'Ошибка при выполнении поиска',
+        pageError: 'Ошибка при получении страницы',
     }
 }

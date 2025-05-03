@@ -9,24 +9,31 @@ from django.conf import settings
 IGNORECASE = settings.SEARCH_INGORECASE
 
 
-def regex(value, ignorecase=IGNORECASE):
-    # args = [f'^{value}', ]
-    # if ignorecase:
-    #     args.append(re.IGNORECASE)
-    # return re.compile(*args)
+def collection_aggregate(collection, params):
+    return collection.aggregate(params).to_list()
+
+
+def collection_count(collection, params):
+    return collection.count_documents(params)
+
+
+def collection_find(collection, params, skip=0, limit=10): 
+    return collection.find(params).skip(skip).limit(limit).to_list()
+
+
+def regex(value):
     return {'$regex': f'^{value}'}
 
 
-def get_loc_filter(value):
+def get_country_filter(value):
     return {
-        'Location': {
-            '$elemMatch': {
-                '$or': [
-                    {'city': regex(value)},
-                    {'country': regex(value)},
-                ]
-            }
-        }
+        'Location.0.country': value  
+    }
+
+
+def get_city_filter(value):
+    return {
+        'Location.0.city': value  
     }
 
 

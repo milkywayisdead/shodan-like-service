@@ -23,7 +23,8 @@ import HostsSearchResults from '@/components/search/results/HostsSearchResults.v
 import NetSearchResults from '@/components/search/results/NetSearchResults.vue';
 import PortSearchResults from '@/components/search/results/PortSearchResults.vue';
 import AsnSearchResults from '@/components/search/results/AsnSearchResults.vue';
-import LocSearchResults from '@/components/search/results/LocSearchResults.vue';
+import CountrySearchResults from '@/components/search/results/CountrySearchResults.vue';
+import CitySearchResults from '@/components/search/results/CitySearchResults.vue';
 import OrgSearchResults from '@/components/search/results/OrgSearchResults.vue';
 import SoftSearchResults from '@/components/search/results/SoftSearchResults.vue';
 import AppSearchResults from '@/components/search/results/AppSearchResults.vue';
@@ -84,10 +85,14 @@ export default {
                         this.lockPage()
                         this.resetPage()
                         this.unlockPage()
+                    } else {
+                        this.store.addErrorNotif(this.locale.messages.searchError)
                     }
                 }).catch(err => {
                     if(err.status === 429){
                         this.store.addErrorNotif(this.locale.messages.requestsLimitReached)
+                    } else {
+                        this.store.addErrorNotif(this.locale.messages.searchError)
                     }
                 }).finally(() => {
                     setTimeout(() => {
@@ -103,8 +108,13 @@ export default {
             this.store.setLoading()
             func({params: {search: term, page: page}})
                 .then(res => {
+                    if(res.status !== 200){
+                        this.store.addErrorNotif(this.locale.messages.pageError)
+                    }
                     this.results.hosts = res.data.hosts
-                }).catch(err => {}).finally(() => {
+                }).catch(err => {
+                    this.store.addErrorNotif(this.locale.messages.pageError)
+                }).finally(() => {
                     setTimeout(() => {
                         this.store.resetLoading()
                     }, 500);
@@ -127,10 +137,12 @@ export default {
             this.$router.push(`/search?t=${event.param}&q=${event.value}`)
         },
         extendSearch(params){
-            const allowedOriginals = ['port', 'net', 'asn']
-            if(!allowedOriginals.includes(params.originalType)) return
+            if(!this.checkExtendedSearch) return
 
             this.$router.push(`/search?t=${params.originalType}&q=${params.originalQuery}&et=${params.param}&eq=${params.value}`)
+        },
+        checkExtendedSearch(original, extended){
+            return true
         }
     },
     watch: {
@@ -162,7 +174,8 @@ export default {
         NetSearchResults,
         PortSearchResults,
         AsnSearchResults,
-        LocSearchResults,
+        CountrySearchResults,
+        CitySearchResults,
         OrgSearchResults,
         SoftSearchResults,
         AppSearchResults,

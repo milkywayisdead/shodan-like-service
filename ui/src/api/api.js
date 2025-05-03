@@ -54,8 +54,11 @@ export const searchApi = {
     domain(params){
         return api.get('/domain', params)
     },
-    loc(params){
-        return api.get('/loc', params)
+    country(params){
+        return api.get('/country', params)
+    },
+    city(params){
+        return api.get('/city', params)
     },
     org(params){
         return api.get('/org', params)
@@ -94,8 +97,11 @@ export const searchApi = {
         org(params){
             return api.get('/org/page', params)
         },
-        loc(params){
-            return api.get('/loc/page', params)
+        country(params){
+            return api.get('/country/page', params)
+        },
+        city(params){
+            return api.get('/city/page', params)
         },
         soft(params){
             return api.get('/soft/page', params)

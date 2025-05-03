@@ -47,7 +47,8 @@ export default {
             if(this.auth.isAuthenticated){
                 items.push(...[
                     {title: searchLoc.org, value: 'org'},
-                    {title: searchLoc.loc, value: 'loc'},
+                    {title: searchLoc.city, value: 'city'},
+                    {title: searchLoc.country, value: 'country'},
                     {title: searchLoc.domain, value: 'domain'},
                     {title: searchLoc.os, value: 'os'},
                     {title: searchLoc.service, value: 'service'},

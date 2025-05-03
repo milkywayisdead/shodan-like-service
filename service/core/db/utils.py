@@ -24,7 +24,6 @@ def net_extend_params(original_params, extra_type, extra_query):
         try:
             original_params['total_ports'] = {'$elemMatch': {SK_TP_DICT[extra_type]: extra_query}}
         except TypeError:
-            #original_params[0]['$match'][f'total_ports'] = {'$elemMatch': {SK_TP_DICT[extra_type]: extra_query}}
             original_params[0]['$match'][f'total_ports.{SK_TP_DICT[extra_type]}'] = extra_query
     elif extra_type in HOST_FACETS:
         key = SK_DICT[extra_type]
@@ -40,7 +39,6 @@ def port_extend_params(original_params, extra_type, extra_query):
         try:
             original_params['total_ports'] = {'$elemMatch': {SK_TP_DICT[extra_type]: extra_query}}
         except TypeError:
-            #original_params[0]['$match'][f'total_ports'] = {'$elemMatch': {SK_TP_DICT[extra_type]: extra_query}}
             original_params[0]['$match'][f'total_ports.{SK_TP_DICT[extra_type]}'] = extra_query
     elif extra_type in HOST_FACETS:
         key = SK_DICT[extra_type]
@@ -56,7 +54,6 @@ def extend_generic(original_params, extra_type, extra_query):
         try:
             original_params['total_ports'] = {'$elemMatch': {SK_TP_DICT[extra_type]: extra_query}}
         except TypeError:
-            #original_params[0]['$match'][f'total_ports'] = {'$elemMatch': {SK_TP_DICT[extra_type]: extra_query}}
             original_params[0]['$match'][f'total_ports.{SK_TP_DICT[extra_type]}'] = extra_query
     elif extra_type in HOST_FACETS:
         key = SK_DICT[extra_type]

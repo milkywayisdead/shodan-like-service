@@ -9,6 +9,7 @@ from .utils.generic_views import (
     GenericPageWithAuth
 )
 from .utils import search_keys as sk
+from .utils.decorators import check_auth, limit_check
 
 
 def details(request):
@@ -23,6 +24,8 @@ def details(request):
     details = db.get_details(t, q, facet)
     return JsonResponse({'details': details})
 
+
+@limit_check
 def hosts(request):
     ip = request.GET['search']
     res = db.hosts(ip)
@@ -47,12 +50,6 @@ class NetSearch(GenericSearchView):
 
     def get_args(self, request):
         return (request.GET['search'],)
-
-    def get_kwargs(self, request):
-        return {
-            'extra_type': request.GET.get('et', None),
-            'extra_query': request.GET.get('eq', None)
-        }
 
 
 class NetPage(GenericPageView):
@@ -97,20 +94,39 @@ class ComponentPage(GenericPageWithAuth):
     search_type = sk.COMPONENT
 
 
-class LocSearch(GenericSearchWithAuth):
-    search_type = sk.LOC
-    hosts_func = db.loc_hosts
-    hosts_total_func = db.loc_hosts_total
-    ports_func = db.loc_ports_total
-    tops_func = db.loc_tops
+class CountrySearch(GenericSearchWithAuth):
+    search_type = sk.COUNTRY
+    hosts_func = db.country_hosts
+    hosts_total_func = db.country_hosts_total
+    ports_func = db.country_ports_total
+    tops_func = db.country_tops
 
     def get_args(self, request):
         return (request.GET['search'], )
 
 
-class LocPage(GenericPageWithAuth):
-    search_type = sk.LOC
-    search_func = db.loc_hosts
+class CountryPage(GenericPageWithAuth):
+    search_type = sk.COUNTRY
+    search_func = db.country_hosts
+
+    def get_args(self, request):
+        return (request.GET['search'], )
+
+
+class CitySearch(GenericSearchWithAuth):
+    search_type = sk.CITY
+    hosts_func = db.city_hosts
+    hosts_total_func = db.city_hosts_total
+    ports_func = db.city_ports_total
+    tops_func = db.city_tops
+
+    def get_args(self, request):
+        return (request.GET['search'], )
+
+
+class CityPage(GenericPageWithAuth):
+    search_type = sk.CITY
+    search_func = db.city_hosts
 
     def get_args(self, request):
         return (request.GET['search'], )
