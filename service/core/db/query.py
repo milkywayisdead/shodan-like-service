@@ -26,14 +26,14 @@ def regex(value):
 
 
 def get_country_filter(value):
-    return {
-        'Location.0.country': value  
+    return {    
+        'Location.0.country': regex(value)
     }
 
 
 def get_city_filter(value):
     return {
-        'Location.0.city': value  
+        'Location.0.city': regex(value) 
     }
 
 
@@ -160,7 +160,7 @@ def get_tops_filter(match, limit=5):
 def get_port_tops_filter(port_str, limit=5):
     return [
         {
-            '$match': { "total_ports.port": port_str},
+            '$match': { "total_ports.port": regex(port_str)},
         },
         { 
             '$unwind': "$total_ports" 
@@ -266,8 +266,6 @@ def get_facet_details_filter(t, q, facet):
         match = {"total_ports.port": regex(q)}
     elif t == 'net':
         match = get_range_filter('address', q)
-    elif t == 'loc':
-        match = get_loc_filter(q)
     elif t == 'asn':
         match = {'ASN': q, 'total_ports': {'$ne': []}}
     else:
