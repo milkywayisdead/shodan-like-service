@@ -1,7 +1,7 @@
 <template>
 <h3>{{ locale.search.details }}</h3>
 <v-row>
-    <v-col cols="2" style="padding-top:25px">
+    <v-col cols="2" style="">
         <details-labels-list 
             :labels="labels"
             @click="extendedSearch" />

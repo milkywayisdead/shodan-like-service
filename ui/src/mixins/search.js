@@ -69,7 +69,7 @@ export const detailsMixin = {
             return this.chartData.labels
         },
         chartHeight(){
-            return this.labels.length*50 + 50
+            return this.labels.length*45 + 25
         },
     }
 }
