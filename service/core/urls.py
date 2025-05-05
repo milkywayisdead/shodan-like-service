@@ -9,6 +9,7 @@ urlpatterns = [
     path('api/logout', views.logout_view, name='logout'),
     path('api/user', views.user, name='user'),
     path('api/register', views.register, name='register'),
+    path('api/reg-check-email', views.reg_check_email, name='reg_check_email'),
 
     path('search/hosts', sv.hosts, name='search_hosts'),
     path('search/port', sv.PortSearch.as_view(), name='search_port'),

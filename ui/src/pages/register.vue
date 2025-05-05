@@ -7,7 +7,8 @@
                 type="text" 
                 v-model="email" 
                 :rules="[rules.isEmail]" 
-                @keyup.enter="register" />
+                @keyup.enter="register" 
+                :error-messages="errorMessages" />
             <v-text-field 
                 :label="locale.password" 
                 type="password" 
@@ -17,7 +18,7 @@
         </v-form>
         <v-btn 
             @click="register"
-            :disabled="!formIsValid">
+            :disabled="!formIsValid || emailExists || !!regCheckTimeout">
             {{ locale.register }}
         </v-btn>
     </v-col>
@@ -39,6 +40,8 @@ export default {
             success: '',
             rules: loginAndRegisterRules,
             formIsValid: false,
+            regCheckTimeout: null,
+            emailExists: false,
         }
     },
     methods: {
@@ -65,12 +68,44 @@ export default {
                         this.store.loading = false
                     }, 1000)
                 } else {
-                    this.error = data.error || 'Registration failed'
+                    if(response.status === 409){
+                        this.store.addErrorNotif(this.locale.messages.emailAlreadyExists)
+                    }
                 }
             } catch (err) {
-                this.error = 'An error occurred during registration: ' + err
+                    this.store.addErrorNotif(this.locale.messages.registerError)
             } finally {
                 this.store.loading = false
+            }
+        },
+        async regCheckEmail(email){
+            const res = await fetch(urls.regCheckEmail + `?e=${email}`)
+            const data = await res.json()
+            if(res.status === 200){
+                this.emailExists = data.exists
+                clearTimeout(this.regCheckTimeout)
+                this.regCheckTimeout = null
+            }
+        }
+    },
+    computed: {
+        emailIsOk(){
+            return this.rules.isEmail(this.email)
+        },
+        errorMessages(){
+            if(this.emailExists){
+                return [this.locale.messages.emailAlreadyExists]
+            }
+            return []
+        }
+    },
+    watch: {
+        email(value){
+            clearTimeout(this.regCheckTimeout)
+            if(this.rules.isEmail(this.email)){
+                this.regCheckTimeout = setTimeout(this.regCheckEmail, 250, value)
+            } else {
+                this.emailExists = false
             }
         }
     }

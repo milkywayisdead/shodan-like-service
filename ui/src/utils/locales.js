@@ -103,6 +103,8 @@ export const ru = {
         authError: 'Ошибка аутентификации',
         searchError: 'Ошибка при выполнении поиска',
         pageError: 'Ошибка при получении страницы',
-        loginPlease: 'Пожалуйста, авторизуйтесь'
+        loginPlease: 'Пожалуйста, авторизуйтесь',
+        emailAlreadyExists: 'Аккаунт уже существует',
+        registerError: 'Ошибка регистрации'
     }
 }
