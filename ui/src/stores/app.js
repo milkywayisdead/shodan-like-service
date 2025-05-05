@@ -1,7 +1,11 @@
 // Utilities
 import { defineStore } from 'pinia'
 import { ru } from '@/utils/locales'
-import { newErrorNotif, newSuccessNotif } from '@/utils/snackbar'
+import { 
+    newErrorNotif, 
+    newSuccessNotif,
+    newInfoNotif,
+} from '@/utils/snackbar'
 
 
 export const useAppStore = defineStore('app', {
@@ -19,6 +23,9 @@ export const useAppStore = defineStore('app', {
         },
         addNotif(notif){
             this.notifs.push(notif)
+        },
+        addInfoNotif(message){
+            this.addNotif(newInfoNotif(message))
         },
         addErrorNotif(message){
             this.addNotif(newErrorNotif(message))

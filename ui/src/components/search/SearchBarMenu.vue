@@ -32,7 +32,7 @@ export default {
     emits: ['change'],
     methods: {
         setSearchTypeTitle(type){
-            this.searchTypeTitle = this.searchTypes.find(i => i.value === type).title
+            this.searchTypeTitle = this.searchTypes.find(i => i.value === type)?.title || 'Hosts'
         }
     },
     computed: {

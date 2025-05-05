@@ -21,6 +21,9 @@ def details(request):
     except:
         return JsonResponse({'details': []}, status=400)
 
+    if t in sk.AUTH_REQUIRED and not request.user.is_authenticated:
+        return JsonResponse({'details': []}, status=401)
+
     details = db.get_details(t, q, facet)
     return JsonResponse({'details': details})
 

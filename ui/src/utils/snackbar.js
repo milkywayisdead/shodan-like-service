@@ -1,3 +1,11 @@
+export const newInfoNotif = (text) => ({
+    id: `info${+ new Date()}`,
+    visible: true,
+    text: text,
+    color: 'info',
+})
+
+
 export const newErrorNotif = (text) => ({
     id: `error${+ new Date()}`,
     visible: true,

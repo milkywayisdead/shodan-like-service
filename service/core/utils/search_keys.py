@@ -44,3 +44,14 @@ REGEX_SEARCH = [
     'total_ports.application',
     'total_ports.component',
 ]
+
+AUTH_REQUIRED = [
+    'city',
+    'country',
+    'org',
+    'os',
+    'service',
+    'component',
+    'app',
+    'soft'
+]

@@ -32,6 +32,8 @@ api.interceptors.response.use(
             auth.isAuthenticated = false
             auth.saveState()
             router.replace('/login')
+            store.addInfoNotif(store.locale.messages.loginPlease)
+            
         }
         return Promise.reject(error)
     }
