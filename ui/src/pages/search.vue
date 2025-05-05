@@ -147,7 +147,12 @@ export default {
     },
     watch: {
         page(value){
-            if(!this._lockPage){
+            const query = this.$route.query || {}
+            const extraType = query.et || ''
+            const extraQuery = query.eq || ''
+            const complexFilter = !!extraType && !!extraQuery
+
+            if(!this._lockPage && !complexFilter){
                 this.getPage(value)
             }
         },
