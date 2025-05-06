@@ -1,5 +1,7 @@
 import { searchApi } from "@/api/api";
 import { storeMixin } from "./store";
+import { DETAILS_MAX_ITEMS } from '@/utils/constants'
+
 
 export const searchMixin = {
     data(){
@@ -24,6 +26,9 @@ export const detailsMixin = {
         filterIsComplex(){
             const query = this.$route.query
             return !!query.et && !!query.eq
+        },
+        maxItemsExceeded(){
+            return this._categories.length > DETAILS_MAX_ITEMS
         }
     },
     methods: {

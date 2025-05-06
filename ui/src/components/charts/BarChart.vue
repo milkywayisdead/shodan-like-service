@@ -3,7 +3,7 @@
     <apexchart
       type="bar"
       :options="chartOptions"
-      :series="series"
+      :series="limitedSeries"
       :height="height"
     ></apexchart>
 </div>
@@ -11,6 +11,7 @@
 
 <script>
 import VueApexCharts from "vue3-apexcharts";
+import { DETAILS_MAX_ITEMS } from '@/utils/constants'
 
 export default {
     components: {
@@ -33,6 +34,17 @@ export default {
     emits: ['category-click'],
     data(){
         const _this = this
+
+        let cats = this.categories
+        if(cats.length > DETAILS_MAX_ITEMS){
+            cats = cats.slice(0, DETAILS_MAX_ITEMS)
+        }
+
+        let series = this.series
+        if(this.categories.length > DETAILS_MAX_ITEMS){
+            series = [{data: series[0].data.slice(0, DETAILS_MAX_ITEMS)}]
+        }
+
         return {
             containerId: `c${+new Date()}`,
             showChart: false,
@@ -91,9 +103,10 @@ export default {
                     }
                 },
                 xaxis: {
-                    categories: this.categories,
+                    categories: cats,
                 },
             },
+            limitedSeries: series, 
         }
     },
 }
