@@ -115,8 +115,11 @@ export const searchApi = {
             return api.get('/os/page', params)
         },
     },
-    details(t, q, facet){
-        const params = {params: {t, q, facet}}
-        return api.get('/details', params)
+    details(t, q, facet, et, eq){
+        let params = {t, q, facet}
+        if(!!et && !!eq){
+            params = {...params, et, eq}
+        }
+        return api.get('/details', {params})
     }
 }

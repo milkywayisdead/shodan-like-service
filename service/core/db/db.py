@@ -355,11 +355,11 @@ def city_tops(loc_str, extra_type=None, extra_query=None, limit=_TOPS_LIMIT):
     return query.aggregate(_collection, params)
 
 
-def get_details(t, q, facet):
+def get_details(t, q, facet, et='', eq=''):
     details = []
     if t != 'domain':
         details = query.aggregate(
             _collection,
-            query.get_facet_details_filter(t, q, facet)
+            query.get_facet_details_filter(t, q, facet, et=et, eq=eq)
         )
     return details

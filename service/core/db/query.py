@@ -1,6 +1,6 @@
 import re
 
-from .utils import get_range
+from .utils import get_range, extend_generic
 from core.utils.search_keys import SK_DICT
 
 from django.conf import settings
@@ -261,7 +261,7 @@ def get_port_tops_filter(port_str, limit=5):
     ]
 
 
-def get_facet_details_filter(t, q, facet):
+def get_facet_details_filter(t, q, facet, et='', eq=''):
     if t == 'port':
         match = {"total_ports.port": regex(q)}
     elif t == 'net':
@@ -272,6 +272,8 @@ def get_facet_details_filter(t, q, facet):
         match = {SK_DICT[t]: regex(q)}
 
     facet = SK_DICT[facet]
+    if et and eq:
+        match = extend_generic(match, et, eq)
 
     return [
         {'$match': match},

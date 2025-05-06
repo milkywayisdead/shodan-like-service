@@ -104,9 +104,18 @@ export default {
             page = page > 20 ? 20 : page
             const query = this.$route.query
             const term = query.q
+            const et = query.et || ''
+            const eq = query.eq || ''
+
             const func = this.searchApi.pagination[query.t]
             this.store.setLoading()
-            func({params: {search: term, page: page}})
+
+            let params = {search: term, page: page}
+            if(et && eq){
+                params = {...params, et, eq}
+            }
+
+            func({params: params})
                 .then(res => {
                     if(res.status !== 200){
                         this.store.addErrorNotif(this.locale.messages.pageError)
@@ -147,12 +156,7 @@ export default {
     },
     watch: {
         page(value){
-            const query = this.$route.query || {}
-            const extraType = query.et || ''
-            const extraQuery = query.eq || ''
-            const complexFilter = !!extraType && !!extraQuery
-
-            if(!this._lockPage && !complexFilter){
+            if(!this._lockPage){
                 this.getPage(value)
             }
         },

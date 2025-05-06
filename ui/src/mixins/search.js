@@ -40,8 +40,11 @@ export const detailsMixin = {
             const t = query.t
             const q = query.q
             const facet = query.facet
+            const et = query.et
+            const eq = query.eq
+
             this.store.setLoading()
-            searchApi.details(t, q, facet)
+            searchApi.details(t, q, facet, et, eq)
                 .then(res => {
                     if(res.status === 200){
                         const k = Object.keys((res.data.details[0]))
@@ -103,7 +106,14 @@ export const topsMixin = {
     methods: {
         toMore(){
             const query = this.$route.query
-            this.$router.push(`/details?t=${query.t}&q=${query.q}&facet=${this.type}`)
+            const et = query.et
+            const eq = query.eq
+
+            let path = `/details?t=${query.t}&q=${query.q}&facet=${this.type}`
+            if(!!et && !!eq){
+                path = `${path}&et=${et}&eq=${eq}`
+            }
+            this.$router.push(path)
         },
     }
 }
