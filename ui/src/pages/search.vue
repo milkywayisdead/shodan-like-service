@@ -84,7 +84,9 @@ export default {
                         this.results = res.data
                         this.lockPage()
                         this.resetPage()
-                        this.unlockPage()
+                        this.$nextTick(_ => {
+                            this.unlockPage()    
+                        })
                     } else {
                         this.store.addErrorNotif(this.locale.messages.searchError)
                     }
