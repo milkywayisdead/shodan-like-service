@@ -4,6 +4,7 @@
       type="bar"
       :options="chartOptions"
       :series="series"
+      :height="height"
     ></apexchart>
 </div>
 </template>
@@ -35,6 +36,7 @@ export default {
         return {
             containerId: `c${+new Date()}`,
             showChart: false,
+            height: this.categories.length*150,
             chartOptions: {
                 chart: {
                     id: 'details-bar',
@@ -76,7 +78,7 @@ export default {
                     labels: {
                         style: {
                             fontSize: '14px',
-                            colors: ['white']
+                            colors: 'white'
                         },
                     } 
                 },
@@ -85,7 +87,7 @@ export default {
                 },
                 plotOptions: {
                     bar: {
-                        horizontal: true
+                        horizontal: true,
                     }
                 },
                 xaxis: {
