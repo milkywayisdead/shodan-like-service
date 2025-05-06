@@ -1,6 +1,6 @@
 <template>
 <p v-for="(label, index) in labels"
-    style="height:44px;padding-top:14px"
+    style="height:42px;padding-top:13px;"
     :key="index">
     <span class="clickable-element" @click="emitClick(label)">{{ label }}</span>
 </p>
