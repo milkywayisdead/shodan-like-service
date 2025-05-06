@@ -6,13 +6,17 @@
             v-for="port in portsSlice" 
             :key="port.port"
             label
-            @click="emitClick">
+            color="primary"
+            @click="emitClick"
+            variant="flat">
             {{ portLabel(port.port) }}
         </v-chip>
         <v-chip class="mr-1" v-if="!clickable"
             v-for="port in portsSlice" 
             :key="port.port"
-            label>
+            color="primary"
+            label
+            variant="flat">
             {{ portLabel(port.port) }}
         </v-chip>
     </v-card-text>

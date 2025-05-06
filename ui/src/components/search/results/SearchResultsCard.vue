@@ -1,7 +1,6 @@
 <template>
 <v-card 
-    :title="title" 
-    :height="height">
+    :title="title">
     <v-card-text>
         <p>{{ locale.search.results.hostsTotal }}: {{ totals.hosts }}</p>
         <p v-if="showPorts">{{ locale.search.results.portsTotal }}: {{ totals.ports }}</p>

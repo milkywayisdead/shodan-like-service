@@ -20,6 +20,12 @@ export const detailsMixin = {
             _categories: []
         }
     },
+    computed: {
+        filterIsComplex(){
+            const query = this.$route.query
+            return !!query.et && !!query.eq
+        }
+    },
     methods: {
         setDetails(data){
             const cats = []

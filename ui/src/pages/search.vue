@@ -1,13 +1,21 @@
 <template>
 <search-bar ref="searchBar" @search="searchTheSame" />
+
+<complex-filter-info 
+    v-if="filterIsComplex"
+    closable
+    @close="handleComplexFilterClose" />
+
 <component v-if="searchType && !noResults"
+    class="mt-1"
     :is="`${searchType}-search-results`" 
     :info="results"
     @host-clicked="hostClickedHandler($event)" 
     @search-by="handleSearchBy"
     @extend-search="extendSearch" 
     :query="query" />
-<no-results v-if="noResults" />
+<no-results v-if="noResults" class="mt-2" />
+
 <v-pagination v-if="auth.isAuthenticated && paginationLength"
     v-model="page" 
     :length="paginationLength" 
@@ -59,6 +67,10 @@ export default {
                 return this.results.host === null
             }
             return this.results.hosts_total === 0
+        },
+        filterIsComplex(){
+            const query = this.$route.query
+            return !!query.et && !!query.eq
         }
     },
     methods: {
@@ -154,6 +166,10 @@ export default {
         },
         checkExtendedSearch(original, extended){
             return true
+        },
+        handleComplexFilterClose(){
+            const query = this.$route.query
+            this.$router.push(`/search?t=${query.t}&q=${query.q}`)
         }
     },
     watch: {
