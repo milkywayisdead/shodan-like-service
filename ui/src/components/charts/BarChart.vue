@@ -1,75 +1,98 @@
 <template>
 <div :id="containerId">
-    <Bar v-if="showChart"
-        id="details-bar"
-        style="background-color:#212121;"
-        :options="chartOptions"
-        :data="chartData"
-        :height="height" 
-        :width="width" />
+    <apexchart
+      type="bar"
+      :options="chartOptions"
+      :series="series"
+    ></apexchart>
 </div>
 </template>
 
 <script>
-import { Bar } from 'vue-chartjs';
-import { 
-    Chart as ChartJS, 
-    Title, 
-    Tooltip,
-    BarElement,
-    LinearScale,
-    CategoryScale,
-} from 'chart.js'
-import ChartDataLabels from 'chartjs-plugin-datalabels';
-
-ChartJS.register(Title, BarElement, Tooltip, LinearScale, CategoryScale, ChartDataLabels)
-
-
-const barThickness = 50
+import VueApexCharts from "vue3-apexcharts";
 
 export default {
-    components: {Bar},
-    props: {
-        chartData: {
-            type: Object,
-            default: {
-                labels: [],
-                datasets: []
-            },
-        },
-        height: {
-            type: Number,
-            default: 500
-        },
+    components: {
+        apexchart: VueApexCharts,
     },
+    props: {
+        categories: {
+            type: Array,
+            default: []
+        },
+        _categories: {
+            type: Array,
+            default: []
+        },
+        series: {
+            type: Array,
+            default: []
+        }
+    },
+    emits: ['category-click'],
     data(){
+        const _this = this
         return {
             containerId: `c${+new Date()}`,
-            chartOptions: {
-                responsive: false,
-                indexAxis: 'y',
-                barThickness: barThickness,
-                scales: {
-                    y: {
-                        ticks: {
-                            display: false
-                        }
-                    } 
-                }
-            },
             showChart: false,
-            width: 0,
+            chartOptions: {
+                chart: {
+                    id: 'details-bar',
+                    events: {
+                        click(event, chartContext, opts) {
+                            const target = event.target
+                            const parent = target.parentElement
+                            try {
+                                if(target.tagName !== 'tspan') return
+                                if(parent?.tagName !== 'text') return
+                                if(
+                                    !parent.classList.contains('apexcharts-text') || 
+                                    !parent.classList.contains('apexcharts-yaxis-label')
+                                ) return
+                            } catch(err){
+                                return
+                            }
+
+                            let cat = ''
+                            for(const child of parent.children){
+                                if(child.tagName === 'title'){
+                                    cat = child.textContent
+                                    break
+                                }
+                            }
+
+                            if(!_this._categories.includes(cat)) return
+                            _this.$emit('category-click', cat)
+                        }
+                    },
+                    toolbar: {
+                        show: false
+                    }
+                },
+                grid: {
+                    show: false,
+                },
+                yaxis: {
+                    labels: {
+                        style: {
+                            fontSize: '14px',
+                            colors: ['white']
+                        },
+                    } 
+                },
+                tooltip: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: true
+                    }
+                },
+                xaxis: {
+                    categories: this.categories,
+                },
+            },
         }
     },
-    methods: {
-        getWidth(){
-            const rect = document.getElementById(this.containerId).getBoundingClientRect()
-            return rect.width
-        }
-    },
-    mounted(){
-        this.width = this.getWidth()
-        this.showChart = true
-    }
 }
 </script>

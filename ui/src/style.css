@@ -5,3 +5,8 @@ a.nodecor {
 .clickable-element {
     cursor: pointer;
 }
+
+
+text.apexcharts-text.apexcharts-yaxis-label {
+    cursor: pointer;
+}

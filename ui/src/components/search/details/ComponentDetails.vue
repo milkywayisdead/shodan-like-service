@@ -1,17 +1,10 @@
 <template>
 <h3>{{ locale.search.details }}</h3>
-<v-row>
-    <v-col cols="2" style="">
-        <details-labels-list 
-            :labels="labels"
-            @click="extendedSearch" />
-    </v-col>
-    <v-col cols="10">
-        <bar-chart v-if="labels.length"
-            :chart-data="chartData" 
-            :height="chartHeight" />
-    </v-col>
-</v-row>
+<bar-chart v-if="categories.length"
+    :categories="categories"
+    :_categories="_categories"
+    :series="series" 
+    @category-click="extendedSearch" />
 </template>
 
 <script>

@@ -14,26 +14,31 @@ export const detailsMixin = {
     mixins: [storeMixin],
     data(){
         return {
-            _chartData: {
-                labels: [],
-                datasets: []
-            },
             facet: null,
+            series: [],
+            categories: [],
+            _categories: []
         }
     },
     methods: {
         setDetails(data){
-            const labels = data.map(item => item._id)
-            const datasets = [
-                {
-                    data: data.map(item => item.count),
-                    backgroundColor: '#36a2eb',
+            const cats = []
+            data.forEach(item => {
+                if(item._id.includes(' ')){
+                    cats.push(item._id.split(' '))
+                } else {
+                    cats.push(item._id)
                 }
+                this._categories.push(item._id)
+            })
+            this.categories = cats
+            
+            this.series = [
+                data.reduce((acc, item) => {
+                    acc.data.push(item.count)
+                    return acc
+                }, {name: 'details', data: []})
             ]
-            this._chartData = {
-                labels: labels,
-                datasets: datasets,
-            }
         },
         getDetails(){
             const query = this.$route.query
@@ -64,17 +69,6 @@ export const detailsMixin = {
     mounted(){
         this.getDetails()
     },
-    computed: {
-        chartData(){
-            return this._chartData
-        },
-        labels(){
-            return this.chartData.labels
-        },
-        chartHeight(){
-            return this.labels.length*45 + 25
-        },
-    }
 }
 
 
