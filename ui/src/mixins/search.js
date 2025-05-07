@@ -34,15 +34,19 @@ export const detailsMixin = {
     methods: {
         setDetails(data){
             const cats = []
+            const _cats = []
             data.forEach(item => {
-                if(item._id.includes(' ')){
-                    cats.push(item._id.split(' '))
+                const _id = item._id || ''
+
+                if(_id.includes(' ')){
+                    cats.push(_id.split(' '))
                 } else {
-                    cats.push(item._id)
+                    cats.push(_id)
                 }
-                this._categories.push(item._id)
+                _cats.push(_id)
             })
             this.categories = cats
+            this._categories = _cats
             
             this.series = [
                 data.reduce((acc, item) => {
@@ -66,7 +70,9 @@ export const detailsMixin = {
                         const k = Object.keys((res.data.details[0]))
                         this.setDetails(res.data.details[0][k[0]])
                     }
-                }).catch(err => {}).finally(() => {
+                }).catch(err => {
+                    console.log(err)
+                }).finally(() => {
                     setTimeout(this.store.resetLoading, 500)
                 })
         },

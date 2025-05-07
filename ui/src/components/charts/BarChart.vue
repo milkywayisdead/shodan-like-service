@@ -48,7 +48,7 @@ export default {
         return {
             containerId: `c${+new Date()}`,
             showChart: false,
-            height: this.categories.length*80,
+            height: cats.length*80,
             chartOptions: {
                 chart: {
                     id: 'details-bar',
