@@ -7,7 +7,7 @@
             :key="port.port"
             label
             color="primary"
-            @click="emitClick"
+            @click="emitClick(port.port)"
             variant="flat">
             {{ portLabel(port.port) }}
         </v-chip>
@@ -44,8 +44,8 @@ export default {
         portLabel(port){
             return port === 'more' ? this.locale.more : port
         },
-        emitClick(){
-            this.$emit('click')
+        emitClick(port){
+            this.$emit('click', port === 'more' ? '' : port)
         }
     },
     computed: {
@@ -60,6 +60,6 @@ export default {
                 return this.ports
             }
         }
-    }
+    },
 }
 </script>

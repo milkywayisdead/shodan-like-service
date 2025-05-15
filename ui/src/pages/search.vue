@@ -153,8 +153,14 @@ export default {
         unlockPage(){
             this._lockPage = false
         },
-        hostClickedHandler(host){
-            this.$router.push(`/search?t=hosts&q=${host.IP}`)
+        hostClickedHandler(event){
+            const { host, port } = event
+            let path = `/search?t=hosts&q=${host.IP}`
+            if(port){
+                path = `${path}#port_${port}`
+            }
+
+            this.$router.push(path)
         },
         handleSearchBy(event){
             this.$router.push(`/search?t=${event.param}&q=${event.value}`)
@@ -170,7 +176,7 @@ export default {
         handleComplexFilterClose(){
             const query = this.$route.query
             this.$router.push(`/search?t=${query.t}&q=${query.q}`)
-        }
+        },
     },
     watch: {
         page(value){

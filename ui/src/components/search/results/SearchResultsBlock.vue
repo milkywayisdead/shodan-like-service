@@ -30,7 +30,7 @@
             </v-col>
             <v-col cols="6">
                 <ports-list-card
-                    @click="emitHostClicked(host)"
+                    @click="emitHostClicked(host, $event)"
                     :ports="host.total_ports" 
                     clickable />
             </v-col>
@@ -75,8 +75,8 @@ export default {
         }
     },
     methods: {
-        emitHostClicked(host){
-            this.$emit('host-clicked', JSON.parse(JSON.stringify(host)))
+        emitHostClicked(host, port){
+            this.$emit('host-clicked', {host: JSON.parse(JSON.stringify(host)), port})
         }
     },
     computed: {

@@ -1,5 +1,5 @@
 <template>
-<v-card 
+<v-card :id="`port_${info.port}`" style="scroll-margin-top:50px;"
     :title="`${info.port}`">
     <v-card-text>
         <p v-if="info.title" style="font-size:1rem;font-weight:600">{{ info.title }}</p>
@@ -64,6 +64,14 @@ export default {
             const body = this.info.body
             if(!body) return body
             return body.split('\n')
+        }
+    },
+    mounted(){
+        if(!this.$route.hash) return
+
+        const dId = `port_${this.info.port}`
+        if(this.$route.hash.replace('#', '') === dId){
+            document.getElementById(dId).scrollIntoView({behavior: 'smooth'})
         }
     }
 }
