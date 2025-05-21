@@ -8,11 +8,33 @@ from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
 
 from .forms import CreateUserForm
+from .utils import get_code, check_code, reg_send_code, inc_code
+
+
+@require_http_methods(['POST'])
+def request_confirmation_code(request):
+    data = json.loads(request.body.decode('utf-8'))
+    username = data.get('username', None)
+    email = data.get('email', None)
+    if not username or not email:
+        return JsonResponse({}, status=400)
+
+    code_exists = get_code(username)
+    if code_exists:
+        return JsonResponse({}, status=409)
+
+    reg_send_code(username, email)
+    return JsonResponse({})
 
 
 @require_http_methods(['POST'])
 def register(request):
-    data = json.loads(request.body.decode('utf-8'))
+    payload = json.loads(request.body.decode('utf-8'))
+    data, code = payload['data'], payload['code']
+
+    if not check_code(data['username'], code):
+        return JsonResponse({}, status=400)
+
     form = CreateUserForm(data)
     if form.is_valid():
         try:

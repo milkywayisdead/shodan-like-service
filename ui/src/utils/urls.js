@@ -6,4 +6,5 @@ export const urls = {
     setTokenUrl: import.meta.env.VITE_SET_TOKEN_URL,
     regCheckEmail: import.meta.env.VITE_REG_CHECK_EMAIL,
     regCheckUsername: import.meta.env.VITE_REG_CHECK_USERNAME,
+    requestConfirmationCode: import.meta.env.VITE_REQUEST_CONFIRMATION_CODE,
 }

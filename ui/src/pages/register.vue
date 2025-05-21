@@ -7,30 +7,30 @@
                 type="text" 
                 v-model="username" 
                 :rules="[rules.notEmpty]" 
-                @keyup.enter="register" 
+                @keyup.enter="requestConfirmCode"
                 :error-messages="userErrorMessages" />
             <v-text-field 
                 :label="locale.email" 
                 type="text" 
                 v-model="email" 
                 :rules="[rules.isEmail]" 
-                @keyup.enter="register" 
+                @keyup.enter="requestConfirmCode" 
                 :error-messages="errorMessages" />
             <v-text-field 
                 :label="locale.password" 
                 type="password" 
                 v-model="password" 
                 :rules="[rules.notEmpty]" 
-                @keyup.enter="register" />
+                @keyup.enter="requestConfirmCode" />
             <v-text-field 
                 :label="locale.passConfirmation" 
                 type="password" 
                 v-model="passConfirmation" 
                 :rules="[rules.notEmpty]" 
-                @keyup.enter="register" />
+                @keyup.enter="requestConfirmCode" />
         </v-form>
         <v-btn 
-            @click="register"
+            @click="requestConfirmCode"
             :disabled="!formIsValid || !passConfirmed || emailExists || !!regCheckTimeout || userExists || !!regCheckUserTimeout">
             {{ locale.register }}
         </v-btn>
@@ -43,10 +43,10 @@
             type="text" 
             v-model="confirmationCode" 
             :rules="[rules.notEmpty]" 
-            @keyup.enter="" />
-        <v-btn 
-            @click=""
-            :disabled="userExists || !!regCheckUserTimeout">
+            @keyup.enter="register" />
+        <v-btn
+            @click="register"
+            :disabled="confirmationCode.length !== 6">
             {{ locale.actions.confirm }}
         </v-btn>
     </v-col>
@@ -79,8 +79,40 @@ export default {
         }
     },
     methods: {
+        async requestConfirmCode(){
+            if(!this.formIsValid || 
+                !this.passConfirmed || 
+                this.emailExists || 
+                !!this.regCheckTimeout || 
+                this.userExists || 
+                !!this.regCheckUserTimeout) return
+
+            this.store.loading = true
+            try {
+                const response = await fetch(urls.requestConfirmationCode, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken()
+                    },
+                    body: JSON.stringify({
+                        username: this.username,
+                        email: this.email,
+                    }),
+                    credentials: 'include'
+                })
+                const data = await response.json()
+                if (response.ok) {
+                    this.confirmation = true
+                }
+            } catch (err) {
+                this.store.addErrorNotif('code error')
+            } finally {
+                this.store.loading = false
+            }
+        },
         async register() {
-            if(!this.formIsValid) return
+            if(!this.confirmationCode.length !== 6) return
 
             this.store.loading = true
             try {
@@ -91,8 +123,12 @@ export default {
                         'X-CSRFToken': getCSRFToken()
                     },
                     body: JSON.stringify({
-                        email: this.email,
-                        password: this.password
+                        data: {
+                            username: this.username,
+                            email: this.email,
+                            password: this.password
+                        },
+                        code: this.confirmationCode,
                     }),
                     credentials: 'include'
                 })

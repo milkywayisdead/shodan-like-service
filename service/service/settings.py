@@ -161,3 +161,11 @@ MONGODB_DB_NAME = os.environ.get('MONGODB_DB_NAME', 'db')
 MONGODB_COLLECTION_NAME = os.environ.get('MONGODB_COLLECTION_NAME', 'Hosts')
 
 SEARCH_INGORECASE = os.environ.get('SEARCH_INGORECASE', '0') == '1'
+
+CONFIRMATION_CODE_EXPIRY = int(os.environ.get('CONFIRMATION_CODE_EXPIRY', '300'))
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_SENDER = os.environ.get('EMAIL_SENDER', 'agiss.site')
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
+EMAIL_PORT = int(os.environ.get('EMAIL_HOST', '25'))
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', '0') == '1'
+EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', '0') == '1'
