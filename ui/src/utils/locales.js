@@ -2,14 +2,17 @@ export const ru = {
     register: 'Регистрация',
     signIn: 'Войти',
     signOut: 'Выйти',
+    username: 'Имя пользователя',
     email: 'Почта',
     password: 'Пароль',
+    passConfirmation: 'Подтверждение пароля',
     login: 'Вход',
     account: 'Личный кабинет',
     more: 'Больше',
     actions: {
         save: 'Сохранить',
         update: 'Обновить',
+        confirm: 'Подтвердить',
     },
     nav: {
         home: 'Главная',
@@ -68,6 +71,8 @@ export const ru = {
     },
     account: {
         profile: 'Профиль',
+        email: 'Почта',
+        password: 'Пароль',
         history: 'История',
         notifications: 'Уведомления',
         api: 'API',
@@ -76,6 +81,7 @@ export const ru = {
         settings: 'Настройки',
         security: 'Безопасность',
         other: 'Прочее',
+        confirmationCode: 'Код подтверждения',
     },
     host: {
         host: 'Хост',
@@ -105,6 +111,7 @@ export const ru = {
         pageError: 'Ошибка при получении страницы',
         loginPlease: 'Пожалуйста, авторизуйтесь',
         emailAlreadyExists: 'Аккаунт уже существует',
+        userAlreadyExists: 'Аккаунт уже существует',
         registerError: 'Ошибка регистрации',
         first100Shown: 'Показаны первые 100 результатов',
         first100Cause: 'Во избежание снижения производительности',

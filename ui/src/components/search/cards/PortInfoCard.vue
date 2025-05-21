@@ -38,11 +38,6 @@ export default {
     data(){
         return {
             _mainParams: [
-                //{title: 'port', value: 'port'},
-                /*{title: 'service', value: 'service'},
-                {title: 'software', value: 'software'},
-                {title: 'application', value: 'application'},
-                {title: 'component', value: 'component'},*/
                 {title: 'title', value: 'title'},
                 {title: 'headers', value: 'headers'},
                 {title: 'body', value: 'body'},

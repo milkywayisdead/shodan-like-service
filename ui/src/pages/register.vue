@@ -1,7 +1,14 @@
 <template>
-<v-row align="center" justify="center">
+<v-row align="center" justify="center" v-show="!confirmation">
     <v-col cols="4" class="text-center">
         <v-form v-model="formIsValid">
+            <v-text-field 
+                :label="locale.username" 
+                type="text" 
+                v-model="username" 
+                :rules="[rules.notEmpty]" 
+                @keyup.enter="register" 
+                :error-messages="userErrorMessages" />
             <v-text-field 
                 :label="locale.email" 
                 type="text" 
@@ -15,11 +22,32 @@
                 v-model="password" 
                 :rules="[rules.notEmpty]" 
                 @keyup.enter="register" />
+            <v-text-field 
+                :label="locale.passConfirmation" 
+                type="password" 
+                v-model="passConfirmation" 
+                :rules="[rules.notEmpty]" 
+                @keyup.enter="register" />
         </v-form>
         <v-btn 
             @click="register"
-            :disabled="!formIsValid || emailExists || !!regCheckTimeout">
+            :disabled="!formIsValid || !passConfirmed || emailExists || !!regCheckTimeout || userExists || !!regCheckUserTimeout">
             {{ locale.register }}
+        </v-btn>
+    </v-col>
+</v-row>
+<v-row align="center" justify="center" v-show="confirmation">
+    <v-col cols="4" class="text-center">
+        <v-text-field 
+            :label="locale.account.confirmationCode" 
+            type="text" 
+            v-model="confirmationCode" 
+            :rules="[rules.notEmpty]" 
+            @keyup.enter="" />
+        <v-btn 
+            @click=""
+            :disabled="userExists || !!regCheckUserTimeout">
+            {{ locale.actions.confirm }}
         </v-btn>
     </v-col>
 </v-row>
@@ -35,17 +63,25 @@ export default {
     mixins: [storeMixin],
     data(){
         return {
+            username: '',
             email: '',
             password: '',
+            passConfirmation: '',
             success: '',
+            confirmationCode: '',
             rules: loginAndRegisterRules,
             formIsValid: false,
             regCheckTimeout: null,
+            regCheckUserTimeout: null,
             emailExists: false,
+            userExists: false,
+            confirmation: false,
         }
     },
     methods: {
         async register() {
+            if(!this.formIsValid) return
+
             this.store.loading = true
             try {
                 const response = await fetch(urls.register, {
@@ -86,7 +122,16 @@ export default {
                 clearTimeout(this.regCheckTimeout)
                 this.regCheckTimeout = null
             }
-        }
+        },
+        async regCheckUsername(username){
+            const res = await fetch(urls.regCheckUsername + `?e=${username}`)
+            const data = await res.json()
+            if(res.status === 200){
+                this.userExists = data.exists
+                clearTimeout(this.regCheckUserTimeout)
+                this.regCheckUserTimeout = null
+            }
+        },
     },
     computed: {
         emailIsOk(){
@@ -97,6 +142,15 @@ export default {
                 return [this.locale.messages.emailAlreadyExists]
             }
             return []
+        },
+        userErrorMessages(){
+            if(this.userExists){
+                return [this.locale.messages.userAlreadyExists]
+            }
+            return []
+        },
+        passConfirmed(){
+            return this.password === this.passConfirmation
         }
     },
     watch: {
@@ -107,7 +161,15 @@ export default {
             } else {
                 this.emailExists = false
             }
-        }
+        },
+        username(value){
+            clearTimeout(this.regCheckUserTimeout)
+            if(value){
+                this.regCheckUserTimeout = setTimeout(this.regCheckUsername, 250, value)
+            } else {
+                this.userExists = false
+            }
+        },
     }
 } 
 </script>

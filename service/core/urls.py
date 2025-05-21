@@ -1,4 +1,5 @@
 from django.urls import path
+from django.urls import path
 from . import views
 from . import search_views as sv
 
@@ -8,8 +9,6 @@ urlpatterns = [
     path('api/login', views.login_view, name='login'),
     path('api/logout', views.logout_view, name='logout'),
     path('api/user', views.user, name='user'),
-    path('api/register', views.register, name='register'),
-    path('api/reg-check-email', views.reg_check_email, name='reg_check_email'),
 
     path('search/hosts', sv.hosts, name='search_hosts'),
     path('search/port', sv.PortSearch.as_view(), name='search_port'),
