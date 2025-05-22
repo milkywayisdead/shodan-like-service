@@ -1,6 +1,7 @@
 import string
 import random
 import redis
+import json
 
 from django.conf import settings
 from django.core.mail import send_mail
@@ -28,12 +29,15 @@ def generate_code(length=6):
 
 def set_code(key, ex=_EX):
     code = generate_code()
-    _R.set(key, {'code': code, 'attempts': 0}, ex=ex)
+    _R.set(key, json.dumps({'code': code, 'attempts': 0}), ex=ex)
     return code
 
 
 def get_code(username):
-    return _R.get(username)
+    r = _R.get(username)
+    if not r:
+        return r
+    return json.loads(r)
 
 
 def inc_code(username):
