@@ -112,7 +112,7 @@ export default {
             }
         },
         async register() {
-            if(!this.confirmationCode.length !== 6) return
+            if(this.confirmationCode.length !== 6) return
 
             this.store.loading = true
             try {
@@ -142,6 +142,8 @@ export default {
                 } else {
                     if(response.status === 409){
                         this.store.addErrorNotif(this.locale.messages.emailAlreadyExists)
+                    } else if(response.status === 422){
+                        this.store.addErrorNotif(this.locale.messages.wrongCode)
                     }
                 }
             } catch (err) {

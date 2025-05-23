@@ -33,7 +33,7 @@ def register(request):
     data, code = payload['data'], payload['code']
 
     if not check_code(data['username'], code):
-        return JsonResponse({}, status=400)
+        return JsonResponse({}, status=422)
 
     form = CreateUserForm(data)
     if form.is_valid():
