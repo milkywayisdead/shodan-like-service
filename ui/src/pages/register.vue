@@ -42,7 +42,7 @@
             :label="locale.account.confirmationCode" 
             type="text" 
             v-model="confirmationCode" 
-            :rules="[rules.notEmpty]" 
+            :rules="[rules.confirmationCodeRule]" 
             @keyup.enter="register" />
         <v-btn
             @click="register"

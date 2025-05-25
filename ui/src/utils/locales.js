@@ -88,7 +88,11 @@ export const ru = {
         passChange: 'Изменение пароля',
         currentPass: 'Текущий пароль',
         newPass: 'Новый пароль',
-        confirmNewPass: 'Введите новый пароль ещё раз'
+        confirmNewPass: 'Введите новый пароль ещё раз',
+        profileInfo: 'Данные профиля',
+        history: 'История',
+        notifications: 'Уведомления',
+        api: 'API',
     },
     host: {
         host: 'Хост',

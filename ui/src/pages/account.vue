@@ -18,6 +18,9 @@ import { useAuthStore } from '../stores/auth.js'
 import UserProfile from '@/components/account/UserProfile.vue'
 import UserEmail from '@/components/account/UserEmail.vue'
 import UserPassword from '@/components/account/UserPassword.vue'
+import UserHistory from '@/components/account/UserHistory.vue'
+import UserNotifications from '@/components/account/UserNotifications.vue'
+import UserApi from '@/components/account/UserApi.vue'
 
 export default {
     mixins: [storeMixin],
@@ -48,6 +51,9 @@ export default {
         UserProfile,
         UserEmail,
         UserPassword,
+        UserHistory,
+        UserNotifications,
+        UserApi,
     }
 }
 </script>
