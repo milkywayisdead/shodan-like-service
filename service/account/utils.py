@@ -33,30 +33,36 @@ def set_code(key, ex=_EX):
     return code
 
 
-def get_code(username):
-    r = _R.get(username)
+def get_code(key):
+    r = _R.get(key)
     if not r:
         return r
     return json.loads(r)
 
 
-def inc_code(username):
-    data = get_code(username)
+def inc_code(key):
+    data = get_code(key)
     if data:
         data = json.loads(data)
         data['attempts'] += 1
-        _R.set(username, json.dumps(data))
+        _R.set(key, json.dumps(data))
+
+
+def code_exists(key):
+    if get_code(key):
+        return True
 
 
 def check_code(key, code):
     code_to_check = get_code(key)
     if not code_to_check:
         return False
-    return code == code_to_check.decode()
+    code_to_check = json.loads(code_to_check)
+    return code == code_to_check['code']
 
 
-def reg_send_code(username, email):
-    code = set_code(username)
+def reg_send_code(key, email):
+    code = set_code(key)
     send_mail(
         'Регистрация на agiss.site',
         code,

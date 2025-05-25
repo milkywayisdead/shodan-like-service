@@ -3,10 +3,10 @@
     <v-col cols="4" class="text-center">
         <v-form v-model="formIsValid">
             <v-text-field 
-                :label="locale.email" 
+                :label="locale.username" 
                 type="text" 
-                v-model="email" 
-                :rules="[rules.isEmail]" 
+                v-model="username" 
+                :rules="[rules.notEmpty]" 
                 @keyup.enter="login" />
             <v-text-field 
                 :label="locale.password" 
@@ -40,7 +40,7 @@ export default {
     },
     data() {
         return {
-            email: '',
+            username: '',
             password: '',
             formIsValid: false,
         }
@@ -51,7 +51,7 @@ export default {
 
             this.store.loading = true
 
-            await this.authStore.login(this.email, this.password, this.$router)
+            await this.authStore.login(this.username, this.password, this.$router)
             if (!this.authStore.isAuthenticated) {
                 this.store.addErrorNotif(this.locale.messages.authError)
             }
