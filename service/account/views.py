@@ -74,3 +74,17 @@ def reg_check_username(request):
     except User.DoesNotExist:
         exists = False
     return JsonResponse({'exists': exists})
+
+
+@require_http_methods(['POST'])
+def change_email(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({}, status=401)
+    return JsonResponse({})
+
+
+@require_http_methods(['POST'])
+def change_pass(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({}, status=401)
+    return JsonResponse({})

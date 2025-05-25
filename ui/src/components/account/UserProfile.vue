@@ -22,8 +22,8 @@ import { storeMixin } from '@/mixins/store'
 import { authMixin } from '@/mixins/auth'
 
 export default {
-	mixins: [storeMixin, authMixin],
-	computed: {
+    mixins: [storeMixin, authMixin],
+    computed: {
         username(){
             return this.auth.user?.username || ''
         },

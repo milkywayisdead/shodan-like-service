@@ -8,4 +8,6 @@ urlpatterns = [
     path('api/reg-check-username', views.reg_check_username, name='reg_check_username'),
     path('api/reg-check-email', views.reg_check_email, name='reg_check_email'),
     path('api/request-confirmation-code', views.request_confirmation_code, name='request_confirmation_code'),
+    path('api/change-email', views.change_email, name='change_email'),
+    path('api/change-pass', views.change_pass, name='change_pass'),    
 ]

@@ -7,4 +7,6 @@ export const urls = {
     regCheckEmail: import.meta.env.VITE_REG_CHECK_EMAIL,
     regCheckUsername: import.meta.env.VITE_REG_CHECK_USERNAME,
     requestConfirmationCode: import.meta.env.VITE_REQUEST_CONFIRMATION_CODE,
+    changeEmail: import.meta.env.VITE_CHANGE_EMAIL,
+    changePass: import.meta.env.VITE_CHANGE_PASS,
 }

@@ -82,6 +82,9 @@ export const ru = {
         security: 'Безопасность',
         other: 'Прочее',
         confirmationCode: 'Код подтверждения',
+        setNewEmail: 'Задать новый адрес',
+        emailChange: 'Изменение почты',
+        passChange: 'Изменение пароля'
     },
     host: {
         host: 'Хост',
@@ -110,7 +113,7 @@ export const ru = {
         searchError: 'Ошибка при выполнении поиска',
         pageError: 'Ошибка при получении страницы',
         loginPlease: 'Пожалуйста, авторизуйтесь',
-        emailAlreadyExists: 'Аккаунт уже существует',
+        emailAlreadyExists: 'Аккаунт с этой почтой уже существует',
         userAlreadyExists: 'Аккаунт уже существует',
         registerError: 'Ошибка регистрации',
         first100Shown: 'Показаны первые 100 результатов',
