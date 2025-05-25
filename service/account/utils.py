@@ -3,6 +3,7 @@ import string
 import random
 import redis
 import json
+import uuid
 
 from django.conf import settings
 from django.core.mail import send_mail
@@ -71,3 +72,18 @@ def reg_send_code(key, email):
         [email],
         fail_silently=False,
     )
+
+
+def send_code(key, email):
+    code = set_code(key)
+    send_mail(
+        'Код подтверждения agiss.site',
+        code,
+        settings.EMAIL_SENDER,
+        [email],
+        fail_silently=False,
+    )
+
+
+def create_id():
+    return uuid.uuid4()

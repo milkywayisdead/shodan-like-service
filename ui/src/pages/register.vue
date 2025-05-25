@@ -89,7 +89,7 @@ export default {
 
             this.store.loading = true
             try {
-                const response = await fetch(urls.requestConfirmationCode, {
+                const response = await fetch(urls.regConfirmationCode, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

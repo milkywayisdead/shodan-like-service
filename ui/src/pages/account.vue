@@ -32,13 +32,17 @@ export default {
                 {title: locale.account.notifications, value: 'notifications'},
                 {title: locale.account.api, value: 'api'},
             ],
-            selected: ['profile']
+            selected: ['profile'],
+            auth: useAuthStore()
         }
     },
     computed: {
         tab(){
             return this.selected[0]
         }
+    },
+    mounted(){
+        this.auth.fetchUser()
     },
     components: {
         UserProfile,

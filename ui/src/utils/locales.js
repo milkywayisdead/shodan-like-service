@@ -119,5 +119,9 @@ export const ru = {
         first100Shown: 'Показаны первые 100 результатов',
         first100Cause: 'Во избежание снижения производительности',
         wrongCode: 'Введён неверный код подтверждения',
+        emailChangedSuccessfully: 'Адрес успешно изменён',
+        passChangedSuccessfully: 'Пароль успешно изменён',
+        errorWhenChangingEmail: 'Ошибка при изменении почты',
+        errorWhenChangingPass: 'Ошибка при изменении пароля',
     }
 }

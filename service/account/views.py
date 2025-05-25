@@ -8,11 +8,19 @@ from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
 
 from .forms import CreateUserForm
-from .utils import get_code, check_code, reg_send_code, inc_code
+from .utils import (
+    get_code, 
+    check_code, 
+    reg_send_code, 
+    inc_code,
+    code_exists,
+    create_id
+)
+from .models import change_user_email
 
 
 @require_http_methods(['POST'])
-def request_confirmation_code(request):
+def reg_confirmation_code(request):
     data = json.loads(request.body.decode('utf-8'))
     username = data.get('username', None)
     email = data.get('email', None)
@@ -77,9 +85,35 @@ def reg_check_username(request):
 
 
 @require_http_methods(['POST'])
+def get_confirmation_code(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({}, status=401)
+    data = json.loads(request.body.decode('utf-8'))
+    email = data.get('email', None)
+    if not email:
+        return JsonResponse({}, status=400)
+
+    code_id = create_id()
+    send_code(code_id, email)
+    return JsonResponse({'id': code_id})
+
+
+@require_http_methods(['POST'])
 def change_email(request):
     if not request.user.is_authenticated:
         return JsonResponse({}, status=401)
+
+    data = json.loads(request.body.decode('utf-8'))
+    email = data.get('email', None)
+    code_id = data.get('confirmation', None)
+    code = data.get('code', None)
+    if not email or not code_id or not code:
+        return JsonResponse({}, status=400)
+
+    if not check_code(code_id, code):
+        return JsonResponse({}, status=422)
+
+    change_user_email(request.user, data)
     return JsonResponse({})
 
 

@@ -1,12 +1,12 @@
 <template>
 <v-card :title="locale.account.emailChange">
     <v-card-text>
-        <v-row v-show="!confirmation">
+        <v-row v-show="!confirmationId.length">
             <v-col cols="4" class="text-center1">
                 <v-form v-model="emailIsValid">
                     <v-text-field 
                         :label="locale.email"
-                        :disabled="confirmation"
+                        :disabled="!!confirmationId.length"
                         type="text" 
                         v-model="email" 
                         :rules="[rules.isEmail]" 
@@ -15,12 +15,12 @@
                 </v-form>
                 <v-btn 
                     @click="requestConfirmCode"
-                    :disabled="btnDisabled || confirmation">
+                    :disabled="btnDisabled || !!confirmationId.length">
                     {{ locale.account.setNewEmail }}
                 </v-btn>
             </v-col>
         </v-row>
-        <v-row v-show="confirmation">
+        <v-row v-show="confirmationId">
             <v-col cols="4" class="text-center1">
                 <v-text-field 
                     :label="locale.account.confirmationCode" 
@@ -54,10 +54,10 @@ export default {
             rules: loginAndRegisterRules,
             emailIsValid: false,
             _emailExists: false,
-            confirmation: false,
             userEmail: '',
             regCheckTimeout: null,
-            confirmationCode: ''
+            confirmationCode: '',
+            confirmationId: '',
         }
     },
     methods: {
@@ -69,7 +69,7 @@ export default {
 
             this.store.loading = true
             try {
-                const response = await fetch(urls.requestConfirmationCode, {
+                const response = await fetch(urls.getConfirmationCode, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export default {
                 })
                 const data = await response.json()
                 if (response.ok) {
-                    this.confirmation = true
+                    this.confirmationId = data.id
                 }
             } catch (err) {
                 this.store.addErrorNotif('code error')
@@ -100,9 +100,42 @@ export default {
                 this.regCheckTimeout = null
             }
         },
-        changeEmail(){
-            alert(1)
-        }
+        async changeEmail(){
+            if(!this.emailIsValid ||
+                this.emailExists ||
+                this.sameEmail || 
+                !!this.regCheckTimeout) return
+
+            this.store.loading = true
+            try {
+                const response = await fetch(urls.changeEmail, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken()
+                    },
+                    body: JSON.stringify({
+                        email: this.email,
+                        confirmation: this.confirmationId,
+                        code: this.confirmationCode,
+                    }),
+                    credentials: 'include'
+                })
+                const data = await response.json()
+                if (response.ok) {
+                    this.store.addSuccessNotif(this.locale.messages.emailChangedSuccessfully)
+                    await this.auth.fetchUser()
+                } else {
+                    this.store.addErrorNotif(this.locale.messages.errorWhenChangingEmail)
+                }
+            } catch (err) {
+                this.store.addErrorNotif('code error')
+            } finally {
+                this.store.loading = false
+                this.confirmationId = ''
+                this.confirmationCode = ''
+            }
+        },
 	},
     computed: {
         errorMessages(){

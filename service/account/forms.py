@@ -15,3 +15,29 @@ class CreateUserForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class UpdateEmailForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email']
+
+    def save(self, commit=True) -> User:
+        user = super().save(commit=False)
+        user.email = self.cleaned_data["email"]
+        if commit:
+            user.save()
+        return user
+
+
+class UpdatePassForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['password']
+
+    def save(self, commit=True) -> User:
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
