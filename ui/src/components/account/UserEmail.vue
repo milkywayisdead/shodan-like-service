@@ -26,7 +26,7 @@
                     :label="locale.account.confirmationCode" 
                     type="text" 
                     v-model="confirmationCode" 
-                    :rules="[rules.notEmpty]" 
+                    :rules="[rules.confirmationCodeRule]" 
                     @keyup.enter="changeEmail" />
                 <v-btn
                     @click="changeEmail"
@@ -76,7 +76,7 @@ export default {
                         'X-CSRFToken': getCSRFToken()
                     },
                     body: JSON.stringify({
-                        username: this.username,
+                        type: 'email',
                         email: this.email,
                     }),
                     credentials: 'include'

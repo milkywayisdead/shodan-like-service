@@ -14,9 +14,10 @@ from .utils import (
     reg_send_code, 
     inc_code,
     code_exists,
-    create_id
+    create_id,
+    send_code,
 )
-from .models import change_user_email
+from .models import change_user_email, change_user_pass
 
 
 @require_http_methods(['POST'])
@@ -121,4 +122,16 @@ def change_email(request):
 def change_pass(request):
     if not request.user.is_authenticated:
         return JsonResponse({}, status=401)
+
+    data = json.loads(request.body.decode('utf-8'))
+    password = data.get('password', None)
+    code_id = data.get('confirmation', None)
+    code = data.get('code', None)
+    if not password or not code_id or not code:
+        return JsonResponse({}, status=400)
+
+    if not check_code(code_id, code):
+        return JsonResponse({}, status=422)
+
+    change_user_pass(request.user, data)
     return JsonResponse({})

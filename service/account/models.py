@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
 
-from .forms import UpdateEmailForm
+from .forms import UpdateEmailForm, UpdatePassForm
 
 
 def check_email(email):
@@ -27,5 +27,12 @@ def change_user_email(user, data):
     return 'ok'
 
 
-def change_user_pass(username):
-    pass
+def change_user_pass(user, data):
+    if not user.check_password(data['current']):
+        raise Exception('Wrong password')
+
+    form = UpdatePassForm(data, instance=user)
+    if not form.is_valid():
+        raise Exception('Form not valid')
+    form.save()
+    return 'ok'

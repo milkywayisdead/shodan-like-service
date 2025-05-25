@@ -83,8 +83,12 @@ export const ru = {
         other: 'Прочее',
         confirmationCode: 'Код подтверждения',
         setNewEmail: 'Задать новый адрес',
+        setNewPass: 'Задать новый пароль',
         emailChange: 'Изменение почты',
-        passChange: 'Изменение пароля'
+        passChange: 'Изменение пароля',
+        currentPass: 'Текущий пароль',
+        newPass: 'Новый пароль',
+        confirmNewPass: 'Введите новый пароль ещё раз'
     },
     host: {
         host: 'Хост',
