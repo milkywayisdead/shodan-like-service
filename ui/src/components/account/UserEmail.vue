@@ -54,7 +54,6 @@ export default {
             rules: loginAndRegisterRules,
             emailIsValid: false,
             _emailExists: false,
-            userEmail: '',
             regCheckTimeout: null,
             confirmationCode: '',
             confirmationId: '',
@@ -69,6 +68,9 @@ export default {
 
             this.store.loading = true
             try {
+                await this.auth.fetchUser()
+                if(!this.userEmail) return
+
                 const response = await fetch(urls.getConfirmationCode, {
                     method: 'POST',
                     headers: {
@@ -77,7 +79,7 @@ export default {
                     },
                     body: JSON.stringify({
                         type: 'email',
-                        email: this.email,
+                        email: this.userEmail,
                     }),
                     credentials: 'include'
                 })
@@ -147,6 +149,9 @@ export default {
         emailExists(){
             return this._emailExists && !this.sameEmail
         },
+        userEmail(){
+            return this.auth?.user?.email || ''
+        },
         sameEmail(){
             return this.userEmail === this.email
         },
@@ -166,7 +171,6 @@ export default {
     },
     mounted(){
         this.email = this.auth?.user?.email || ''
-        this.userEmail = this.auth?.user?.email || ''
     }
 }
 </script>
