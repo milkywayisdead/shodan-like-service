@@ -87,8 +87,6 @@ def reg_check_username(request):
 
 @require_http_methods(['POST'])
 def get_confirmation_code(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({}, status=401)
     data = json.loads(request.body.decode('utf-8'))
     email = data.get('email', None)
     if not email:

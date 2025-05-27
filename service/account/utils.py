@@ -59,7 +59,6 @@ def check_code(key, code):
     code_to_check = get_code(key)
     if not code_to_check:
         return False
-    code_to_check = json.loads(code_to_check)
     return code == code_to_check['code']
 
 
@@ -86,4 +85,4 @@ def send_code(key, email):
 
 
 def create_id():
-    return uuid.uuid4()
+    return str(uuid.uuid4())
