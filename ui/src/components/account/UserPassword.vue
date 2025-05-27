@@ -5,12 +5,6 @@
             <v-col cols="4" class="text-center1">
                 <v-form v-model="passIsValid">
 		            <v-text-field 
-		                :label="locale.password" 
-		                type="password" 
-		                v-model="password" 
-		                :rules="[rules.passwordRule]" 
-		                @keyup.enter="requestConfirmCode" />
-		            <v-text-field 
 		                :label="locale.account.newPass" 
 		                type="password" 
 		                v-model="newPassword" 
@@ -60,7 +54,6 @@ export default {
     mixins: [storeMixin, authMixin],
     data(){
         return {
-            password: '',
             newPassword: '',
             passConfirmation: '',
             rules: loginAndRegisterRules,
@@ -110,7 +103,6 @@ export default {
                         'X-CSRFToken': getCSRFToken()
                     },
                     body: JSON.stringify({
-                    	current: this.password,
                         password: this.newPassword,
                         confirmation: this.confirmationId,
                         code: this.confirmationCode,
@@ -130,7 +122,6 @@ export default {
                 this.store.loading = false
                 this.confirmationId = ''
                 this.confirmationCode = ''
-                this.password = ''
                 this.newPassword = ''
                 this.passConfirmation = ''
             }

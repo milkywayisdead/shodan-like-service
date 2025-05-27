@@ -28,8 +28,8 @@ def change_user_email(user, data):
 
 
 def change_user_pass(user, data):
-    if not user.check_password(data['current']):
-        raise Exception('Wrong password')
+    #if not user.check_password(data['current']):
+    #    raise Exception('Wrong password')
 
     form = UpdatePassForm(data, instance=user)
     if not form.is_valid():
