@@ -7,7 +7,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
 
-from .forms import CreateUserForm
 from .utils import (
     get_code, 
     check_code, 
@@ -17,7 +16,11 @@ from .utils import (
     create_id,
     send_code,
 )
-from .models import change_user_email, change_user_pass
+from .models import (
+    register_user,
+    change_user_email, 
+    change_user_pass
+)
 
 
 @require_http_methods(['POST'])
@@ -39,22 +42,19 @@ def reg_confirmation_code(request):
 @require_http_methods(['POST'])
 def register(request):
     payload = json.loads(request.body.decode('utf-8'))
-    data, code = payload['data'], payload['code']
+    data, code_id, code = payload['data'], payload['confirmation'], payload['code']
 
-    if not check_code(data['username'], code):
+    if not check_code(code_id, code):
         return JsonResponse({}, status=422)
 
-    form = CreateUserForm(data)
-    if form.is_valid():
-        try:
-            form.save()
-            data, status = {'success': 'User registered successfully'}, 201
-        except IntegrityError:
-            data, status = {'error': 'Already exists'}, 409
-        return JsonResponse(data, status=status)
-    else:
-        errors = form.errors.as_json()
-        return JsonResponse({'error': errors}, status=400)
+    try:
+        register_user(data)
+        data, status = {'success': 'User registered successfully'}, 201
+    except IntegrityError:
+        data, status = {'error': 'Already exists'}, 409
+    except Exception:
+        data, status = {'error': True}, 400
+    return JsonResponse(data, status=status)
 
 
 @require_http_methods(['GET'])

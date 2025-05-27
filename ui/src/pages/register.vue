@@ -69,6 +69,7 @@ export default {
             passConfirmation: '',
             success: '',
             confirmationCode: '',
+            confirmationId: '',
             rules: loginAndRegisterRules,
             formIsValid: false,
             regCheckTimeout: null,
@@ -89,14 +90,15 @@ export default {
 
             this.store.loading = true
             try {
-                const response = await fetch(urls.regConfirmationCode, {
+                const response = await fetch(urls.getConfirmationCode, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRFToken': getCSRFToken()
                     },
                     body: JSON.stringify({
-                        username: this.username,
+                        //username: this.username,
+                        type: 'register',
                         email: this.email,
                     }),
                     credentials: 'include'
@@ -104,6 +106,7 @@ export default {
                 const data = await response.json()
                 if (response.ok) {
                     this.confirmation = true
+                    this.confirmationId = data.id
                 }
             } catch (err) {
                 this.store.addErrorNotif('code error')
@@ -126,9 +129,10 @@ export default {
                         data: {
                             username: this.username,
                             email: this.email,
-                            password: this.password
+                            password: this.password,
                         },
                         code: this.confirmationCode,
+                        confirmation: this.confirmationId,
                     }),
                     credentials: 'include'
                 })
@@ -150,6 +154,8 @@ export default {
                     this.store.addErrorNotif(this.locale.messages.registerError)
             } finally {
                 this.store.loading = false
+                this.confirmationId = ''
+                this.confirmationCode = ''
             }
         },
         async regCheckEmail(email){
