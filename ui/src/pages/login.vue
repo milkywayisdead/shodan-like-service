@@ -1,25 +1,29 @@
 <template>
 <v-row align="center" justify="center">
     <v-col cols="4" class="text-center">
-        <v-form v-model="formIsValid">
-            <v-text-field 
-                :label="locale.username" 
-                type="text" 
-                v-model="username" 
-                :rules="[rules.notEmpty]" 
-                @keyup.enter="login" />
-            <v-text-field 
-                :label="locale.password" 
-                type="password" 
-                v-model="password" 
-                :rules="[rules.notEmpty]" 
-                @keyup.enter="login" />
-        </v-form>
-        <v-btn 
-            @click="login"
-            :disabled="!formIsValid">
-            {{ locale.login }}
-        </v-btn>
+        <v-card :title="locale.login">
+            <v-card-text>
+                <v-form v-model="formIsValid">
+                    <v-text-field 
+                        :label="locale.username" 
+                        type="text" 
+                        v-model="username" 
+                        :rules="[rules.notEmpty]" 
+                        @keyup.enter="login" />
+                    <v-text-field 
+                        :label="locale.password" 
+                        type="password" 
+                        v-model="password" 
+                        :rules="[rules.notEmpty]" 
+                        @keyup.enter="login" />
+                </v-form>
+                <v-btn 
+                    @click="login"
+                    :disabled="!formIsValid">
+                    {{ locale.login }}
+                </v-btn>
+            </v-card-text>
+        </v-card>
     </v-col>
 </v-row>
 </template>

@@ -94,6 +94,7 @@ export const ru = {
         history: 'История',
         notifications: 'Уведомления',
         api: 'API',
+        confirmation: 'Подтверждение',
     },
     host: {
         host: 'Хост',

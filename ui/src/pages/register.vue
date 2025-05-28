@@ -1,59 +1,67 @@
 <template>
 <v-row align="center" justify="center" v-show="!confirmationId.length">
     <v-col cols="4" class="text-center">
-        <v-form v-model="formIsValid">
-            <v-text-field 
-                :label="locale.username" 
-                type="text" 
-                v-model="username" 
-                :rules="[rules.notEmpty]" 
-                @keyup.enter="requestConfirmCode"
-                :error-messages="userErrorMessages" />
-            <v-text-field 
-                :label="locale.email" 
-                type="text" 
-                v-model="email" 
-                :rules="[rules.isEmail]" 
-                @keyup.enter="requestConfirmCode" 
-                :error-messages="errorMessages" />
-            <v-text-field 
-                :label="locale.password" 
-                type="password" 
-                v-model="password" 
-                :rules="[rules.notEmpty]" 
-                @keyup.enter="requestConfirmCode" />
-            <v-text-field 
-                :label="locale.passConfirmation" 
-                type="password" 
-                v-model="passConfirmation" 
-                :rules="[rules.notEmpty]" 
-                @keyup.enter="requestConfirmCode" />
-        </v-form>
-        <v-btn 
-            @click="requestConfirmCode"
-            :disabled="!formIsValid || !passConfirmed || emailExists || !!regCheckTimeout || userExists || !!regCheckUserTimeout">
-            {{ locale.register }}
-        </v-btn>
+        <v-card :title="locale.register">
+            <v-card-text>
+                <v-form v-model="formIsValid">
+                    <v-text-field 
+                        :label="locale.username" 
+                        type="text" 
+                        v-model="username" 
+                        :rules="[rules.notEmpty]" 
+                        @keyup.enter="requestConfirmCode"
+                        :error-messages="userErrorMessages" />
+                    <v-text-field 
+                        :label="locale.email" 
+                        type="text" 
+                        v-model="email" 
+                        :rules="[rules.isEmail]" 
+                        @keyup.enter="requestConfirmCode" 
+                        :error-messages="errorMessages" />
+                    <v-text-field 
+                        :label="locale.password" 
+                        type="password" 
+                        v-model="password" 
+                        :rules="[rules.notEmpty]" 
+                        @keyup.enter="requestConfirmCode" />
+                    <v-text-field 
+                        :label="locale.passConfirmation" 
+                        type="password" 
+                        v-model="passConfirmation" 
+                        :rules="[rules.notEmpty]" 
+                        @keyup.enter="requestConfirmCode" />
+                </v-form>
+                <v-btn 
+                    @click="requestConfirmCode"
+                    :disabled="!formIsValid || !passConfirmed || emailExists || !!regCheckTimeout || userExists || !!regCheckUserTimeout">
+                    {{ locale.register }}
+                </v-btn>
+            </v-card-text>
+        </v-card>
     </v-col>
 </v-row>
 <v-row align="center" justify="center" v-show="confirmationId.length">
     <v-col cols="4" class="text-center">
-        <v-text-field 
-            :label="locale.account.confirmationCode" 
-            type="text" 
-            v-model="confirmationCode" 
-            :rules="[rules.confirmationCodeRule]" 
-            @keyup.enter="register" />
-        <v-btn
-            @click="register"
-            :disabled="confirmationCode.length !== 6">
-            {{ locale.actions.confirm }}
-        </v-btn>
-        <v-btn
-            @click="requestConfirmCode"
-            :disabled="newCodeTimeout.length > 0">
-            {{ locale.actions.getNewCode }} {{ newCodeTimeout }}
-        </v-btn>
+        <v-card :title="locale.account.confirmation">
+            <v-card-text>
+                <v-text-field 
+                    :label="locale.account.confirmationCode" 
+                    type="text" 
+                    v-model="confirmationCode" 
+                    :rules="[rules.confirmationCodeRule]" 
+                    @keyup.enter="register" />
+                <v-btn
+                    @click="register"
+                    :disabled="confirmationCode.length !== 6">
+                    {{ locale.actions.confirm }}
+                </v-btn>
+                <v-btn
+                    @click="requestConfirmCode"
+                    :disabled="newCodeTimeout.length > 0">
+                    {{ locale.actions.getNewCode }} {{ newCodeTimeout }}
+                </v-btn>
+            </v-card-text>
+        </v-card>
     </v-col>
 </v-row>
 </template>
