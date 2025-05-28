@@ -6,14 +6,19 @@ export const ru = {
     email: 'Почта',
     password: 'Пароль',
     passConfirmation: 'Подтверждение пароля',
+    passwordRestoration: 'Восстановление пароля',
     login: 'Вход',
     account: 'Личный кабинет',
     more: 'Больше',
+    forgotPassword: 'Не помню пароль',
+    newPasswordForm: 'Ввод нового пароля',
     actions: {
         save: 'Сохранить',
         update: 'Обновить',
         confirm: 'Подтвердить',
         getNewCode: 'Получить новый код',
+        restore: 'Восстановить',
+        next: 'Далее',
     },
     nav: {
         home: 'Главная',
@@ -133,5 +138,6 @@ export const ru = {
         passChangedSuccessfully: 'Пароль успешно изменён',
         errorWhenChangingEmail: 'Ошибка при изменении почты',
         errorWhenChangingPass: 'Ошибка при изменении пароля',
+        usernameEmailNoMatch: 'Имя пользователя и пароль не совпадают'
     }
 }

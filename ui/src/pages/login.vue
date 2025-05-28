@@ -22,6 +22,11 @@
                     :disabled="!formIsValid">
                     {{ locale.login }}
                 </v-btn>
+                <div class="mt-4 py-4">
+                    <a class="nodecor" href="" @click.prevent="toRestore">
+                        {{ locale.forgotPassword }}
+                    </a>
+                </div>
             </v-card-text>
         </v-card>
     </v-col>
@@ -61,6 +66,9 @@ export default {
             }
             this.store.loading = false
         },
+        toRestore(){
+            this.$router.push('/restore')
+        }
     }
 }
 </script>

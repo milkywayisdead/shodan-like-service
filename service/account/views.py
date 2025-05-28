@@ -18,10 +18,12 @@ from .utils import (
     code_is_active,
 )
 from .models import (
+    User,
     register_user,
     change_user_email, 
-    change_user_pass
+    change_user_pass,
 )
+from .forms import UpdatePassForm
 
 
 @require_http_methods(['POST'])
@@ -137,3 +139,43 @@ def change_pass(request):
 
     change_user_pass(request.user, data)
     return JsonResponse({})
+
+
+@require_http_methods(['POST'])
+def check_username_and_email(request):
+    data = json.loads(request.body.decode('utf-8'))
+    username, email = data['username'], data['email']
+    if not username or not email:
+        return JsonResponse({}, status=400)
+
+    valid = False
+    try:
+        User.objects.get(username=username, email=email)
+        valid = True
+    except User.DoesNotExist:
+        pass
+    return JsonResponse({'valid': valid})
+
+
+@require_http_methods(['POST'])
+def check_code(request):
+    data = json.loads(request.body.decode('utf-8'))
+    code_id, code_to_check = data['confirmation'], data['code']
+    code = get_code(code_id)
+    if get_code and code['code'] == code_to_check:
+        return JsonResponse({'valid': True})
+    return JsonResponse({'valid': False}, status=422)
+
+
+@require_http_methods(['POST'])
+def restore_pass(request):
+    data = json.loads(request.body.decode('utf-8'))
+    username, email = data['username'], data['email']
+    password, code_id, code = data['password'], data['confirmation'], data['code']
+    user = User.objects.get(username=username, email=email)
+    form = UpdatePassForm(data, instance=user)
+    if form.is_valid():
+        form.save()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False}, status=400)

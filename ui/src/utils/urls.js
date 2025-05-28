@@ -10,4 +10,7 @@ export const urls = {
     getConfirmationCode: import.meta.env.VITE_GET_CONFIRMATION_CODE,
     changeEmail: import.meta.env.VITE_CHANGE_EMAIL,
     changePass: import.meta.env.VITE_CHANGE_PASS,
+    checkUsernameEmail: import.meta.env.VITE_CHECK_USERNAME_EMAIL,
+    checkCode: import.meta.env.VITE_CHECK_CODE,
+    restorePass: import.meta.env.VITE_RESTORE_PASS,
 }

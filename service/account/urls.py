@@ -10,5 +10,8 @@ urlpatterns = [
     path('api/reg-confirmation-code', views.reg_confirmation_code, name='reg_confirmation_code'),
     path('api/get-confirmation-code', views.get_confirmation_code, name='get_confirmation_code'),
     path('api/change-email', views.change_email, name='change_email'),
-    path('api/change-pass', views.change_pass, name='change_pass'),    
+    path('api/change-pass', views.change_pass, name='change_pass'),
+    path('api/check-username-email', views.check_username_and_email, name='check_username_and_email'),    
+    path('api/check-code', views.check_code, name='check_code'),
+    path('api/restore-pass', views.restore_pass, name='restore_pass'),
 ]
