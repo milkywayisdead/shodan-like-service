@@ -47,7 +47,6 @@ def get_code(key):
 def inc_code(key):
     data = get_code(key)
     if data:
-        data = json.loads(data)
         attemps_counter = data['attempts'] + 1
         data['attempts'] = attemps_counter
         data['active'] = attemps_counter < _ATTEMPTS_LIMIT

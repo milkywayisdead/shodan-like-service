@@ -62,6 +62,7 @@
 import { loginAndRegisterRules } from '@/utils/rules'
 import { confirmationMixin } from '@/mixins/confirmation'
 import { urls } from '@/utils/urls'
+import { getCSRFToken } from '@/stores/auth'
 
 export default {
     mixins: [confirmationMixin],
@@ -132,8 +133,6 @@ export default {
                     this.store.addErrorNotif(this.locale.messages.registerError)
             } finally {
                 this.store.loading = false
-                this.confirmationId = ''
-                this.confirmationCode = ''
             }
         },
         async regCheckEmail(email){

@@ -53,6 +53,7 @@ import { authMixin } from '@/mixins/auth'
 import { loginAndRegisterRules } from '@/utils/rules'
 import { urls } from '@/utils/urls'
 import { confirmationMixin } from '@/mixins/confirmation'
+import { getCSRFToken } from '@/stores/auth'
 
 export default {
     mixins: [authMixin, confirmationMixin],
@@ -94,6 +95,10 @@ export default {
                 const data = await response.json()
                 if (response.ok) {
                     this.store.addSuccessNotif(this.locale.messages.passChangedSuccessfully)
+                    this.confirmationId = ''
+                    this.confirmationCode = ''
+                    this.newPassword = ''
+                    this.passConfirmation = ''
                     //await this.auth.fetchUser()
                 } else {
                     this.store.addErrorNotif(this.locale.messages.errorWhenChangingPass)
@@ -102,10 +107,6 @@ export default {
                 this.store.addErrorNotif('code error')
             } finally {
                 this.store.loading = false
-                this.confirmationId = ''
-                this.confirmationCode = ''
-                this.newPassword = ''
-                this.passConfirmation = ''
             }
         },
 	},
