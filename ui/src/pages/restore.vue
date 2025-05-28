@@ -133,7 +133,7 @@ export default {
                 this.store.loading = false
             }
         },
-        requestRestoration(){
+        async requestRestoration(){
             this.store.loading = true
             try {
                 const response = await fetch(urls.checkCode, {
@@ -167,7 +167,7 @@ export default {
             this.store.loading = true
             await this.getCode(this.email)
         },
-        restore(){
+        async restore(){
             this.store.loading = true
             try {
                 const response = await fetch(urls.restorePAss, {
