@@ -37,6 +37,11 @@
                     :disabled="confirmationCode.length !== 6">
                     {{ locale.actions.confirm }}
                 </v-btn>
+                <v-btn
+                    @click="requestConfirmCode"
+                    :disabled="newCodeTimeout.length > 0">
+                    {{ locale.actions.getNewCode }} {{ newCodeTimeout }}
+                </v-btn>
             </v-col>
         </v-row>
     </v-card-text>
@@ -44,23 +49,21 @@
 </template>
 
 <script>
-import { storeMixin } from '@/mixins/store'
 import { authMixin } from '@/mixins/auth'
 import { loginAndRegisterRules } from '@/utils/rules'
 import { urls } from '@/utils/urls'
-import { getCSRFToken } from '@/stores/auth'
+import { confirmationMixin } from '@/mixins/confirmation'
 
 export default {
-    mixins: [storeMixin, authMixin],
+    mixins: [authMixin, confirmationMixin],
     data(){
         return {
             newPassword: '',
             passConfirmation: '',
             rules: loginAndRegisterRules,
-            confirmationCode: '',
-            confirmationId: '',
             email: '',
-            passIsValid: ''
+            passIsValid: '',
+            type: 'passchange'
         }
     },
     methods: {
@@ -68,28 +71,7 @@ export default {
             if(this.btnDisabled) return
 
             this.store.loading = true
-            try {
-                const response = await fetch(urls.getConfirmationCode, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCSRFToken()
-                    },
-                    body: JSON.stringify({
-                    	type: 'pass',
-                        email: this.email,
-                    }),
-                    credentials: 'include'
-                })
-                const data = await response.json()
-                if (response.ok) {
-                    this.confirmationId = data.id
-                }
-            } catch (err) {
-                this.store.addErrorNotif('code error')
-            } finally {
-                this.store.loading = false
-            }
+            await this.getCode(this.email)
         },
         async changePass(){
             if(this.btnDisabled) return

@@ -1,5 +1,5 @@
 <template>
-<v-row align="center" justify="center" v-show="!confirmation">
+<v-row align="center" justify="center" v-show="!confirmationId.length">
     <v-col cols="4" class="text-center">
         <v-form v-model="formIsValid">
             <v-text-field 
@@ -36,7 +36,7 @@
         </v-btn>
     </v-col>
 </v-row>
-<v-row align="center" justify="center" v-show="confirmation">
+<v-row align="center" justify="center" v-show="confirmationId.length">
     <v-col cols="4" class="text-center">
         <v-text-field 
             :label="locale.account.confirmationCode" 
@@ -50,7 +50,7 @@
             {{ locale.actions.confirm }}
         </v-btn>
         <v-btn
-            @click="register"
+            @click="requestConfirmCode"
             :disabled="newCodeTimeout.length > 0">
             {{ locale.actions.getNewCode }} {{ newCodeTimeout }}
         </v-btn>
@@ -59,13 +59,12 @@
 </template>
 
 <script>
-import { getCSRFToken } from '../stores/auth'
-import { urls } from '@/utils/urls'
 import { loginAndRegisterRules } from '@/utils/rules'
-import { storeMixin } from '@/mixins/store'
+import { confirmationMixin } from '@/mixins/confirmation'
+import { urls } from '@/utils/urls'
 
 export default {
-    mixins: [storeMixin],
+    mixins: [confirmationMixin],
     data(){
         return {
             username: '',
@@ -73,17 +72,12 @@ export default {
             password: '',
             passConfirmation: '',
             success: '',
-            confirmationCode: '',
-            confirmationId: '',
             rules: loginAndRegisterRules,
             formIsValid: false,
             regCheckTimeout: null,
             regCheckUserTimeout: null,
             emailExists: false,
             userExists: false,
-            confirmation: false,
-            _newCodeTimeout: 0,
-            newCodeInterval: null,
         }
     },
     methods: {
@@ -96,37 +90,7 @@ export default {
                 !!this.regCheckUserTimeout) return
 
             this.store.loading = true
-            try {
-                const response = await fetch(urls.getConfirmationCode, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCSRFToken()
-                    },
-                    body: JSON.stringify({
-                        //username: this.username,
-                        type: 'register',
-                        email: this.email,
-                    }),
-                    credentials: 'include'
-                })
-                const data = await response.json()
-                if (response.ok) {
-                    this.confirmation = true
-                    this.confirmationId = data.id
-                    this._newCodeTimeout = 60
-                    this.newCodeInterval = setInterval(_ => {
-                        this._newCodeTimeout--
-                        if(this._newCodeTimeout === 0){
-                            clearInterval(this.newCodeInterval)
-                        }
-                    }, 1000)
-                }
-            } catch (err) {
-                this.store.addErrorNotif('code error')
-            } finally {
-                this.store.loading = false
-            }
+            await this.getCode(this.email)
         },
         async register() {
             if(this.confirmationCode.length !== 6) return
@@ -210,12 +174,6 @@ export default {
         passConfirmed(){
             return this.password === this.passConfirmation
         },
-        newCodeTimeout(){
-            if(this._newCodeTimeout > 0){
-                return `(${this._newCodeTimeout})`
-            }
-            return ''
-        }
     },
     watch: {
         email(value){

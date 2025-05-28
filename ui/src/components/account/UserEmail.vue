@@ -33,6 +33,11 @@
                     :disabled="confirmationCode.length !== 6">
                     {{ locale.actions.confirm }}
                 </v-btn>
+                <v-btn
+                    @click="requestConfirmCode"
+                    :disabled="newCodeTimeout.length > 0">
+                    {{ locale.actions.getNewCode }} {{ newCodeTimeout }}
+                </v-btn>
             </v-col>
         </v-row>
     </v-card-text>
@@ -40,14 +45,13 @@
 </template>
 
 <script>
-import { storeMixin } from '@/mixins/store'
 import { authMixin } from '@/mixins/auth'
 import { loginAndRegisterRules } from '@/utils/rules'
+import { confirmationMixin } from '@/mixins/confirmation'
 import { urls } from '@/utils/urls'
-import { getCSRFToken } from '@/stores/auth'
 
 export default {
-    mixins: [storeMixin, authMixin],
+    mixins: [authMixin, confirmationMixin],
     data(){
         return {
             email: '',
@@ -55,8 +59,6 @@ export default {
             emailIsValid: false,
             _emailExists: false,
             regCheckTimeout: null,
-            confirmationCode: '',
-            confirmationId: '',
         }
     },
     methods: {
@@ -67,31 +69,11 @@ export default {
                 !!this.regCheckTimeout) return
 
             this.store.loading = true
-            try {
-                await this.auth.fetchUser()
-                if(!this.userEmail) return
 
-                const response = await fetch(urls.getConfirmationCode, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCSRFToken()
-                    },
-                    body: JSON.stringify({
-                        type: 'email',
-                        email: this.userEmail,
-                    }),
-                    credentials: 'include'
-                })
-                const data = await response.json()
-                if (response.ok) {
-                    this.confirmationId = data.id
-                }
-            } catch (err) {
-                this.store.addErrorNotif('code error')
-            } finally {
-                this.store.loading = false
-            }
+            await this.auth.fetchUser()
+            if(!this.userEmail) return
+
+            this.getCode(this.userEmail)
         },
         async regCheckEmail(email){
             const res = await fetch(urls.regCheckEmail + `?e=${email}`)
