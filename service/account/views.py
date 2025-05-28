@@ -15,6 +15,7 @@ from .utils import (
     code_exists,
     create_id,
     send_code,
+    code_is_active,
 )
 from .models import (
     register_user,
@@ -45,7 +46,8 @@ def register(request):
     data, code_id, code = payload['data'], payload['confirmation'], payload['code']
 
     if not check_code(code_id, code):
-        return JsonResponse({}, status=422)
+        inc_code(code_id)
+        return JsonResponse({'active': code_is_active(code_id)}, status=422)
 
     try:
         register_user(data)
@@ -110,7 +112,8 @@ def change_email(request):
         return JsonResponse({}, status=400)
 
     if not check_code(code_id, code):
-        return JsonResponse({}, status=422)
+        inc_code(code_id)
+        return JsonResponse({'active': code_is_active(code_id)}, status=422)
 
     change_user_email(request.user, data)
     return JsonResponse({})
@@ -129,7 +132,8 @@ def change_pass(request):
         return JsonResponse({}, status=400)
 
     if not check_code(code_id, code):
-        return JsonResponse({}, status=422)
+        inc_code(code_id)
+        return JsonResponse({'active': code_is_active(code_id)}, status=422)
 
     change_user_pass(request.user, data)
     return JsonResponse({})

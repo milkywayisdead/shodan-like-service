@@ -13,6 +13,7 @@ export const ru = {
         save: 'Сохранить',
         update: 'Обновить',
         confirm: 'Подтвердить',
+        getNewCode: 'Получить новый код',
     },
     nav: {
         home: 'Главная',

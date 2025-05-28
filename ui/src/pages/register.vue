@@ -49,6 +49,11 @@
             :disabled="confirmationCode.length !== 6">
             {{ locale.actions.confirm }}
         </v-btn>
+        <v-btn
+            @click="register"
+            :disabled="newCodeTimeout.length > 0">
+            {{ locale.actions.getNewCode }} {{ newCodeTimeout }}
+        </v-btn>
     </v-col>
 </v-row>
 </template>
@@ -77,6 +82,8 @@ export default {
             emailExists: false,
             userExists: false,
             confirmation: false,
+            _newCodeTimeout: 0,
+            newCodeInterval: null,
         }
     },
     methods: {
@@ -107,6 +114,13 @@ export default {
                 if (response.ok) {
                     this.confirmation = true
                     this.confirmationId = data.id
+                    this._newCodeTimeout = 60
+                    this.newCodeInterval = setInterval(_ => {
+                        this._newCodeTimeout--
+                        if(this._newCodeTimeout === 0){
+                            clearInterval(this.newCodeInterval)
+                        }
+                    }, 1000)
                 }
             } catch (err) {
                 this.store.addErrorNotif('code error')
@@ -195,6 +209,12 @@ export default {
         },
         passConfirmed(){
             return this.password === this.passConfirmation
+        },
+        newCodeTimeout(){
+            if(this._newCodeTimeout > 0){
+                return `(${this._newCodeTimeout})`
+            }
+            return ''
         }
     },
     watch: {
@@ -214,7 +234,7 @@ export default {
                 this.userExists = false
             }
         },
-    }
+    },
 } 
 </script>
 

@@ -12,6 +12,7 @@ from django.core.mail import send_mail
 _REDIS_URL = f'redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}?db=4'
 _R = redis.Redis.from_url(_REDIS_URL)
 _EX = settings.CONFIRMATION_CODE_EXPIRY
+_ATTEMPTS_LIMIT = settings.CONFIRMATION_CODE_ATTEMPTS_LIMIT
 
 _CHARS = [i for i in (string.digits + string.ascii_letters)]
 
@@ -31,7 +32,8 @@ def generate_code(length=6):
 
 def set_code(key, ex=_EX):
     code = generate_code()
-    _R.set(key, json.dumps({'code': code, 'attempts': 0}), ex=ex)
+    value = json.dumps({'code': code, 'attempts': 0, 'active': True})
+    _R.set(key, value, ex=ex)
     return code
 
 
@@ -46,7 +48,9 @@ def inc_code(key):
     data = get_code(key)
     if data:
         data = json.loads(data)
-        data['attempts'] += 1
+        attemps_counter = data['attempts'] + 1
+        data['attempts'] = attemps_counter
+        data['active'] = attemps_counter < _ATTEMPTS_LIMIT
         _R.set(key, json.dumps(data))
 
 
@@ -55,9 +59,18 @@ def code_exists(key):
         return True
 
 
+def code_is_active(key):
+    code = get_code(key)
+    if not code:
+        return False
+    return code['active']
+
+
 def check_code(key, code):
     code_to_check = get_code(key)
     if not code_to_check:
+        return False
+    if not code_to_check['active']:
         return False
     return code == code_to_check['code']
 
