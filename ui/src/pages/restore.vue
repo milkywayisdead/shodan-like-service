@@ -18,7 +18,7 @@
                         @keyup.enter="checkUsernameAndEmail" />
                 </v-form>
                 <v-btn 
-                    @click=""
+                    @click="checkUsernameAndEmail"
                     :disabled="!formIsValid">
                     {{ locale.actions.next }}
                 </v-btn>
@@ -170,7 +170,7 @@ export default {
         async restore(){
             this.store.loading = true
             try {
-                const response = await fetch(urls.restorePAss, {
+                const response = await fetch(urls.restorePass, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
