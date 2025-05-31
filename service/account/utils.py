@@ -30,9 +30,9 @@ def generate_code(length=6):
     return result
 
 
-def set_code(key, ex=_EX):
+def set_code(key, reason='-', ex=_EX):
     code = generate_code()
-    value = json.dumps({'code': code, 'attempts': 0, 'active': True})
+    value = json.dumps({'code': code, 'attempts': 0, 'active': True, 'reason': reason})
     _R.set(key, value, ex=ex)
     return code
 
@@ -65,13 +65,13 @@ def code_is_active(key):
     return code['active']
 
 
-def check_code(key, code):
+def check_code(key, code, reason=''):
     code_to_check = get_code(key)
     if not code_to_check:
         return False
     if not code_to_check['active']:
         return False
-    return code == code_to_check['code']
+    return reason == code_to_check['reason'] and code == code_to_check['code']
 
 
 def reg_send_code(key, email):
@@ -85,8 +85,8 @@ def reg_send_code(key, email):
     )
 
 
-def send_code(key, email):
-    code = set_code(key)
+def send_code(key, email, reason='-'):
+    code = set_code(key, reason=reason)
     send_mail(
         'Код подтверждения agiss.site',
         code,
@@ -98,3 +98,7 @@ def send_code(key, email):
 
 def create_id():
     return str(uuid.uuid4())
+
+
+def delete_code(code_id):
+    _R.delete(code_id)

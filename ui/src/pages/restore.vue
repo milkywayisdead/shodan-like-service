@@ -52,7 +52,7 @@
 </v-row>
 <v-row align="center" justify="center" v-show="newPassForm">
     <v-col cols="4" class="text-center">
-        <v-card :title="locale.account.confirmation">
+        <v-card :title="locale.account.newPasswordForm">
             <v-card-text>
                 <v-text-field 
                     :label="locale.password" 
@@ -101,6 +101,7 @@ export default {
             email: '',
             formIsValid: false,
             newPassForm: false,
+            type: 'restore_pass',
         }
     },
     methods: {

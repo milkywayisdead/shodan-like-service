@@ -64,7 +64,7 @@ export default {
             rules: loginAndRegisterRules,
             email: '',
             passIsValid: '',
-            type: 'passchange'
+            type: 'change_pass'
         }
     },
     methods: {

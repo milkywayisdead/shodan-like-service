@@ -87,6 +87,7 @@ export default {
             regCheckUserTimeout: null,
             emailExists: false,
             userExists: false,
+            type: 'register'
         }
     },
     methods: {

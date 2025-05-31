@@ -16,6 +16,7 @@ from .utils import (
     create_id,
     send_code,
     code_is_active,
+    delete_code,
 )
 from .models import (
     User,
@@ -46,14 +47,16 @@ def reg_confirmation_code(request):
 def register(request):
     payload = json.loads(request.body.decode('utf-8'))
     data, code_id, code = payload['data'], payload['confirmation'], payload['code']
+    email = data['email']
 
-    if not check_code(code_id, code):
+    if not check_code(code_id, code, reason=f'register_{email}'):
         inc_code(code_id)
         return JsonResponse({'active': code_is_active(code_id)}, status=422)
 
     try:
         register_user(data)
         data, status = {'success': 'User registered successfully'}, 201
+        delete_code(code_id)
     except IntegrityError:
         data, status = {'error': 'Already exists'}, 409
     except Exception:
@@ -93,11 +96,12 @@ def reg_check_username(request):
 def get_confirmation_code(request):
     data = json.loads(request.body.decode('utf-8'))
     email = data.get('email', None)
+    reason = f'{data["type"]}_${email}'
     if not email:
         return JsonResponse({}, status=400)
 
     code_id = create_id()
-    send_code(code_id, email)
+    send_code(code_id, email, reason=reason)
     return JsonResponse({'id': code_id})
 
 
@@ -113,11 +117,12 @@ def change_email(request):
     if not email or not code_id or not code:
         return JsonResponse({}, status=400)
 
-    if not check_code(code_id, code):
+    if not check_code(code_id, code, reason=f'change_email_{email}'):
         inc_code(code_id)
         return JsonResponse({'active': code_is_active(code_id)}, status=422)
 
     change_user_email(request.user, data)
+    delete_code(code_id)
     return JsonResponse({})
 
 
@@ -133,11 +138,13 @@ def change_pass(request):
     if not password or not code_id or not code:
         return JsonResponse({}, status=400)
 
-    if not check_code(code_id, code):
+    user = request.user
+    if not check_code(code_id, code, reason=f'change_pass_{user.email}'):
         inc_code(code_id)
         return JsonResponse({'active': code_is_active(code_id)}, status=422)
 
-    change_user_pass(request.user, data)
+    change_user_pass(user, data)
+    delete_code(code_id)
     return JsonResponse({})
 
 
@@ -158,7 +165,7 @@ def check_username_and_email(request):
 
 
 @require_http_methods(['POST'])
-def check_code(request):
+def code_check(request):
     data = json.loads(request.body.decode('utf-8'))
     code_id, code_to_check = data['confirmation'], data['code']
     code = get_code(code_id)
@@ -172,10 +179,15 @@ def restore_pass(request):
     data = json.loads(request.body.decode('utf-8'))
     username, email = data['username'], data['email']
     password, code_id, code = data['password'], data['confirmation'], data['code']
+    if not check_code(code_id, code, reason=f'restore_pass_{email}'):
+        inc_code(code_id)
+        return JsonResponse({}, status=400)
+
     user = User.objects.get(username=username, email=email)
     form = UpdatePassForm(data, instance=user)
     if form.is_valid():
         form.save()
+        delete_code(code_id)
         return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False}, status=400)

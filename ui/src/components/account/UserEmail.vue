@@ -60,6 +60,7 @@ export default {
             emailIsValid: false,
             _emailExists: false,
             regCheckTimeout: null,
+            type: 'change_email'
         }
     },
     methods: {
