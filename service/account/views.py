@@ -96,7 +96,7 @@ def reg_check_username(request):
 def get_confirmation_code(request):
     data = json.loads(request.body.decode('utf-8'))
     email = data.get('email', None)
-    reason = f'{data["type"]}_${email}'
+    reason = f'{data["type"]}_{email}'
     if not email:
         return JsonResponse({}, status=400)
 
