@@ -7,7 +7,7 @@ class AsDictMixin:
     def as_dict(self):
         d = {}
         for field in self.__class__.include_fields:
-            d[field] = getattr(d, field)
+            d[field] = getattr(self, field)
         return d
 
 
@@ -18,6 +18,8 @@ class AsDictMixin:
 
 
 class NewsArticle(models.Model, AsDictMixin):
+    include_fields = ['title', 'full_text', 'description', 'created', 'modified']
+
     title = models.CharField(verbose_name='Заголовок')
     full_text = models.TextField(verbose_name='Полный текст')
     description = models.TextField(verbose_name='Краткое описание')
@@ -30,9 +32,12 @@ class NewsArticle(models.Model, AsDictMixin):
     class Meta:
         verbose_name = 'Новость'
         verbose_name_plural = 'Новости'
+        ordering = ['-created']
 
 
 class Filter(models.Model, AsDictMixin):
+    include_fields = ['code', 'name', 'description', 'created', 'modified']
+
     code = models.CharField(verbose_name='Код')
     name = models.CharField(verbose_name='Название')
     description = models.TextField(verbose_name='Описание')
@@ -48,6 +53,8 @@ class Filter(models.Model, AsDictMixin):
 
 
 class Functionality(models.Model, AsDictMixin):
+    include_fields = ['name', 'description', 'created', 'modified']
+
     name = models.CharField(verbose_name='Название')
     description = models.TextField(verbose_name='Описание')
     created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')

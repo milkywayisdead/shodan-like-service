@@ -121,5 +121,17 @@ export const searchApi = {
             params = {...params, et, eq}
         }
         return api.get('/details', {params})
+    },
+}
+
+
+const _miscApi = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+})
+
+
+export const miscApi = {
+    getContent(type=''){
+        return _miscApi.get(`/get_content?type=${type}`)
     }
 }

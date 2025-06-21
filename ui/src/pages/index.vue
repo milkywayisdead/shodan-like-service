@@ -15,6 +15,7 @@
 import { useAuthStore } from '../stores/auth.js'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '@/stores/app.js'
+import { miscApi } from '@/api/api.js'
 
 export default {
     setup() {
@@ -26,7 +27,9 @@ export default {
             authStore,
             router,
             locale: storage.locale,
-            cards: [1, 2, 3, 4]
+            cards: [1, 2, 3, 4],
+            news: [],
+            functionality: []
         }
     },
     methods: {
@@ -36,10 +39,25 @@ export default {
             } catch (error) {
                 console.error(error)
             }
-        }
+        },
+        getNews(){
+            miscApi.getContent('news')
+                .then(res => {
+                    console.log(res)
+                })
+        },
+        getFunctionality(){
+            miscApi.getContent('functionality')
+                .then(res => {
+                    console.log(res)
+                })
+        },
     },
     async mounted() {
         await this.authStore.fetchUser()
+
+        this.getNews()
+        this.getFunctionality()
     }
 }
 </script>
