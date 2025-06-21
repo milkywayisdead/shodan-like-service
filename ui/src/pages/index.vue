@@ -1,12 +1,33 @@
 <template>
+
 <v-row>
-    <v-col cols="3" v-for="card in cards">
-        <v-card :title="`Функционал ${card}`" :height="400"></v-card>
+    <v-col cols="12">
+        <v-card title="Функционал" height="auto">
+            <v-card-text>
+                <v-row>
+                    <v-col cols="3" v-for="(item, idx) in functionality" :key="idx">
+                        <v-card flat :title="item.name">
+                            <v-card-text>{{ item.description }}</v-card-text>
+                        </v-card>   
+                    </v-col>
+                </v-row>
+            </v-card-text>
+        </v-card>
     </v-col>
 </v-row>
 <v-row>
     <v-col cols="12">
-        <v-card title="Новость" :height="100"></v-card>
+        <v-card title="Новости" height="auto">
+            <v-card-text>
+                <v-row>
+                    <v-col cols="3" v-for="(item, idx) in news" :key="idx">
+                        <v-card flat :title="item.title">
+                            <v-card-text>{{ item.description }}</v-card-text>
+                        </v-card>   
+                    </v-col>
+                </v-row>
+            </v-card-text>
+        </v-card>
     </v-col>
 </v-row>
 </template>
@@ -16,6 +37,7 @@ import { useAuthStore } from '../stores/auth.js'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '@/stores/app.js'
 import { miscApi } from '@/api/api.js'
+import { ref } from 'vue'
 
 export default {
     setup() {
@@ -27,9 +49,8 @@ export default {
             authStore,
             router,
             locale: storage.locale,
-            cards: [1, 2, 3, 4],
-            news: [],
-            functionality: []
+            news: ref([]),
+            functionality: ref([])
         }
     },
     methods: {
@@ -43,13 +64,14 @@ export default {
         getNews(){
             miscApi.getContent('news')
                 .then(res => {
-                    console.log(res)
+                    this.news = res.data.data
                 })
         },
         getFunctionality(){
             miscApi.getContent('functionality')
                 .then(res => {
-                    console.log(res)
+                    this.functionality = res.data.data
+                    console.log(this.functionality)
                 })
         },
     },
