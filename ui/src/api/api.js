@@ -131,7 +131,10 @@ const _miscApi = axios.create({
 
 
 export const miscApi = {
-    getContent(type=''){
-        return _miscApi.get(`/get_content?type=${type}`)
+    getContent(type='', n=4){
+        return _miscApi.get(`/get_content?type=${type}&n=${n}`)
+    },
+    getContentItem(type='', id=''){
+        return _miscApi.get(`/get_content_item?type=${type}&id=${id}`)
     }
 }

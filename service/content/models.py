@@ -1,6 +1,12 @@
 from django.db import models
 
 
+class ContentMixin:
+    @classmethod
+    def get(cls, item_id):
+        return cls.objects.get(id=item_id).as_dict()
+
+
 class AsDictMixin:
     include_fields = []
     preview_fields = []
@@ -20,13 +26,13 @@ class AsDictMixin:
 
     @classmethod
     def get_last_n(cls, n=4):
-        items = cls.objects.all()[:4]
+        items = cls.objects.all()[:n]
         return [item.preview_dict() for item in items]
 
 
-class NewsArticle(models.Model, AsDictMixin):
+class NewsArticle(models.Model, AsDictMixin, ContentMixin):
     include_fields = ['title', 'full_text', 'description', 'created', 'modified']
-    preview_fields = ['title', 'description', 'created', 'modified']
+    preview_fields = ['id', 'title', 'description', 'created', 'modified']
 
     title = models.CharField(verbose_name='Заголовок')
     full_text = models.TextField(verbose_name='Полный текст')
@@ -43,9 +49,9 @@ class NewsArticle(models.Model, AsDictMixin):
         ordering = ['-created']
 
 
-class Filter(models.Model, AsDictMixin):
+class Filter(models.Model, AsDictMixin, ContentMixin):
     include_fields = ['code', 'name', 'description', 'created', 'modified']
-    preview_fields = ['code', 'name']
+    preview_fields = ['id', 'code', 'name', 'description']
 
     code = models.CharField(verbose_name='Код')
     name = models.CharField(verbose_name='Название')
@@ -61,7 +67,7 @@ class Filter(models.Model, AsDictMixin):
         verbose_name_plural = 'Фильтры'
 
 
-class Functionality(models.Model, AsDictMixin):
+class Functionality(models.Model, AsDictMixin, ContentMixin):
     include_fields = ['name', 'description', 'created', 'modified']
     preview_fields = ['name', 'description']
 

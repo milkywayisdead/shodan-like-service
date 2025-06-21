@@ -1,6 +1,5 @@
 <template>
-
-<v-row>
+<v-row v-if="functionality.length > 0">
     <v-col cols="12">
         <v-card title="Функционал" height="auto">
             <v-card-text>
@@ -15,13 +14,15 @@
         </v-card>
     </v-col>
 </v-row>
-<v-row>
+<v-row v-if="news.length > 0">
     <v-col cols="12">
         <v-card title="Новости" height="auto">
             <v-card-text>
                 <v-row>
                     <v-col cols="3" v-for="(item, idx) in news" :key="idx">
-                        <v-card flat :title="item.title">
+                        <v-card flat>
+                            <v-card-title @click="toArticle(item.id)" class="clickable-element">{{ item.title }}</v-card-title>
+                            <v-card-subtitle>{{ new Date(item.created).toLocaleString() }}</v-card-subtitle>
                             <v-card-text>{{ item.description }}</v-card-text>
                         </v-card>   
                     </v-col>
@@ -71,9 +72,11 @@ export default {
             miscApi.getContent('functionality')
                 .then(res => {
                     this.functionality = res.data.data
-                    console.log(this.functionality)
                 })
         },
+        toArticle(id){
+            this.$router.push(`/feed/${id}`)
+        }
     },
     async mounted() {
         await this.authStore.fetchUser()

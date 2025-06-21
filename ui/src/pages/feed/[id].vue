@@ -1,9 +1,8 @@
 <template>
-<h1>{{ locale.nav.tools }}</h1>
-<v-row>
-    <v-col cols="3" v-for="(item, idx) in functionality" :key="idx">
-        <v-card flat :title="item.name">
-            <v-card-text>{{ item.description }}</v-card-text>
+<v-row v-if="item">
+    <v-col cols="12">
+        <v-card flat :title="item.title" :subtitle="new Date(item.created).toLocaleString()">
+            <v-card-text>{{ item.full_text }}</v-card-text>
         </v-card>   
     </v-col>
 </v-row>
@@ -17,19 +16,19 @@ export default {
     mixins: [storeMixin],
     data(){
         return {
-            functionality: [],
+            item: null
         }
     },
     methods: {
-        getFunctionality(){
-            miscApi.getContent('functionality')
+        getArticle(){
+            miscApi.getContentItem('news', this.$route.params.id)
                 .then(res => {
-                    this.functionality = res.data.data
+                    this.item = res.data.data
                 })
         },
     },
     mounted(){
-        this.getFunctionality()
+        this.getArticle()
     }
 }
 </script>

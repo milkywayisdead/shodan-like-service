@@ -7,7 +7,7 @@ from content import models
 _DEFAULT_N = 4
 
 
-CONTENT_FUNCS = {
+CONTENT_PREVIEW_FUNCS = {
     '': lambda x: [],
     'news': models.NewsArticle.get_last_n,
     'filters': models.Filter.get_last_n,
@@ -15,7 +15,24 @@ CONTENT_FUNCS = {
 }
 
 
+CONTENT_ITEM_FUNCS = {
+    'news': models.NewsArticle.get,
+    'filters': models.Filter.get,
+    'functionality': models.Functionality.get,
+}
+
+
 def get_content(request):
     content_type = request.GET.get('type', '')
-    func = CONTENT_FUNCS[content_type]
-    return JsonResponse({'data': func(_DEFAULT_N)})
+    n = request.GET.get('n', _DEFAULT_N)
+    func = CONTENT_PREVIEW_FUNCS[content_type]
+    return JsonResponse({'data': func(int(n))})
+
+
+def get_content_item(request):
+    content_type = request.GET.get('type', '')
+    item_id = request.GET.get('id', '')
+    func = CONTENT_ITEM_FUNCS[content_type]
+    return JsonResponse({
+        'data': func(item_id)
+    })
