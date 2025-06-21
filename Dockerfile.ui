@@ -7,5 +7,7 @@ RUN npm run build
 
 FROM nginx as production-stage
 RUN mkdir /app
+RUN mkdir /static
 COPY --from=build-stage /app/dist /app
 COPY ./nginx_ui/nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx_ui/static /static/static

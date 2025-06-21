@@ -1,0 +1,60 @@
+# Точки для запросов для поиска по соответствующим фильтрам; возвращают первые 10 хостов, общее кол-во хостов, топы
+search/hosts
+search/port
+search/asn
+search/net
+search/city
+search/country
+search/org
+search/domain
+search/os
+search/service
+search/soft
+search/app
+search/component
+
+
+# Точки для запросов для получения списка хостов n-ной страницы
+search/net/page
+search/port/page
+search/asn/page
+search/app/page
+search/component/page
+search/country/page
+search/city/page
+search/org/page
+search/os/page
+search/soft/page
+search/service/page
+
+
+# Точка для запроса подробностей (для графиков)
+search/details/
+
+
+# Точки для регистрации, входа/выхода, получения инфы по пользователю и csrf-токена
+api/register
+api/set-csrf-token
+api/login
+api/logout
+api/user
+
+
+# Точки для проверки на существование имени и почты (используются на форме регистрации)
+api/reg-check-username
+api/reg-check-email
+
+
+# Точка запроса кода подтверждения
+api/get-confirmation-code
+
+
+# Точки для смены пароля и почты (используются в ЛК для смены пароля и почты)
+api/change-email
+api/change-pass
+
+
+# Точки для проверки соответствия имени и почты, проверки кода подтверждения перед сменой пароля, смены пароля (используются при восстановлении пароля)
+api/check-username-email
+api/check-code
+api/restore-pass
